@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -24,3 +28,33 @@ a {
     background: black;
   }
 }
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: rgb(55 65 81 / var(--tw-bg-opacity));
+  border-radius:15px;
+}
+
+.scroll-light::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scroll-light::-webkit-scrollbar-track {
+  background: rgb(204 204 204 / var(--tw-bg-opacity));
+  border-radius:15px;
+}
+
+.scroll-light::-webkit-scrollbar-thumb {
+  background: rgb(153 153 153 / var(--tw-bg-opacity));
+  border-radius:15px;
+}
+
+
