@@ -4,15 +4,24 @@ import Loader from '../../components/Loader'
 import useShoppingCart from '../../context/ShoppingCart'
 import AddressForm from '../../components/form/AddressForm'
 import Cart from '../../components/cart/Cart'
+import axios from 'axios'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 const CartSummary = () => {
-    const {cartDelivery, cartBuyer} = useShoppingCart()
+    const {cartItems,cartDelivery, cartBuyer} = useShoppingCart()
     const { data: delivery, error } = useSWR('/api/deliveries/'+cartDelivery.id, fetcher)
 
     if(error) return error
     if(!delivery) return <Loader />
+
+    const handlePay = () => {
+        axios.post('/api/pay', {
+            cartItems: cartItems
+        })
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err))
+    }
 
     return(
         <div className="grid grid-cols-12 gap-4">
@@ -67,6 +76,7 @@ const CartSummary = () => {
                     buttonLink="#"
                     buttonTitle="Zapłać"
                 />
+                <button className="bg-gray-700 py-4 px-10 text-white" onClick={handlePay}>Pay</button>
             </div>
         </div>
     )
