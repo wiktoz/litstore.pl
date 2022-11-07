@@ -16,10 +16,17 @@ const CartSummary = () => {
     if(!delivery) return <Loader />
 
     const handlePay = () => {
-        axios.post('/api/pay', {
-            cartItems: cartItems
+        axios.post('/api/payments/pay', {
+            cart: {
+                items: cartItems,
+                delivery: cartDelivery,
+                buyer: cartBuyer
+            }
         })
-        .then((response) => console.log(response))
+        .then((response) => {
+            console.log(response.data)
+            window.location.replace(response.data.url)
+        })
         .catch((err) => console.log(err))
     }
 

@@ -4,6 +4,7 @@ const schema = new Schema({
     number: Number,
     buyer: {
         user_id: String,
+        email: String,
         name: String,
         street: String,
         house: String,
@@ -15,15 +16,19 @@ const schema = new Schema({
         id: String,
         price: Number,
     },
-    products: Array,
+    items: Array,
     payment: {
+        amount: String,
         method: String,
         hash: String,
         url: String,
         status: String,
     },
-    status: String,
-    date: Date.now(),
+    status: {type: String, default: "payment" },
+    date: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 const Order = models.Order || model('Order', schema)
