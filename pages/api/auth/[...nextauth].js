@@ -5,6 +5,20 @@ import User from '../../../models/user';
 import { compare } from 'bcryptjs';
 
 export default NextAuth({
+    callbacks: {
+        session: async ({ session, token }) => {
+          if (session?.user) {
+            session.user.role = token.role;
+          }
+          return session;
+        },
+        jwt: async ({ user, token }) => {
+          if (user) {
+            token.role = user.role;
+          }
+          return token;
+        },
+    },
     //Configure JWT
     session: {
         jwt: true,
@@ -27,7 +41,7 @@ export default NextAuth({
                     throw new Error('Password doesnt match');
                 }
 
-                return { email: result.email };
+                return { email: result.email, role: result.role };
             },
         }),
     ],

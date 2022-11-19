@@ -2,7 +2,7 @@ import Cart from "../../components/cart/Cart"
 import SummaryBox from "../../components/cart/SummaryBox"
 import useShoppingCart from "../../context/ShoppingCart"
 
-export default function ShoppingCart(){
+const ShoppingCart = () => {
     const {cartItems} = useShoppingCart()
 
     return(
@@ -30,3 +30,5 @@ export default function ShoppingCart(){
         </div>
     )
 }
+
+export default ShoppingCart

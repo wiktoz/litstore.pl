@@ -80,10 +80,9 @@ const CartSummary = () => {
             <div className="col-span-12 md:col-span-4">
                 <SummaryBox
                     previousStep="/cart/delivery"
-                    buttonLink="#"
                     buttonTitle="Zapłać"
+                    buttonOnClick={handlePay}
                 />
-                <button className="bg-gray-700 py-4 px-10 text-white" onClick={handlePay}>Pay</button>
             </div>
         </div>
     )

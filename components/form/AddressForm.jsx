@@ -84,14 +84,14 @@ const AddressForm = forwardRef(({name, surname, email, street, postcode, city, s
                             </div>
 
                             <div className="col-span-4">
-                            <Input
-                                register={register} 
-                                errors={errors} 
-                                id="postcode"
-                                title="Postal Code"
-                                autoComplete="postal-code"
-                                value={postcode}
-                            />
+                                <Input
+                                    register={register} 
+                                    errors={errors} 
+                                    id="postcode"
+                                    title="Postal Code"
+                                    autoComplete="postal-code"
+                                    value={postcode}
+                                />
                             </div>
                             <div className="col-span-6">
                                 <Input 

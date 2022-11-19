@@ -1,12 +1,14 @@
 import Link from "next/link"
 import useSWR from "swr"
 import Loader from "../components/Loader"
+import Geowidget from "../components/geowidget"
+
 const fetcher = url => fetch(url).then(r => r.json())
 
 const Products = () => {
     const { data, error } = useSWR('/api/products/get', fetcher)
 
-    if (error) return "An error has occurred."
+    if (error) return error
     if (!data) return <Loader />
 
     return(
