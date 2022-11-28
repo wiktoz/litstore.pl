@@ -27,8 +27,7 @@ export default function Cart(){
             
             {
                 cartItems && cartItems.length > 0 ?
-                <div className="grid grid-cols-12 gap-2">
-                    <div className="col-span-12">
+                <div className="grid grid-cols-12 gap-4">
                     <AnimatePresence>
                         {
                             cartItems.map(item => {
@@ -38,6 +37,7 @@ export default function Cart(){
                                     exit={{ opacity:0 }}
                                     initial={{ opacity:0 }}
                                     animate={{ opacity:1 }}
+                                    className="col-span-12"
                                 >
                                     <CartItem 
                                         id={item.id}
@@ -53,23 +53,21 @@ export default function Cart(){
                         }
                         </AnimatePresence>
                     </div>
-                </div> 
-                
                 
                 : 
                 <AnimatePresence>
                 <motion.div
-                    exit={{ opacity:0, y:150 }}
-                    initial={{ opacity:0, y:150 }}
+                    exit={{ opacity:0, y:200 }}
+                    initial={{ opacity:0, y:200 }}
                     animate={{ opacity:1, y:0 }}
                     className="flex flex-col justify-center items-center h-full my-20">
                     <ShoppingBagIcon
-                        className="h-24 w-24 text-gray-500"
+                        className="h-24 w-24 text-gray-400"
                         aria-hidden="true"
                       />
-                    <p className="my-4 text-gray-700">Twój koszyk jest pusty</p>
+                    <p className="my-4 text-gray-700 font-semibold">Twój koszyk jest pusty</p>
                     <Link href="/products">
-                        <p className="text-gray-700 text-xs border rounded-lg px-6 py-1 hover:cursor-pointer">Sprawdź produkty</p>
+                        <p className="text-gray-700 text-xs border-b-2 border-gray-400 py-1 my-2 hover:cursor-pointer">Sprawdź produkty</p>
                     </Link>
                 </motion.div>
                 </AnimatePresence>

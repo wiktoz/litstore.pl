@@ -1,7 +1,6 @@
 import { getCsrfToken, signIn, getSession } from "next-auth/react"
 import Router from "next/router"
 import { useState } from "react"
-import Image from "next/image"
 
 export default function SignUp({ csrfToken }) {
   const [email, setEmail] = useState('')
@@ -32,7 +31,7 @@ export default function SignUp({ csrfToken }) {
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
               Zarejestruj się
             </h2>
           </div>
@@ -85,27 +84,6 @@ export default function SignUp({ csrfToken }) {
                 />
               </div>
             </div>
-
-            {/*<div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a href="#" className="font-medium text-gray-600 hover:text-gray-500">
-                  Forgot your password?
-                </a>
-              </div>
-  </div>*/}
-
             <div>
               <button
                 type="submit"
@@ -131,3 +109,24 @@ export async function getServerSideProps(context) {
     },
   }
 }
+
+
+{/*<div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Remember me
+                </label>
+              </div>
+
+              <div className="text-sm">
+                <a href="#" className="font-medium text-gray-600 hover:text-gray-500">
+                  Forgot your password?
+                </a>
+              </div>
+  </div>*/}

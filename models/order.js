@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, models } from "mongoose"
+import ProductItem from './product_item'
 
 const schema = new Schema({
     number: Number,
@@ -16,7 +17,10 @@ const schema = new Schema({
         id: String,
         price: Number,
     },
-    items: Array,
+    items: [{
+        id: { type: Schema.Types.ObjectId, ref: 'ProductItem' },
+        qty: Number
+    }],
     payment: {
         amount: String,
         method: String,

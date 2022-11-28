@@ -1,11 +1,13 @@
 import bcrypt from 'bcryptjs'
-import connectDb from '../../utils/connectDb'
+import connect from '../../utils/connectDb'
 import User from '../../models/user'
 
 export default async function registerHandler(req, res){
     const body = req.body
 
-    await connectDb()
+    // TODO validating body
+
+    await connect()
     const user = await User.findOne({email: body.email})
 
     if(user){

@@ -1,30 +1,33 @@
 import Slider from "../components/Slider"
+import Products from "../components/Products"
+import useSWR from "swr"
+import Loader from "../components/Loader"
+
+const fetcher = url => fetch(url).then(r => r.json())
 
 export default function Home() {
+  const { data: products, error } = useSWR("/api/products/get", fetcher)
+
+  if(error) return "Error occured"
+  if(!products) return <Loader/>
+
   return (
     <>
       <div className="pb-10">
         <Slider></Slider>
       </div>
       <div>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porta dolor a laoreet fermentum. Mauris vulputate rhoncus quam, vel condimentum orci consectetur eu. Morbi in aliquam lorem. Phasellus a interdum nulla, facilisis suscipit nulla. Vivamus enim ex, dignissim ac lorem posuere, facilisis luctus dui. Praesent et rutrum dolor, in iaculis nulla. Aenean nisl dui, placerat at condimentum a, semper in tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce sit amet ligula a libero maximus pretium. Phasellus luctus fermentum dignissim. Integer accumsan justo risus, vel iaculis magna sodales ut. Pellentesque tincidunt rutrum nunc sed lacinia. Morbi at massa a lorem finibus semper vitae sed urna.
-
-Donec convallis fermentum luctus. In eu ligula diam. Fusce aliquam massa eget lobortis pharetra. Aenean accumsan, lorem id imperdiet convallis, lectus nisi condimentum sem, eu fringilla urna ligula vel justo. Curabitur quam felis, imperdiet commodo risus eu, commodo elementum sapien. Nullam suscipit nunc nec urna facilisis pellentesque. Cras viverra, mauris nec ornare tincidunt, odio turpis porta lectus, in fermentum sapien justo ac massa. Pellentesque ac varius leo. Donec sed augue tempus, lobortis tortor non, tincidunt dolor. Nulla ut commodo est.
-
-Praesent sit amet iaculis lectus. Sed posuere nunc quis euismod consequat. Vivamus sapien enim, viverra a leo vitae, ullamcorper tempus erat. Phasellus facilisis nulla aliquam posuere molestie. Aliquam eget ipsum tempor, posuere nisi sed, euismod est. Proin quis ipsum odio. Aliquam in sapien a dolor ornare feugiat. Duis lobortis dapibus consequat. Morbi sem lacus, semper vitae est non, aliquet maximus augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel nisi metus. Donec volutpat metus sit amet pretium pharetra. Quisque purus libero, tincidunt in magna sit amet, congue dignissim quam. Donec metus nunc, consectetur et quam eget, mattis iaculis felis. Nulla vehicula ultrices tellus, at placerat dolor. Suspendisse potenti.
-
-Pellentesque pretium faucibus elit. Ut auctor id ante eu convallis. In urna dui, venenatis in eleifend sed, aliquet nec magna. Etiam scelerisque odio ex, at egestas arcu ornare nec. Cras vel auctor lorem. Praesent dapibus odio lacus, vel ullamcorper leo placerat at. Nunc a pellentesque nisl. Mauris ex est, congue eu iaculis id, posuere accumsan diam. Nulla aliquet a orci nec tempus. Aliquam luctus neque sed nisl porta hendrerit. Duis sed elit vitae justo dictum blandit. Curabitur malesuada felis vel ultrices convallis. Proin tempor eu sem sit amet venenatis.
-
-Duis vel volutpat tellus. Donec porttitor mollis metus. Suspendisse id ligula felis. Nam vehicula lectus nulla, at interdum orci faucibus ac. Quisque porta metus quis lectus mattis ultricies. Nam viverra orci at lorem aliquet, vitae vestibulum nunc ullamcorper. Vestibulum quis nibh pretium, fermentum quam in, sodales dui. Donec ultrices at arcu vitae condimentum. Quisque mauris nisl, luctus eu lectus quis, cursus placerat lectus. Aliquam tempor vestibulum scelerisque. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porta dolor a laoreet fermentum. Mauris vulputate rhoncus quam, vel condimentum orci consectetur eu. Morbi in aliquam lorem. Phasellus a interdum nulla, facilisis suscipit nulla. Vivamus enim ex, dignissim ac lorem posuere, facilisis luctus dui. Praesent et rutrum dolor, in iaculis nulla. Aenean nisl dui, placerat at condimentum a, semper in tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce sit amet ligula a libero maximus pretium. Phasellus luctus fermentum dignissim. Integer accumsan justo risus, vel iaculis magna sodales ut. Pellentesque tincidunt rutrum nunc sed lacinia. Morbi at massa a lorem finibus semper vitae sed urna.
-
-Donec convallis fermentum luctus. In eu ligula diam. Fusce aliquam massa eget lobortis pharetra. Aenean accumsan, lorem id imperdiet convallis, lectus nisi condimentum sem, eu fringilla urna ligula vel justo. Curabitur quam felis, imperdiet commodo risus eu, commodo elementum sapien. Nullam suscipit nunc nec urna facilisis pellentesque. Cras viverra, mauris nec ornare tincidunt, odio turpis porta lectus, in fermentum sapien justo ac massa. Pellentesque ac varius leo. Donec sed augue tempus, lobortis tortor non, tincidunt dolor. Nulla ut commodo est.
-
-Praesent sit amet iaculis lectus. Sed posuere nunc quis euismod consequat. Vivamus sapien enim, viverra a leo vitae, ullamcorper tempus erat. Phasellus facilisis nulla aliquam posuere molestie. Aliquam eget ipsum tempor, posuere nisi sed, euismod est. Proin quis ipsum odio. Aliquam in sapien a dolor ornare feugiat. Duis lobortis dapibus consequat. Morbi sem lacus, semper vitae est non, aliquet maximus augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel nisi metus. Donec volutpat metus sit amet pretium pharetra. Quisque purus libero, tincidunt in magna sit amet, congue dignissim quam. Donec metus nunc, consectetur et quam eget, mattis iaculis felis. Nulla vehicula ultrices tellus, at placerat dolor. Suspendisse potenti.
-
-Pellentesque pretium faucibus elit. Ut auctor id ante eu convallis. In urna dui, venenatis in eleifend sed, aliquet nec magna. Etiam scelerisque odio ex, at egestas arcu ornare nec. Cras vel auctor lorem. Praesent dapibus odio lacus, vel ullamcorper leo placerat at. Nunc a pellentesque nisl. Mauris ex est, congue eu iaculis id, posuere accumsan diam. Nulla aliquet a orci nec tempus. Aliquam luctus neque sed nisl porta hendrerit. Duis sed elit vitae justo dictum blandit. Curabitur malesuada felis vel ultrices convallis. Proin tempor eu sem sit amet venenatis.
-
-Duis vel volutpat tellus. Donec porttitor mollis metus. Suspendisse id ligula felis. Nam vehicula lectus nulla, at interdum orci faucibus ac. Quisque porta metus quis lectus mattis ultricies. Nam viverra orci at lorem aliquet, vitae vestibulum nunc ullamcorper. Vestibulum quis nibh pretium, fermentum quam in, sodales dui. Donec ultrices at arcu vitae condimentum. Quisque mauris nisl, luctus eu lectus quis, cursus placerat lectus. Aliquam tempor vestibulum scelerisque. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+        <p className="text-3xl font-bold tracking-tight my-8">
+          <span className="bg-gray-700 text-white pl-4 pr-1">New</span> 
+          <span className="text-gray-700">Arrivals</span>
+        </p>
+        <Products products={products} size="small"/>
+      </div>
+      <div className="mt-10">
+        <p className="text-xs text-gray-300 font-light">
+          LitStore is registered trademark. This is a demonstrative version for e-commerce software. All products are not for sale.
+          Sample products names, brands and photos are taken from website misbhv.com and are own by MISBHV sp. z o.o.
+        </p>
       </div>
       </>
   )

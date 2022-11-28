@@ -21,7 +21,7 @@ const Pay = async (req, res) => {
     const ids = cart.items?.map(({id}) => id)
 
     return ProductItem.find({_id: {$in: ids}}).then(async (products) => {
-        const price = products.reduce((count, obj) => count + obj.price, 0)
+        const price = products.reduce((count, obj, index) => count + (obj.price*cart.items[index].qty), 0)
         const paymentPrice = ((price * 100) / 100).toFixed(2)
 
         /*

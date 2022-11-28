@@ -1,13 +1,14 @@
+import { useSession } from "next-auth/react"
 import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Popover, Transition } from '@headlessui/react'
+import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import useShoppingCart from "../context/ShoppingCart"
 import useSWR from 'swr'
 import Loader from './Loader'
 import MobileNavbar from './MobileNavbar'
-import { set } from 'react-hook-form'
+import SignOutButton from "./SignOutButton"
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -18,6 +19,7 @@ function classNames(...classes) {
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const { cartQty } = useShoppingCart()
+  const { data: session, status } = useSession()
 
   const { data: categories, error } = useSWR('/api/categories/get', fetcher)
 
@@ -32,12 +34,12 @@ export default function Navbar() {
 
       {/* Standard Menu */}
       <header className="relative bg-white">
-        <p className="flex h-7 items-center justify-center bg-gray-600 px-4 text-xs font-normal tracking-wide text-white sm:px-6 lg:px-8">
+        <p className="flex items-center justify-center bg-gray-700 px-4 py-3 text-xs font-normal tracking-wider text-white sm:px-6 lg:px-8">
           Free delivery on orders over $100
         </p>
 
         <nav aria-label="Top" className="mx-auto w-full">
-          <div className="border-b border-gray-200 px-2 lg:px-6">
+          <div className="border-b border-gray-200 p-2 lg:px-8">
             <div className="flex h-16 items-center">
               <button
                 type="button"
@@ -49,9 +51,9 @@ export default function Navbar() {
               </button>
 
               {/* Logo */}
-              <div className="ml-4 flex lg:ml-0">
+              <Link href="/">
+              <div className="ml-4 flex lg:ml-0 hover:cursor-pointer">
                   <span className="sr-only">Logo</span>
-                  <Link href="/">
                     <Image
                       className="h-8 w-auto align-bottom"
                       src="/img/litstore.png"
@@ -59,8 +61,8 @@ export default function Navbar() {
                       height="15px"
                       alt=""
                     />
-                  </Link>
               </div>
+              </Link>
 
               {/* Flyout menus */}
               <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
@@ -74,7 +76,7 @@ export default function Navbar() {
                               className={classNames(
                                 open
                                   ? 'border-gray-600 text-gray-600'
-                                  : 'border-transparent text-gray-700 hover:text-gray-800',
+                                  : 'border-transparent text-gray-600 hover:text-gray-800 tracking-wide',
                                 'relative z-20 -mb-px flex items-center border-b-2 pt-px text-sm transition-colors duration-200 ease-out focus:outline-none'
                               )}
                             >
@@ -120,9 +122,9 @@ export default function Navbar() {
                                     </div>
                                     <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
                                     <Popover.Button>
-                                      <Link href="/products">
+                                      <Link href={"/" + category.slug}>
                                         <a onClick={() => close()}>
-                                          Show everything
+                                          Show Everything
                                         </a>
                                       </Link>
                                       </Popover.Button>
@@ -172,33 +174,58 @@ export default function Navbar() {
               </Popover.Group>
 
               <div className="ml-auto flex items-center">
-                <div className="text-sm font-normal hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <Link href="/auth/signin" className="text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </Link>
+                <div className="text-sm font-normal hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 text-gray-500">
+                  { status === "authenticated" ?
+                    <SignOutButton/>
+                    :
+                    <>
+                      <Link href="/auth/signin">
+                        <p className='hover:text-gray-800 hover:cursor-pointer'>
+                          Sign In
+                        </p>
+                      </Link>
+                      <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
+                      <Link href="/auth/signup">
+                        <p className='hover:text-gray-800 hover:cursor-pointer'>
+                          Create account
+                        </p>
+                      </Link>
+                    </>
+                  }
                   <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <Link href="/auth/signup" className="text-gray-700 hover:text-gray-800">
-                    Create account
-                  </Link>
                 </div>
 
                 {/* Search */}
-                <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
-                  </a>
+                <div className="ml-4 flow-root lg:ml-6">
+                  <Link href="/search" className="flex items-center p-2">
+                    <div className='flex flex-row align-items-center hover:cursor-pointer text-gray-400 hover:text-gray-600'>
+                      <span className="sr-only">Search</span>
+                      <MagnifyingGlassIcon className="h-5 w-5 flex-shrink-0"
+                        aria-hidden="true" />
+                    </div>
+                  </Link>
+                </div>
+
+                {/* User Account */}
+                <div className="ml-4 flow-root lg:ml-6">
+                  <Link href={status === "authenticated" ? "/user/profile" : "/auth/signin" } className="flex items-center p-2">
+                    <div className='flex flex-row align-items-center hover:cursor-pointer text-gray-400 hover:text-gray-600'>
+                      <span className="sr-only">Profile</span>
+                      <UserIcon className="h-5 w-5 flex-shrink-0"
+                        aria-hidden="true" />
+                    </div>
+                  </Link>
                 </div>
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="/cart" className="group -m-2 flex items-center p-2">
-                    <div className="flex flex-row align-items-center hover:cursor-pointer">
+                  <Link href="/cart" className="flex items-center p-2">
+                    <div className="flex flex-row align-items-center hover:cursor-pointer text-gray-400 hover:text-gray-600">
                       <ShoppingBagIcon
-                        className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                        className="h-5 w-5 flex-shrink-0 "
                         aria-hidden="true"
                       />
-                      <span className="h-full mx-2 my-auto text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartQty}</span>
+                      <span className="mx-1 h-full my-auto text-sm font-medium">{cartQty}</span>
                       <span className="sr-only">items in cart, view bag</span>
                     </div>
                   </Link>

@@ -1,39 +1,41 @@
-import { getCsrfToken, signIn, getSession } from "next-auth/react"
+import { signIn, getSession } from "next-auth/react"
 import Router from "next/router"
 import { useState } from "react"
-import Image from "next/image"
+import Spinner from "./Spinner"
 
 export default function SignIn({ csrfToken }) {
+  const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
 
   const handleSignIn = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
 
     let options = {
-      callbackUrl: `${window.location.origin}/admin`,
       email: email,
-      password: password
+      password: password,
+      redirect: false
     }
 
     const response = await signIn("credentials", options)
 
     setMessage(null)
     if(response?.error){
+      setIsLoading(false)
       setMessage(response.error)
     }
-
-
+    else return Router.push('/user/profile')
   }
 
   return (
     <>
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-6">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Zaloguj się
+            <h2 className="text-2xl font-bold text-gray-900">
+              Sign In
             </h2>
           </div>
             <input type="hidden" name="remember" defaultValue="true" />
@@ -71,6 +73,28 @@ export default function SignIn({ csrfToken }) {
                 />
               </div>
             </div>
+            { message ?
+            <div className="text-red-400">
+              <p>{message}</p>
+            </div> 
+            : ""}
+            <div>
+              <button
+                type="submit"
+                className="group relative flex w-full justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                onClick={(e)=>handleSignIn(e)}
+              >
+                {
+                  isLoading ? <Spinner/> : "Zaloguj się"
+                }
+              </button>
+            </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
 
             {/*<div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -91,29 +115,3 @@ export default function SignIn({ csrfToken }) {
                 </a>
               </div>
   </div>*/}
-
-            <div>
-              <button
-                type="submit"
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                onClick={(e)=>handleSignIn(e)}
-              >
-                Zaloguj się
-              </button>
-            </div>
-        </div>
-      </div>
-      <div>
-        <p>{message}</p>
-      </div>
-    </>
-  )
-}
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
-}

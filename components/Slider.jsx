@@ -65,7 +65,7 @@ export default function Slider(){
         {slides.map((_, idx) => (
           <div
             key={idx}
-            className={`slideshowDot ${index === idx ? "bg-gray-400" : "bg-gray-100"} m-2 w-3 h-3 rounded-full hover:cursor-pointer`}
+            className={`slideshowDot ${index === idx ? "bg-gray-400" : "bg-gray-100"} m-2 w-2 h-2 rounded-full hover:cursor-pointer`}
             onClick={() => {
               setIndex(idx);
             }}

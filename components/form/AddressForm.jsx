@@ -37,8 +37,8 @@ const AddressForm = forwardRef(({name, surname, email, street, postcode, city, s
                     <form onSubmit={handleSubmit(onSubmit)} >
                         <fieldset disabled={disabled}>
                     <div className="overflow-hidden">
-                        <div className=" py-5">
-                        <div className="grid grid-cols-12 gap-3">
+                        <div className="py-5">
+                        <div className="grid grid-cols-12 gap-5">
                             <div className="col-span-6">
                             <Input
                                 register={register} 

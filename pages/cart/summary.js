@@ -2,7 +2,6 @@ import useSWR from 'swr'
 import SummaryBox from '../../components/cart/SummaryBox'
 import Loader from '../../components/Loader'
 import useShoppingCart from '../../context/ShoppingCart'
-import AddressForm from '../../components/form/AddressForm'
 import Cart from '../../components/cart/Cart'
 import axios from 'axios'
 

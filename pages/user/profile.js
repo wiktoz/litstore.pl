@@ -1,25 +1,21 @@
-import {useSession, signOut} from 'next-auth/react'
-import { useEffect } from 'react'
+import {useSession} from 'next-auth/react'
+import SignOutButton from '../../components/SignOutButton'
+import Link from 'next/link'
 
 const UserProfile = () => {
     const { data: session, status } = useSession()
     
-    useEffect(()=>{
-        console.log(session)
-    })
-
-    if (status === "authenticated") {
-        return(
-            <div>ZALOGOWANY jako {session.user.email} {session.user.role}<span onClick={signOut}>Wyloguj</span></div>
-        )
-
-    }
-    else{
-        return(
-            <div>NIEZALOGOWANY!</div>
-        )
-    }
-
+    return(
+        <>
+            {
+                session && session.user.role === "admin" ? 
+                <Link href="/admin">
+                    Go To Admin Panel
+                </Link> : ""
+            }
+            <SignOutButton/>
+        </>
+    )
 }
 
 export default UserProfile

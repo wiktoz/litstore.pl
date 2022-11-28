@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import Loader from '../components/Loader'
 import { useState, useEffect } from 'react'
-import useShoppingCart from '../context/ShoppingCart'
 
-import Accordion from '../components/Accordion'
+import useSWR from 'swr'
+import useShoppingCart from '../../context/ShoppingCart'
+
+import Loader from '../../components/Loader'
+import Accordion from '../../components/Accordion'
 import {FiChevronLeft} from 'react-icons/fi'
 
 const fetcher = url => fetch(url).then(r => r.json())
@@ -73,8 +74,8 @@ const ProductPage = () => {
                     <p className="mx-2">Go Back To Products</p>
                 </div>
                 <div className="my-2">
-                    <p className="text-sm text-gray-400">{product.producer}</p>
-                    <p className="text-2xl font-semibold">{product.name}</p>
+                    <p className="text-xs font-semibold text-gray-400 mb-2">{product.producer}</p>
+                    <p className="text-2xl font-semibold tracking-tight mb-6">{product.name}</p>
                     <div className="flex flex-row my-4 gap-2">
                         {
                             product.variant ? 
