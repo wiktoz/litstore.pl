@@ -68,16 +68,16 @@ const MobileNavbar = ({categories,open,setOpen}) => {
                   {categories.map((category) => (
                     <Tab.Panel key={category.name} className="space-y-10 px-4 pt-10 pb-8">
                       <div className="grid grid-cols-2 gap-x-4">
-                        <Link href={"/"+category.slug}><a onClick={() => setOpen(false)}>Show All</a></Link>
+                        <Link href={"/"+category.slug} onClick={() => setOpen(false)}>Show All</Link>
                         {category.featured ? category.featured.map((item) => (
                           <div key={item.name} className="group relative text-sm">
                             <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                               <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
                             </div>
-                            <a href={item.href} className="mt-6 block text-gray-900">
+                            <Link href={item.href} onClick={() => setOpen(false)} className="mt-6 block text-gray-900">
                               <span className="absolute inset-0 z-20" aria-hidden="true" />
                               {item.name}
-                            </a>
+                            </Link>
                             <p aria-hidden="true" className="mt-1">
                               Shop now
                             </p>
@@ -121,12 +121,12 @@ const MobileNavbar = ({categories,open,setOpen}) => {
 
               <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                 <div className="flow-root">
-                  <Link href="/auth/signin" className="-m-2 block p-2 text-gray-900">
+                  <Link href="/auth/signin" onClick={() => setOpen(false)} className="-m-2 block p-2 text-gray-900">
                     Sign in
                   </Link>
                 </div>
                 <div className="flow-root">
-                  <Link href="/auth/signup" className="-m-2 block p-2 text-gray-900">
+                  <Link href="/auth/signup" onClick={() => setOpen(false)} className="-m-2 block p-2 text-gray-900">
                     Create account
                   </Link>
                 </div>

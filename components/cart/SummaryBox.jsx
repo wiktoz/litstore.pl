@@ -39,7 +39,7 @@ const SummaryBox = ({previousStep, buttonTitle, buttonLink, buttonOnClick}) => {
     return(
         <div className="my-4 md:mx-4 md:my-0 md:mb-4 rounded h-full relative">
             <div className="flex flex-col justify-between sticky top-5 bg-gray-100 p-4 rounded">
-                <p className="text-lg font-semibold text-gray-700 tracking-tight">Summary</p>
+                <p className="text-lg font-bold text-gray-800 tracking-tight">Podsumowanie</p>
                 <div className="text-sm py-10 text-gray-600">
                     <div className='flex flex-row justify-between'>
                         <p>Products</p>

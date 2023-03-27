@@ -58,8 +58,7 @@ export default async function Upload(req, res){
       photos: photos,
       new_badge: fields.new_badge,
       active: fields.active,
-    }, async (err, product) => {
-      if(err) return res.status(503).send(err)
+    }).then(async (product) => {
 
       var ext, newName, renamedPhotos = []
 
@@ -109,6 +108,8 @@ export default async function Upload(req, res){
       await product.save()
 
       return res.status(200).json({product})
+    }).catch(err => {
+      return res.status(503).send(err)
     })
   })
 }

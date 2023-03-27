@@ -19,7 +19,7 @@ export default function EditProduct(){
 
     const files = useRef()
 
-    const { data : categories, error: categoriesError } = useSWR('/api/categories/get', fetcher)
+    const { data : categories, error: categoriesError } = useSWR('/api/categories', fetcher)
     const { data : variants, error: variantsError } = useSWR('/api/variants/get', fetcher)
     const { data: product, error: productError } = useSWR('/api/products/slug/'+slug, fetcher)
     
@@ -59,22 +59,22 @@ export default function EditProduct(){
               "Content-Type": "multipart/form-data",
             }
         })
-          .then(function (response) {
+        .then(function (response) {
             e.target.reset()
             files.current.fileRemoveAll()
             console.log(slug)
             mutate('/api/products/slug/'+response.data.slug)
             router.push('/admin/products/edit/'+response.data.slug)
-          })
-          .catch(function (error) {
+        })
+        .catch(function (error) {
             console.log(error);
-        });
+        })
     }
 
     return (
         <div className="py-2">
             <div className="md:grid md:grid-cols-3 md:gap-6">
-                <div className="md:col-span-1">
+                <div className="md:col-span-3">
                     <div className="px-4 sm:px-0">
                     <h3 className="text-lg font-medium leading-6 text-gray-900">Edit product</h3>
                     <p className="mt-1 text-sm text-gray-600">
@@ -82,9 +82,9 @@ export default function EditProduct(){
                     </p>
                     </div>
                 </div>
-                <div className="mt-5 md:col-span-2 md:mt-0">
+                <div className="mt-5 md:col-span-3 md:mt-0">
                     <form action="/api/products/add" method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
-                    <div className="shadow sm:overflow-hidden sm:rounded-md">
+                    <div className="shadow overflow-hidden rounded-md">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <div className="grid grid-cols-12 gap-6">
                             <div className="col-span-12">
@@ -166,7 +166,7 @@ export default function EditProduct(){
                             type="submit"
                             className="inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-0"
                         >
-                            Add
+                            Edit
                         </button>
                         </div>
                     </div>

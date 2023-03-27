@@ -1,16 +1,20 @@
-import connect from "../../../utils/connectDb"
-import Order from "../../../models/order"
-import ProductItem from "../../../models/product_item"
+import { get } from "../../../utils/handlers/order"
 
-const getOrders = async (req, res) => {
-    await connect()
+const Orders = async (req, res) => {
+    const { id } =  req.query
+    const requestMethod = req.method
 
-    return Order.find({}).sort({"date": -1}).then((orders) => {
-        return res.status(200).send(orders)
-    })
-    .catch((err) => {
-        return res.status(503).send(err)
-    })
+    switch(requestMethod){
+        case "GET":
+            const getResponse = await get(id)
+            
+            if(getResponse?.error) 
+                return res.status(500).send(getResponse)
+            return res.status(200).send(getResponse)
+
+        default:
+            return res.status(404).end()
+    }
 }
 
-export default getOrders
+export default Orders

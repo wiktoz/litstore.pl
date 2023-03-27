@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 
-const AddressForm = forwardRef(({name, surname, email, street, postcode, city, submitData, disabled}, _ref) => {
+const AddressForm = forwardRef(({title, description, name, surname, email, street, postcode, city, submitData, disabled}, _ref) => {
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .required('Name is required'),
@@ -21,7 +21,6 @@ const AddressForm = forwardRef(({name, surname, email, street, postcode, city, s
     const { register, handleSubmit, reset, formState: {errors} } = useForm({resolver})
 
     const onSubmit = (data) => {
-        console.log(data)
         if(data){
             submitData(data)
         }
@@ -29,10 +28,20 @@ const AddressForm = forwardRef(({name, surname, email, street, postcode, city, s
 
     return(
         <div>
-                <div className="shadow rounded p-4">
+                <div className="rounded p-4">
                     <div className="py-4">
-                    <h3 className="text-lg font-semibold leading-6 text-gray-900">Personal Information</h3>
-                    <p className="mt-1 text-sm text-gray-600">Enter your details. The invoice will be issued for the following data</p>
+                        <h3 className="text-lg font-semibold leading-6 text-gray-900">
+                            {
+                                title ? 
+                                title : "Personal Information"
+                            }
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-600">
+                            {
+                                description ? 
+                                description : "Enter your details. The invoice will be issued for the following data"
+                            }
+                        </p>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} >
                         <fieldset disabled={disabled}>

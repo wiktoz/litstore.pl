@@ -7,12 +7,24 @@ import AddressForm from "../../form/AddressForm"
 
 const fetcher = url => fetch(url).then(r => r.json())
 
-const DeliveryBox = ({pickDelivery}) => {
-    const { data: deliveries, error} = useSWR('/api/deliveries/getActive', fetcher)
-    const {cartDelivery} = useShoppingCart()
+const DeliveryBox = () => {
+    const { data: deliveries, error} = useSWR('/api/deliveries/active', fetcher)
+    const { cartDelivery, setDelivery } = useShoppingCart()
     
     if(error) return "An error has occured"
     if(!deliveries) return <Loader />
+
+    const pickDelivery = (e, id) => {
+        e.preventDefault()
+
+        setDelivery(id, cartDelivery.data)
+    }
+
+    const handleAddressData = (data) => {
+        if(cartDelivery && cartDelivery.id){
+            setDelivery(cartDelivery.id, data)
+        }
+    }
 
     return(
         <>
@@ -21,13 +33,13 @@ const DeliveryBox = ({pickDelivery}) => {
                 deliveries.map(item => {
                     return(
                         <DeliveryItem
-                            key={item._id} 
+                            key={item._id}
                             id={item._id}
                             name={item.name}
                             img={item.img}
                             price={item.price}
                             isPicked={cartDelivery && cartDelivery.id == item._id ? true : false }
-                            pickDelivery={pickDelivery}
+                            pickDelivery={ e => { pickDelivery(e, item._id) }}
                         />
                     )
                 })
@@ -39,7 +51,7 @@ const DeliveryBox = ({pickDelivery}) => {
                     return (
                     cartDelivery && cartDelivery.id == item._id ?
                         item.name == "InPost" ?
-                            <Geowidget key="InPostGeowidget"/> : <AddressForm />
+                            <Geowidget key="InPostGeowidget"/> : <AddressForm submitData={handleAddressData}/>
                             : ""
                     )
                 })

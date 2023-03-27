@@ -13,12 +13,6 @@ const CartDelivery = () => {
 
     const [addressPicked, setAddressPicked] = useState(cartBuyer.name ? true : false)
 
-    const pickDelivery = (e, id) => {
-        e.preventDefault()
-
-        setDelivery(id)
-    }
-
     const handleAddressData = (data) => {
         setBuyer(data)
         setAddressPicked(true)
@@ -64,9 +58,7 @@ const CartDelivery = () => {
                     <h3 className="text-lg font-semibold leading-6 text-gray-900">Delivery Method</h3>
                     <p className="mt-1 text-sm text-gray-600">Pick method which your products will be shipped to you</p>
                     </div>
-                    <DeliveryBox
-                        pickDelivery={pickDelivery}
-                    />
+                    <DeliveryBox />
                 </section>
             </div>
             <div className="col-span-12 md:col-span-4">

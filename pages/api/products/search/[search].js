@@ -3,11 +3,16 @@ import connectDb from '../../../../utils/connectDb'
 
 const getProduct = async (req, res) => {
     await connectDb()
-    Product.find({ 
-        name: { $regex: req.query.search, '$options': 'i' }
-    }).exec((err, products) => {
-        if(err) return res.status(503).send(err)
+
+    return Product.find({
+        $or: [
+            { name: { $regex: req.query.search, '$options': 'i' } },
+            { producer: { $regex: req.query.search, '$options': 'i' } },
+        ]
+    }).then(products => {
         return res.status(200).json(products)
+    }).catch(err => {
+        return res.status(503).send(err)
     })
 }
 

@@ -21,7 +21,7 @@ export default function Navbar() {
   const { cartQty } = useShoppingCart()
   const { data: session, status } = useSession()
 
-  const { data: categories, error } = useSWR('/api/categories/get', fetcher)
+  const { data: categories, error } = useSWR('/api/categories', fetcher)
 
   if(error) return error
   if(!categories) return <Loader/>
@@ -55,11 +55,12 @@ export default function Navbar() {
               <div className="ml-4 flex lg:ml-0 hover:cursor-pointer">
                   <span className="sr-only">Logo</span>
                     <Image
-                      className="h-8 w-auto align-bottom"
                       src="/img/litstore.png"
-                      width="83px"
-                      height="15px"
-                      alt=""
+                      className="h-4 w-auto align-bottom"
+                      width="0"
+                      height="0"
+                      sizes="100vw"
+                      alt="logo"
                     />
               </div>
               </Link>
@@ -68,7 +69,7 @@ export default function Navbar() {
               <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
                 <div className="flex h-full space-x-8">
                   {categories.map((category) => (
-                    <Popover key={category.name} className="flex">
+                    <Popover key={category.slug} className="flex">
                       {({ open }) => (
                         <>
                           <div className="relative flex">
@@ -77,7 +78,7 @@ export default function Navbar() {
                                 open
                                   ? 'border-gray-600 text-gray-600'
                                   : 'border-transparent text-gray-600 hover:text-gray-800 tracking-wide',
-                                'relative z-20 -mb-px flex items-center border-b-2 pt-px text-sm transition-colors duration-200 ease-out focus:outline-none'
+                                'relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm transition-colors duration-200 ease-out focus:outline-none'
                               )}
                             >
                               {category.name}
@@ -102,7 +103,7 @@ export default function Navbar() {
                                   <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
                                     <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                       {category.featured ? category.featured.map((item) => (
-                                        <div key={item.name} className="group relative text-base sm:text-sm">
+                                        <div key={item.slug} className="group relative text-base sm:text-sm">
                                           <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                             <img
                                               src={item.imageSrc}
@@ -122,14 +123,12 @@ export default function Navbar() {
                                     </div>
                                     <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
                                     <Popover.Button>
-                                      <Link href={"/" + category.slug}>
-                                        <a onClick={() => close()}>
+                                      <Link href={"/" + category.slug} onClick={() => close()}>
                                           Show Everything
-                                        </a>
                                       </Link>
                                       </Popover.Button>
                                       {category.sections ? category.sections.map((section) => (
-                                        <div key={section.name}>
+                                        <div key={section.slug}>
                                           <p id={`${section.name}-heading`} className="font-medium text-gray-900">
                                             {section.name}
                                           </p>

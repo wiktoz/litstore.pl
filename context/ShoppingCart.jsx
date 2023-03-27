@@ -12,7 +12,7 @@ export default function useShoppingCart(){
 export function ShoppingCartProvider({children}){
     const [cartItems, setCartItems] = useLocalStorage("cartItems", [])
     const [cartBuyer, setCartBuyer] = useLocalStorage("cartBuyer", {})
-    const [cartDelivery, setCartDelivery] = useLocalStorage("cartDelivery", {})
+    const [cartDelivery, setCartDelivery] = useLocalStorage("cartDelivery", {id: null, data: null})
 
     const cartQty = cartItems.reduce((qty, item) => item.qty + qty, 0)
 
@@ -20,8 +20,8 @@ export function ShoppingCartProvider({children}){
         setCartBuyer(buyer)
     }
 
-    function setDelivery(id){
-        setCartDelivery({id: id})
+    function setDelivery(id, data){
+        setCartDelivery({id: id, data: data})
     }
 
     function getItemQty(id){

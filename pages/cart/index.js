@@ -10,7 +10,7 @@ const ShoppingCart = () => {
             { cartItems && cartItems.length > 0 ?
             <>
             <div className="col-span-12 my-4">
-                <h1 className="text-lg font-semibold text-gray-700 tracking-tight">Shopping Cart</h1>    
+                <h1 className="text-lg font-bold text-gray-800">Twój Koszyk</h1>    
             </div>
             <div className="col-span-12 md:col-span-8">
                 <Cart />

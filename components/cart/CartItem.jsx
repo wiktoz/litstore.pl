@@ -15,16 +15,16 @@ export default function CartItem({id, qty, handleIncrease, handleDecrease, handl
         <Box>
             <div className="flex flex-row items-center justify-items-center gap-6 w-full justify-between">
                 <div>
-                    <img src={"/img/products/"+ product.product_id.main_photo} className="w-32"></img>
+                    <img src={"/img/products/"+ product.product_id.main_photo} className="w-32 rounded-md"></img>
                 </div>
                 <div>
-                    <p className="text-sm my-2 font-medium">{product.product_id.name}</p>
+                    <p className="text-sm my-2 font-semibold">{product.product_id.name}</p>
                     <p className='text-xs'>{
                         product.options.map(option => {
                             return <span key={option._id}>{option.variant_id.displayName} {option.name}</span>
                         })
                     }</p>
-                    <p className="text-sm mt-2">{product.price} <span className="text-xs">PLN</span></p>
+                    <p className="text-md mt-2">{product.price} <span className="text-xs">PLN</span></p>
                 </div>
                 <div className="flex flex-row items-center">
                     <div className="text-xs hover:cursor-pointer hover:opacity-50">

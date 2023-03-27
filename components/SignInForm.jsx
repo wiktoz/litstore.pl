@@ -32,9 +32,9 @@ export default function SignIn({ csrfToken }) {
   return (
     <>
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-md space-y-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-lg font-bold text-gray-700 tracking-tight uppercase">
               Sign In
             </h2>
           </div>
@@ -58,7 +58,7 @@ export default function SignIn({ csrfToken }) {
               </div>
               <div>
                 <label htmlFor="password" className="sr-only">
-                  hasło
+                  password
                 </label>
                 <input
                   id="password"
@@ -81,11 +81,11 @@ export default function SignIn({ csrfToken }) {
             <div>
               <button
                 type="submit"
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                className="group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                 onClick={(e)=>handleSignIn(e)}
               >
                 {
-                  isLoading ? <Spinner/> : "Zaloguj się"
+                  isLoading ? <Spinner/> : "Sign in"
                 }
               </button>
             </div>

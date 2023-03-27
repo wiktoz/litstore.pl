@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 export default function Footer(){
     return(
@@ -7,9 +8,11 @@ export default function Footer(){
     <div className="sm:flex sm:items-center sm:justify-between">
         <Image 
             src="/img/litstore.png" 
-            className="mr-3 h-8"
-            width="83px"
-            height="15px"
+            className="mr-3 h-4 w-auto"
+            width="0"
+            height="0"
+            sizes="100vw"
+            alt="logo"
         />
 
       <div className="mt-8 flex gap-6 text-gray-500 sm:mt-0">
@@ -50,32 +53,32 @@ export default function Footer(){
     </div>
 
     <div
-      className="grid grid-cols-1 gap-8 border-t border-gray-100 pt-12 sm:grid-cols-2 lg:grid-cols-4"
+      className="text-sm grid grid-cols-1 gap-8 border-t border-gray-100 pt-12 sm:grid-cols-2 lg:grid-cols-4"
     >
       <div>
-        <p className="font-medium">Informations</p>
+        <p className="font-bold text-gray-800">Informations</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <a className="hover:opacity-75" href=""> Privacy Policy </a>
-          <a className="hover:opacity-75" href=""> Terms & Conditions</a>
-          <a className="hover:opacity-75" href=""> Contact us </a>
+          <Link className="hover:opacity-75" href="/privacy-policy"> Privacy Policy </Link>
+          <Link className="hover:opacity-75" href="/terms-and-conditions"> Terms & Conditions</Link>
+          <Link className="hover:opacity-75" href="/contact"> Contact us </Link>
         </nav>
       </div>
 
       <div>
-        <p className="font-medium">Customer Service</p>
+        <p className="font-bold text-gray-800">Customer Service</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <a className="hover:opacity-75" href=""> Delivery & Payments </a>
-          <a className="hover:opacity-75" href=""> Returns & Refunds </a>
+          <Link className="hover:opacity-75" href="/delivery-and-payments"> Delivery & Payments </Link>
+          <Link className="hover:opacity-75" href="/returns-and-refunds"> Returns & Refunds </Link>
         </nav>
       </div>
 
       <div>
-        <p className="font-medium">Helpful Links</p>
+        <p className="font-bold text-gray-800">Helpful Links</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <a className="hover:opacity-75" href=""> FAQs </a>
+          <a className="hover:opacity-75" href="/faq"> FAQs </a>
         </nav>
       </div>
     </div>

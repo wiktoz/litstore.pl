@@ -6,12 +6,18 @@ const schema = new Schema({
     role: String,
     billingAddress:{
         name: String,
+        surname: String,
         street: String,
-        houseNumber: String,
-        flatNumber: String,
         postcode: String,
         city: String
-    }
+    },
+    addresses: [{
+        name: String,
+        surname: String,
+        street: String,
+        postcode: String,
+        city: String
+    }]
 })
 
 const User = models.User || model('User', schema);

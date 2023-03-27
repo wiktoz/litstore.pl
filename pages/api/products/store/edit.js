@@ -6,22 +6,20 @@ export default async function EditStore(req, res){
 
     await connect()
 
-    if(price.length != qty.length || qty.length != unit.length || unit.length != active.length){
+    if(id.length != price.length != qty.length != unit.length != active.length){
         return res.status(503).send({error: "fill all the fields"})
     }
 
     //prepare array to update
     let updateValues = []
-    let query
 
     for(let i=0; i < price.length; i++){
-        query = {
+        updateValues.push({
             updateOne: {
                 filter: { _id: id[i] },
                 update: { price: price[i], stock: qty[i], unit: unit[i], active: active[i]}
             }
-        }
-        updateValues.push(query)
+        })
     }
 
     await ProductItem.bulkWrite(updateValues).then((product) => {

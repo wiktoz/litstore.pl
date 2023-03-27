@@ -8,6 +8,7 @@ export default NextAuth({
     callbacks: {
         session: async ({ session, token }) => {
           if (session?.user) {
+            session.user.id = token.id
             session.user.role = token.role
           }
           return session
@@ -15,6 +16,7 @@ export default NextAuth({
         jwt: async ({ user, token }) => {
           if (user?.role) {
             token.role = user.role
+            token.id = user.id
           }
           return token
         },
@@ -41,7 +43,7 @@ export default NextAuth({
                     throw new Error('Incorrect password')
                 }
 
-                return { email: result.email, role: result.role };
+                return { id: result._id, role: result.role };
             },
         }),
     ],

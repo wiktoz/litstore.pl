@@ -10,7 +10,7 @@ const CategoryProducts = () => {
     const router = useRouter()
     const { categorySlug } = router.query
 
-    const { data: category, error: categoryError } = useSWR("/api/categories/get/"+categorySlug, fetcher)
+    const { data: category, error: categoryError } = useSWR(categorySlug ? "/api/categories/"+categorySlug : null, fetcher)
     const { data: products, error: productsError } = useSWR(category ? "/api/products/categoryId/"+category._id : null, fetcher)
 
     if(categoryError || productsError) return ""

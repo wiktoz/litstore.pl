@@ -8,7 +8,7 @@ const Products = ({products, size}) => {
                 products.map((product, index)=>{
                     return(
                         <Link href={"/p/" + product.slug} key={product.slug}>
-                            <div className="rounded-md border hover:cursor-pointer relative">
+                            <div className="rounded-md border hover:cursor-pointer relative h-full">
                                 {
                                     product.new_badge ? 
                                     <div className="bg-gray-700 absolute top-0 right-0 rounded-tr-md rounded-bl-md">

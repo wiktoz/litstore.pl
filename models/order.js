@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, models } from "mongoose"
 import ProductItem from './product_item'
+import Delivery from './delivery'
 
 const schema = new Schema({
     number: Number,
@@ -14,7 +15,7 @@ const schema = new Schema({
         postcode: String
     },
     delivery: {
-        id: String,
+        id: { type: Schema.Types.ObjectId, ref: 'Delivery' },
         price: Number,
     },
     items: [{

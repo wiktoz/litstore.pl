@@ -4,11 +4,19 @@ import Loader from '../../components/Loader'
 import useShoppingCart from '../../context/ShoppingCart'
 import Cart from '../../components/cart/Cart'
 import axios from 'axios'
+import { useEffect } from 'react'
+import Router from 'next/router'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 const CartSummary = () => {
     const {cartItems,cartDelivery, cartBuyer} = useShoppingCart()
+
+    useEffect(() => {
+        if(!cartBuyer.name)
+            Router.push('/cart/delivery')
+    })
+
     const { data: delivery, error } = useSWR('/api/deliveries/'+cartDelivery.id, fetcher)
 
     if(error) return error
@@ -53,6 +61,12 @@ const CartSummary = () => {
                         <p>{cartBuyer.street}</p>
                         <p>{cartBuyer.postcode} {cartBuyer.city}</p>
                     </div>
+                    <div className="col-span-6 px-6 py-10">
+                        <p className='font-bold mb-2'>Delivery data</p>
+                        <p>{cartDelivery.data.name} {cartDelivery.data.surname}</p>
+                        <p>{cartDelivery.data.street}</p>
+                        <p>{cartDelivery.data.postcode} {cartDelivery.data.city}</p>
+                    </div>
                     <div className='col-span-6 flex flex-row items-center'>
                         <div>
                         </div>
@@ -62,24 +76,16 @@ const CartSummary = () => {
                         </div>
                     </div>
                 </section>
-                <section> 
+                <section>
                     <div className='w-full'>
                         <Cart/>
                     </div>
-                </section>
-                <div className="block" aria-hidden="true">
-                <div className="py-5">
-                <div className="border-t border-gray-200" />
-                </div>
-                </div>
-                <section>
-                    
                 </section>
             </div>
             <div className="col-span-12 md:col-span-4">
                 <SummaryBox
                     previousStep="/cart/delivery"
-                    buttonTitle="Zapłać"
+                    buttonTitle="Zamawiam i płacę"
                     buttonOnClick={handlePay}
                 />
             </div>
