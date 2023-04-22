@@ -9,7 +9,7 @@ const InPostMap = () => {
         <link rel="stylesheet" href="https://geowidget.easypack24.net/css/easypack.css"/>
         </Head>
         <Script src='https://geowidget.easypack24.net/js/sdk-for-javascript.js' strategy="lazyOnload" />
-        <Script>{
+        <Script id="inpost-map">{
             window.easyPackAsyncInit = function () {
                 easyPack.init({});
                 var map = easyPack.mapWidget('easypack-map', function(point){

@@ -14,7 +14,7 @@ export default function EditCategory(){
 
     const { data : category, error: categoryError } = useSWR(slug ? '/api/categories/' + slug : null, fetcher)
 
-    if(categoryError) return "An error has occured."
+    if(categoryError) return "An error has occurred."
     if(!category) return <Loader/>
 
     const handleAddCategory = async (e) => {
@@ -46,7 +46,7 @@ export default function EditCategory(){
                 <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-3">
                     <div className="px-4 sm:px-0">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">Edit category "{category.name}"</h3>
+                    <h3 className="text-lg font-medium leading-6 text-gray-900">Edit category {category.name}</h3>
                     <p className="mt-1 text-sm text-gray-600">
                         Edit category name, description or display settings.
                     </p>

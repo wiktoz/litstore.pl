@@ -1,31 +1,7 @@
-import sha256 from 'crypto-js/sha256'
 import ProductsOrder from '../../components/ProductsOrder'
 import useSWR from 'swr'
 import Loader from '../../components/Loader'
-
-export const getServerSideProps = async (context) => {
-    const PAYMENT_KEY = process.env.PAYMENT_KEY
-
-    const hashFields = {
-        "ServiceID": context.query.ServiceID,
-        "OrderID": context.query.OrderID
-    }
-
-    const hash = sha256(Object.values(hashFields).join('|') + "|" + PAYMENT_KEY).toString()
-
-    if(hash !== context.query.Hash){
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/",
-            },
-        }
-    }
-
-    const orderID = context.query.OrderID
-
-    return { props: { orderID } }
-}
+import { useRouter } from 'next/router'
 
 const getColor = (status) => {
     if(status === "PENDING") return "text-orange-500"
@@ -40,10 +16,13 @@ const formatDate = (date) => {
 
 const fetcher = url => fetch(url).then(r => r.json())
 
-const PaymentCompleted = ({orderID}) => {
-    const { data: order, error} = useSWR(orderID ? '/api/orders/' + orderID : null, fetcher)
+const PaymentCompleted = () => {
+    const router = useRouter()
+    const { OrderID, ServiceID, Hash } = router.query
+    const endpoint = '/api/orders/' + OrderID + '?ServiceID=' + ServiceID + '&Hash=' + Hash
+    const { data: order, error} = useSWR(OrderID && ServiceID && Hash ? endpoint : null, fetcher)
 
-    if(error) return "An error has occured"
+    if(error) return "An error has occurred"
     if(!order) return <Loader />
 
     return(
@@ -54,7 +33,7 @@ const PaymentCompleted = ({orderID}) => {
                     <p>
                         Your order #{order._id} has been completed.
                     </p>
-                    { order?.payment.status == "SUCCESS" ?
+                    { order?.payment.status === "SUCCESS" ?
                         <p>
                             Payment completed.
                         </p>
@@ -92,7 +71,8 @@ const PaymentCompleted = ({orderID}) => {
                         </div>
                         <div className="px-6">
                             <p className='font-bold mb-2'>Delivery method <span className='font-normal text-xs'>(+{order?.delivery?.price} PLN)</span></p>
-                            <img className='w-24 my-4' src={"/img/delivery/" + order?.delivery?.id.img} />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img className='w-24 my-4' src={"/img/delivery/" + order?.delivery?.id.img}  alt="delivery company"/>
                         </div>
                     </div>
                 </section>

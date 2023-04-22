@@ -15,8 +15,13 @@ const Products = ({products, size}) => {
                                         <p className="text-white text-xs px-2 py-1 tracking-tight">new</p>
                                     </div> : ""
                                 }
-                                <div>
-                                    <img src={"/img/products/" + product.main_photo}/>
+                                <div className="h-full flex flex-col justify-between">
+                                    <div className="grow flex justify-center">
+                                        <div className="my-auto">
+                                            <img src={"/img/products/" + product.main_photo}/>
+                                        </div>
+                                    </div>
+
                                     <div className='m-2 my-4'>
                                         <p className="text-xs font-semibold text-gray-400 mb-1">{product.producer}</p>
                                         <p className="text-sm font-light">{product.name}</p>

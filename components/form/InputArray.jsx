@@ -1,6 +1,7 @@
 import { useState, forwardRef, useImperativeHandle} from 'react'
 import { Reorder } from "framer-motion"
 import {FaTimes} from 'react-icons/fa'
+import AddressForm from "./AddressForm";
 
 const InputArray = forwardRef((props, ref) => {
     const defaultState = [{id: 'idval0', value: ''},{id: 'idval1', value: ''}]
@@ -71,5 +72,5 @@ const InputArray = forwardRef((props, ref) => {
         </div>
     )
 })
-
+InputArray.displayName = "InputArray"
 export default InputArray

@@ -11,7 +11,7 @@ const CartDelivery = () => {
     const addressBox = useRef()
     const {cartBuyer, setBuyer, setDelivery} = useShoppingCart()
 
-    const [addressPicked, setAddressPicked] = useState(cartBuyer.name ? true : false)
+    const [addressPicked, setAddressPicked] = useState(!!cartBuyer.name)
 
     const handleAddressData = (data) => {
         setBuyer(data)
@@ -47,7 +47,7 @@ const CartDelivery = () => {
                             postcode={cartBuyer.postcode ? cartBuyer.postcode : ""}  
                             city={cartBuyer.city ? cartBuyer.city : ""} 
                             submitData={handleAddressData}
-                            disabled={addressPicked ? true : false}
+                            disabled={addressPicked}
                         />
                     </div>
                 </section>

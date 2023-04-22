@@ -5,7 +5,10 @@ import User from '../../models/user'
 export default async function registerHandler(req, res){
     const body = req.body
 
-    // TODO validating body
+    if(body.email.isEmpty)
+        return res.status(200).json({message: "Email cannot be empty!"})
+    if(body.password.length < 7)
+        return res.status(200).json({message: "Password has to be at least 8 characters!"})
 
     await connect()
     const user = await User.findOne({email: body.email})

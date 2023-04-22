@@ -21,7 +21,7 @@ const Accordion = ({ title, description}) => {
           >
             <VscChevronRight></VscChevronRight>
           </motion.div>
-          {title}
+          <p className="font-semibold">{title}</p>
         </motion.div>
 
         {isOpen && (
@@ -39,7 +39,7 @@ const Accordion = ({ title, description}) => {
                         exit={{ opacity: 0, height:0, y:-30}}
                         className="my-2"
                     >
-                        <p className="text-sm rounded p-4">{description}</p>
+                        <p className="text-xs rounded-lg border-gray-200 leading-5 border p-4" dangerouslySetInnerHTML={{ __html: description}}></p>
                     </motion.div>
                 )
         }

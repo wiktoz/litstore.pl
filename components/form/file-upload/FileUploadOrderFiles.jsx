@@ -3,6 +3,7 @@ import {AiOutlineCloudUpload} from 'react-icons/ai'
 import { Reorder } from "framer-motion"
 import {AiOutlineClose} from 'react-icons/ai'
 import Image from 'next/image'
+import AddressForm from "../AddressForm";
 
 const FileInputOrder = forwardRef((props, ref) => {
 
@@ -19,8 +20,8 @@ useImperativeHandle(ref, () => ({
 }))
 
 const onFileDrop = (e) => {
-   var newFile, src
-   var arr = []
+   let newFile, src
+   let arr = []
     for (let i = 0; i < e.target.files.length; i++){
       newFile = e.target.files[i];
       if(newFile){
@@ -83,7 +84,7 @@ return (
             <div className="overflow-auto scroll-light">
             { 
             <Reorder.Group axis="x" className="flex flex-row my-2" values={fileList} onReorder={setFileList}>
-              {fileList.map((item, index) => (
+              {fileList?.map(item => (
                 <Reorder.Item className="mr-1 relative bg-white" key={item.id} value={item}>
                   <div className="absolute top-1 right-1 text-gray-300 hover:cursor-pointer" onClick={() => fileRemove(item)}><AiOutlineClose></AiOutlineClose></div>
                   <div className="flex flex-col h-full w-28 border rounded-lg p-3 justify-content-center text-center">
@@ -106,5 +107,5 @@ return (
   </>
 )
 })
-
+FileInputOrder.displayName = "FileInputOrder"
 export default FileInputOrder

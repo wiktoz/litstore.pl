@@ -41,7 +41,7 @@ const AddVariant = () => {
     return (
         <>
         <div className="py-2">
-            <div className="md:grid md:grid-cols-3 md:gap-6">
+            <div className="md:grid md:grid-cols-1 md:gap-6">
                 <div className="md:col-span-1">
                     <div className="px-4 sm:px-0">
                     <h3 className="text-lg font-medium leading-6 text-gray-900">Add variants</h3>
@@ -51,7 +51,7 @@ const AddVariant = () => {
                     </p>
                     </div>
                 </div>
-                <div className="mt-5 md:col-span-2 md:mt-0">
+                <div className="mt-5 md:col-span-1 md:mt-0">
                     <form action="/api/variants/add" method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <div className="shadow sm:overflow-hidden sm:rounded-lg">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">

@@ -1,7 +1,7 @@
 import ProductItem from "../../../models/product_item"
 import connect from '../../../utils/connectDb'
 
-const ProductItemById = async (req, res) => {
+const GetProductItem = async (req, res) => {
     await connect()
 
     await ProductItem.find({}).then((product)=>{
@@ -11,4 +11,4 @@ const ProductItemById = async (req, res) => {
     })  
 }
 
-export default ProductItemById
+export default GetProductItem

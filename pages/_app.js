@@ -18,8 +18,8 @@ import '../styles/inpost.css'
 
 function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
   const getLayout =
-        router.pathname.includes('/admin') ? ((page) => <AdminLayout children={page} />)
-        : ((page) => <ShopLayout children={page} />)
+      router.pathname.includes('/admin') ? ((page, pageProps) => <AdminLayout>{page}</AdminLayout>)
+          : ((page) => <ShopLayout>{page}</ShopLayout>)
   
   return (
     <>

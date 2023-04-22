@@ -124,5 +124,5 @@ const AddressForm = forwardRef(({title, description, name, surname, email, stree
             </div>
     )
 })
-
+AddressForm.displayName = "AddressForm"
 export default AddressForm

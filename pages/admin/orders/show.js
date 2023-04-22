@@ -9,9 +9,9 @@ const formatDate = (date) => {
 }
 
 const ShowOrders = () => {
-    const { data: orders, error } = useSWR("/api/orders/get", fetcher)
+    const { data: orders, error } = useSWR("/api/orders", fetcher)
 
-    if(error) return "error occured"
+    if(error) return "error occurred"
     if(!orders) return <Loader/>
 
     return(
@@ -51,7 +51,7 @@ const ShowOrders = () => {
                         {
                             orders.map(order => {
                                 return(
-							    <tr>
+							    <tr key={order._id}>
 								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
 									<div className="flex items-center">
 											<div>
@@ -66,7 +66,7 @@ const ShowOrders = () => {
                                         {
                                             order.items.map(item => {
                                                 return (
-                                                    <p>{item.id}</p>
+                                                    <p key={item.id}>{item.id}</p>
                                                 )
                                             })
                                         }

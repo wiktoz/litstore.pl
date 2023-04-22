@@ -78,7 +78,7 @@ export default function Footer(){
         <p className="font-bold text-gray-800">Helpful Links</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <a className="hover:opacity-75" href="/faq"> FAQs </a>
+          <Link className="hover:opacity-75" href="/faq"> FAQs </Link>
         </nav>
       </div>
     </div>

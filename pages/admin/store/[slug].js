@@ -3,17 +3,31 @@ import useSWR from 'swr'
 import Loader from '../../../components/Loader'
 import Input from '../../../components/form/Input'
 import axios from 'axios'
+import {useEffect, useState} from "react"
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function StoreProduct(){
+    const [stock, setStocks] = useState({})
     const router = useRouter()
     const {slug} = router.query
 
     const { data: store, error: storeError } = useSWR('/api/products/store/populate/'+slug, fetcher)
     const { data: product, error: productError } = useSWR('/api/products/slug/'+slug, fetcher)
 
-    if(storeError || productError) return "An error occured."
+    useEffect(()=> {
+        store ? setStocks({}) : null
+    },[store, stock])
+
+    /*
+        stock: {
+            _id: itemId,
+            price: itemPrice,
+            stock: itemStock,
+        }
+     */
+
+    if(storeError || productError) return "An error occurred."
     if(!store || !product) return <Loader/>
 
     const postData = async (e) => {
@@ -49,15 +63,19 @@ export default function StoreProduct(){
                 store.map((item) => {
                     return(
                         <div key={item._id}>
-                        <Input 
-                            id={item._id}
-                            title={item.options.map(option => {
-                                return(
-                                    option.name 
-                                )
-                            })}
-                            value={item.price ? item.price : "0"}
-                        />
+                            <Input
+                                product-id={item._id}
+                                title={item.options.map(option => {
+                                    return(
+                                        option.name
+                                    )
+                                })}
+                                value={item.price ? item.price : "0"}
+                            />
+                            <Input
+                                product-id={item._id}
+                                name="stock[]"
+                            />
                         </div>
                     )
                 })

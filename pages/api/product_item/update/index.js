@@ -9,7 +9,7 @@ const UpdateProductItem = async (req, res) => {
             updateOne :
             {
                "filter": {_id: item._id},
-               "update": {price: item.price}
+               "update": {price: item.price, stock: item.stock, unit: item.unit}
             }
          }
     })
