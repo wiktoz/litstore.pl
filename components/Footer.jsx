@@ -56,7 +56,7 @@ export default function Footer(){
       className="text-sm grid grid-cols-1 gap-8 border-t border-gray-100 pt-12 sm:grid-cols-2 lg:grid-cols-4"
     >
       <div>
-        <p className="font-bold text-gray-800">Informations</p>
+        <p className="font-bold text-gray-800">Information</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
           <Link className="hover:opacity-75" href="/privacy-policy"> Privacy Policy </Link>

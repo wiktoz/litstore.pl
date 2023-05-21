@@ -5,6 +5,7 @@ import useShoppingCart from '../../context/ShoppingCart'
 import AddressForm from '../../components/form/AddressForm'
 import { useState, useRef } from 'react'
 import DeliveryBox from '../../components/cart/delivery/DeliveryBox'
+import Geowidget from "../../components/Geowidget"
 
 const CartDelivery = () => {
     const deliveryBox = useRef()
@@ -36,7 +37,7 @@ const CartDelivery = () => {
                         <div className='w-full h-1 rounded bg-gray-300'></div>
                     </div>
                 </section>
-                <section ref={addressBox} className={ addressPicked ? "opacity-50" : ""}>
+                <section ref={addressBox} className={"shadow rounded p-4 " + (addressPicked ? "opacity-50" : "")}>
                     
                     <div className='w-full'>
                         <AddressForm
@@ -53,7 +54,7 @@ const CartDelivery = () => {
                 </section>
                 <div className="py-6">
                 </div>
-                <section ref={deliveryBox} className="shadow rounded p-4">
+                <section ref={deliveryBox} className="shadow rounded p-8">
                     <div className="py-2">
                     <h3 className="text-lg font-semibold leading-6 text-gray-900">Delivery Method</h3>
                     <p className="mt-1 text-sm text-gray-600">Pick method which your products will be shipped to you</p>

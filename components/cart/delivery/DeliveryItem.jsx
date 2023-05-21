@@ -4,10 +4,10 @@ const DeliveryItem = ({id, name, img, price, isPicked, pickDelivery}) => {
             <div className='px-4'>
                 <img src={"/img/delivery/" + img} className="w-20" />
             </div>
-            <div className='flex flex-col self-center px-6'>
-                <p className='font-medium'>{name}</p>
-                <p className='text-sm text-gray-500'>
-                    + {price} PLN
+            <div className='flex flex-col self-center px-2'>
+                <p className='font-semibold text-sm'>{name}</p>
+                <p className='text-xs text-gray-500'>
+                    {price} PLN
                 </p>
             </div>
         </div>

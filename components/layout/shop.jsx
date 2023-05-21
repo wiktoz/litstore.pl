@@ -21,8 +21,7 @@ export default function ShopLayout({children}) {
                     </div>
                 </div>
             </div>
-            </Transition>
-            <Transition>
+
                 <Footer></Footer>
             </Transition>
             </div>

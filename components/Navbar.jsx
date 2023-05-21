@@ -23,7 +23,7 @@ export default function Navbar() {
 
   const { data: categories, error } = useSWR('/api/categories', fetcher)
 
-  if(error) return error
+  if(error) return <Loader/>
   if(!categories) return <Loader/>
 
   return (

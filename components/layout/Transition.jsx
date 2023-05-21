@@ -5,7 +5,7 @@ const variants = {
     out: {
       opacity: 0,
       transition: {
-        duration: 0
+        duration: 0.2
       }
     },
     in: {
@@ -20,7 +20,7 @@ const Transition = ({ children }) => {
     const { asPath } = useRouter()
     return (
             <AnimatePresence
-            initial={{opacity:0}}
+            initial={{opacity: 0}}
             mode='wait'
             >
             <motion.div

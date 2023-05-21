@@ -8,7 +8,7 @@ const fetcher = url => fetch(url).then(r => r.json())
 export default function Home() {
   const { data: products, error } = useSWR("/api/products/get", fetcher)
 
-  if(error) return "Error occured"
+  if(error) return "Error occurred"
   if(!products) return <Loader/>
 
   return (

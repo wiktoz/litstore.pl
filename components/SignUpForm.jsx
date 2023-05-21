@@ -1,16 +1,31 @@
 import { getCsrfToken, signIn, getSession } from "next-auth/react"
-import Router from "next/router"
+import {useRouter} from "next/router"
 import { useState } from "react"
+import Spinner from "./Spinner"
+import Link from "next/link";
 
 export default function SignUp({ csrfToken }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [repeatPassword, setRepeatPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState(null)
+
+  const Router = useRouter()
 
   const handleSignUp = async (e) => {
     e.preventDefault()
 
-    const response = await fetch('/api/register',{
+    if(!email || !password || !repeatPassword) return
+
+    if(password !== repeatPassword){
+      setMessage("Passwords are not equal")
+      return
+    }
+
+    setIsLoading(true)
+
+    const r = await fetch('/api/register',{
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -18,24 +33,26 @@ export default function SignUp({ csrfToken }) {
       body: JSON.stringify({email, password})
     })
 
-    const data = await response.json()
+    const response = await r.json()
 
     setMessage(null)
-    if(data.message){
-      setMessage(data.message)
+    if(response?.error){
+      setIsLoading(false)
+      setMessage(response.error)
     }
+    else await Router.push('/user/profile')
   }
 
   return (
     <>
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-4">
           <div>
-            <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-              Zarejestruj się
+            <h2 className="text-2xl font-bold text-gray-700 tracking-tight">
+              Sign Up
             </h2>
           </div>
-            <input type="hidden" name="remember" defaultValue="true" />
+            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
                 <label htmlFor="email-address" className="sr-only">
@@ -81,22 +98,36 @@ export default function SignUp({ csrfToken }) {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
                   placeholder="powtórz hasło"
+                  value={repeatPassword}
+                  onChange={e=>setRepeatPassword(e.target.value)}
                 />
               </div>
             </div>
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-600">
+                Rejestrując się, zgadzasz się z&nbsp;
+                <Link href="/terms-and-conditions" className="text-gray-900 hover:text-gray-700">
+                  Regulaminem
+                </Link>
+              </div>
+            </div>
+            { message ?
+              <div className="text-red-500 text-sm">
+                <p>{message}</p>
+              </div>
+              : ""}
             <div>
               <button
                 type="submit"
-                className="group relative flex w-full justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                className={"w-full group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-semibold text-white focus:outline-none " + (!email || !password || !repeatPassword || isLoading ? "opacity-70 hover:cursor-default hover:bg-gray-600" : "hover:bg-gray-700")}
                 onClick={(e)=>handleSignUp(e)}
               >
-                Zarejestruj się
+                {
+                  isLoading ? <Spinner/> : "Sign up"
+                }
               </button>
             </div>
         </div>
-      </div>
-      <div>
-        <p>{message}</p>
       </div>
     </>
   )

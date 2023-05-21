@@ -1,26 +1,16 @@
 import SignUpForm from "../../components/SignUpForm"
-import { getCsrfToken, getSession } from "next-auth/react"
+import {getCsrfToken} from "next-auth/react"
 
-export default function Home() {
-  return (
-    <div className='p-10'>
-      <SignUpForm></SignUpForm>
-    </div>
-  )
-}
-
-export async function getServerSideProps(context) {
-  const { req } = context
-  const session = await getSession({ req })
-
-  if (session) {
-    return {
-      redirect: { destination: "/user/profile" },
+const SignUp = () => {
+    const getToken = async () => {
+        return await getCsrfToken()
     }
-  }
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
+
+    return (
+        <div className='p-10'>
+          <SignUpForm csrfToken={getToken}></SignUpForm>
+        </div>
+    )
 }
+
+export default SignUp

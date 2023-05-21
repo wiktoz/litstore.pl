@@ -28,7 +28,7 @@ const AddressForm = forwardRef(({title, description, name, surname, email, stree
 
     return(
         <div>
-                <div className="rounded p-4">
+                <div className="rounded px-6 py-2">
                     <div className="py-4">
                         <h3 className="text-lg font-semibold leading-6 text-gray-900">
                             {
@@ -46,7 +46,7 @@ const AddressForm = forwardRef(({title, description, name, surname, email, stree
                     <form onSubmit={handleSubmit(onSubmit)} >
                         <fieldset disabled={disabled}>
                     <div className="overflow-hidden">
-                        <div className="py-5">
+                        <div className="py-2">
                         <div className="grid grid-cols-12 gap-5">
                             <div className="col-span-6">
                             <Input

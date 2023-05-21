@@ -56,7 +56,7 @@ export default function Slider(){
             className="min-w-full basis-full"
             key={index}
           >
-            <img src={item.link}></img>
+            <img src={item.link} className="rounded-md"></img>
           </div>
         ))}
       </motion.div>

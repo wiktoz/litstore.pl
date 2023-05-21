@@ -1,5 +1,7 @@
 import ProductItem from "../../../../../models/product_item"
 import Product from '../../../../../models/product'
+import VariantOption from "../../../../../models/variant_option"
+import Variant from "../../../../../models/variant"
 import connect from '../../../../../utils/connectDb'
 
 const ProductStore = async (req, res) => {

@@ -11,7 +11,7 @@ const formatDate = (date) => {
 const ShowOrders = () => {
     const { data: orders, error } = useSWR("/api/orders", fetcher)
 
-    if(error) return "error occurred"
+    if(error) return <Loader/>
     if(!orders) return <Loader/>
 
     return(

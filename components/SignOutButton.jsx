@@ -21,9 +21,7 @@ export default function SignOutButton(){
 
     }
     else{
-        return(
-            null
-        )
+        return null
     }
 
 }

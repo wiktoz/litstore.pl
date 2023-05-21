@@ -13,7 +13,7 @@ const CategoryProducts = () => {
     const { data: category, error: categoryError } = useSWR(categorySlug ? "/api/categories/"+categorySlug : null, fetcher)
     const { data: products, error: productsError } = useSWR(category ? "/api/products/categoryId/"+category._id : null, fetcher)
 
-    if(categoryError || productsError) return ""
+    if(categoryError || productsError) return <Loader/>
     if(!category || !products) return <Loader/>
 
     return(

@@ -11,7 +11,7 @@ const DeliveryBox = () => {
     const { data: deliveries, error} = useSWR('/api/deliveries/active', fetcher)
     const { cartDelivery, setDelivery } = useShoppingCart()
     
-    if(error) return "An error has occured"
+    if(error) return "An error has occurred"
     if(!deliveries) return <Loader />
 
     const pickDelivery = (e, id) => {
@@ -38,21 +38,28 @@ const DeliveryBox = () => {
                             name={item.name}
                             img={item.img}
                             price={item.price}
-                            isPicked={cartDelivery && cartDelivery.id == item._id ? true : false }
+                            isPicked={!!(cartDelivery && cartDelivery.id === item._id) }
                             pickDelivery={ e => { pickDelivery(e, item._id) }}
                         />
                     )
                 })
             }
         </div>
-        <div className="w-full h-full">
+        <div className="w-full my-4">
             {
                 deliveries.map(item => {
                     return (
-                    cartDelivery && cartDelivery.id == item._id ?
-                        item.name == "InPost" ?
-                            <Geowidget key="InPostGeowidget"/> : <AddressForm submitData={handleAddressData}/>
-                            : ""
+                    cartDelivery && cartDelivery.id === item._id ?
+                        item.name === "InPost" ?
+                            <Geowidget key="InPostGeowidget" id={cartDelivery.id}/> :
+                            <div key="addressForm" className="border-gray-300 border-2 rounded-lg">
+                                <AddressForm
+                                    submitData={handleAddressData}
+                                    title="Dane do wysyłki"
+                                    description="Podaj dane, na które wyślemy twoje zakupy"
+                                />
+                            </div>
+                    : ""
                     )
                 })
             }

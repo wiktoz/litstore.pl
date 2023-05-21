@@ -6,7 +6,7 @@ const ProductByCategoryId = async (req, res) => {
 
     await connect()
 
-    await Product.find({category: id}).then((products)=>{
+    await Product.find({category: id, active: true}).then((products)=>{
         return res.status(200).send(products)
     }).catch((err)=>{
         return res.status(503).send(err)

@@ -1,26 +1,16 @@
 import SignInForm from "../../components/SignInForm"
-import { getCsrfToken, getSession } from "next-auth/react"
+import {getCsrfToken} from "next-auth/react"
 
-export default function Home({csrfToken}) {
+const SignIn = () => {
+  const getToken = async () => {
+    return await getCsrfToken()
+  }
+
   return (
     <div className='p-10'>
-      <SignInForm csrfToken={csrfToken}></SignInForm>
+      <SignInForm csrfToken={getToken}></SignInForm>
     </div>
   )
 }
 
-export async function getServerSideProps(context) {
-  const { req } = context
-  const session = await getSession({ req })
-
-  if (session) {
-    return {
-      redirect: { destination: "/user/profile" },
-    }
-  }
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
-}
+export default SignIn

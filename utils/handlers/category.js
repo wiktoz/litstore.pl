@@ -16,7 +16,7 @@ const create = async (data) => {
 const get = async () => {
     await connect()
     
-    return Category.find({})
+    return Category.find({active: true})
     .then(category => { 
         return category 
     })

@@ -5,7 +5,7 @@ import Box from '../Box'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
-export default function CartItem({id, qty, handleIncrease, handleDecrease, handleRemove}){
+export default function CartItem({id, qty, handleIncrease, handleDecrease, handleRemove, nobtn}){
     const { data : product, error } = useSWR('/api/product_item/id/'+id, fetcher)
     if (error) return "An error has occurred."
     if (!product) return <Box><Loader /></Box>
@@ -26,6 +26,7 @@ export default function CartItem({id, qty, handleIncrease, handleDecrease, handl
                     }</p>
                     <p className="text-md mt-2">{product.price} <span className="text-xs">PLN</span></p>
                 </div>
+                { nobtn ? <div></div> :
                 <div className="flex flex-row items-center">
                     <div className="text-xs hover:cursor-pointer hover:opacity-50">
                         <FiMinus onClick={(e) => handleDecrease(e, id)}/>
@@ -37,9 +38,12 @@ export default function CartItem({id, qty, handleIncrease, handleDecrease, handl
                         <FiPlus onClick={(e) => handleIncrease(e, id)}/>
                     </div>
                 </div>
+                }
+                { nobtn ? <div></div> :
                 <div className='mx-4 hover:cursor-pointer hover:opacity-50'>
                     <FiTrash2 onClick={(e) => handleRemove(e, id)}/>
                 </div>
+                }
             </div>
         </Box>
     )

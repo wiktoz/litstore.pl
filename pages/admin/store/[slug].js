@@ -16,8 +16,16 @@ export default function StoreProduct(){
     const { data: product, error: productError } = useSWR('/api/products/slug/'+slug, fetcher)
 
     useEffect(()=> {
-        store ? setStocks({}) : null
-    },[store, stock])
+        // effect on page load, no deps to run only once
+        const stocks = store?.map(p => ({
+                _id: p._id,
+                options: p.options?.map(o => o.name),
+                price: p.price,
+                stock: p.stock,
+                unit: p.unit
+        }))
+        setStocks(stocks)
+    },[])
 
     /*
         stock: {

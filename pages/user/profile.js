@@ -7,6 +7,7 @@ import {PlusIcon} from '@heroicons/react/24/outline'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import axios from 'axios'
+import Loader from '../../components/Loader'
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -15,8 +16,8 @@ const UserProfile = () => {
     const { data: session, status } = useSession()
     const { data: user, error } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
 
-    if(error) return "Error occured"
-    if(!user) return "Loading..."
+    if(error) return <Loader/>
+    if(!user) return <Loader/>
 
     const addAddress = async (data) => {
         const endpoint = '/api/users/edit/'+session.user.id+'/addAddress'

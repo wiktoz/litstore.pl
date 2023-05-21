@@ -61,12 +61,8 @@ const CartSummary = () => {
                         <p>{cartBuyer.street}</p>
                         <p>{cartBuyer.postcode} {cartBuyer.city}</p>
                     </div>
-                    <div className="col-span-6 px-6 py-10">
-                        <p className='font-bold mb-2'>Delivery data</p>
-                        <p>{cartDelivery.data.name} {cartDelivery.data.surname}</p>
-                        <p>{cartDelivery.data.street}</p>
-                        <p>{cartDelivery.data.postcode} {cartDelivery.data.city}</p>
-                    </div>
+                </section>
+                <section className='grid grid-cols-12 rounded my-4 bg-gray-50 text-gray-700 text-sm'>
                     <div className='col-span-6 flex flex-row items-center'>
                         <div>
                         </div>
@@ -75,10 +71,16 @@ const CartSummary = () => {
                             <img className='w-24 my-4' src={"/img/delivery/" + delivery.img} />
                         </div>
                     </div>
+                    <div className="col-span-6 px-6 py-10">
+                        <p className='font-bold mb-2'>Delivery data</p>
+                        <p>{cartDelivery.data.name} {cartDelivery.data.surname}</p>
+                        <p>{cartDelivery.data.street}</p>
+                        <p>{cartDelivery.data.postcode} {cartDelivery.data.city}</p>
+                    </div>
                 </section>
                 <section>
                     <div className='w-full'>
-                        <Cart/>
+                        <Cart nobtn={true} />
                     </div>
                 </section>
             </div>

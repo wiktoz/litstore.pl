@@ -1,5 +1,6 @@
 import Product from "../../models/product"
 import connect from "../connectDb"
+import Category from "../../models/category";
 
 const create = async (data) => {
     await connect()
@@ -16,7 +17,7 @@ const create = async (data) => {
 const get = async () => {
     await connect()
     
-    return Category.find({})
+    return Product.find({})
     .then(category => { 
         return category 
     })

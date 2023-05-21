@@ -41,11 +41,11 @@ const ProductPage = () => {
     }
 
     const getMaxPrice = () => {
-        return Math.max(...variants.map((i) => i.price))
+        return Math.max(...variants?.map((i) => i.price))
     }
 
     const getMinPrice = () => {
-        return Math.min(...variants.map((i) => i.price))
+        return Math.min(...variants?.map((i) => i.price))
     }
 
     const printPrice = () => {

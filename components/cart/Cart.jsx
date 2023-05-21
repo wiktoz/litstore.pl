@@ -4,7 +4,7 @@ import {AnimatePresence, motion} from 'framer-motion'
 import { ShoppingBagIcon } from '@heroicons/react/24/outline'
 import Link from "next/link"
 
-export default function Cart(){
+export default function Cart({nobtn}){
     const { cartQty, cartItems, cartBuyer, getItemQty, increaseQty, decreaseQty, removeFromCart } = useShoppingCart()
 
     const handleDecrease = (e, id) => {
@@ -46,6 +46,7 @@ export default function Cart(){
                                         handleIncrease={handleIncrease}
                                         handleDecrease={handleDecrease}
                                         handleRemove={handleRemove}
+                                        nobtn={nobtn}
                                     />
                                 </motion.div>
                                 )
