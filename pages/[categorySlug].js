@@ -19,7 +19,7 @@ const CategoryProducts = () => {
     return(
         <div>
             <div className="mt-4 mb-8">
-                <h1 className="text-xl uppercase font-bold tracking-tighter">{category.name}</h1>
+                <h1 className="text-xl uppercase font-bold tracking-tighter text-gray-700">{category.name}</h1>
                 <p className="text-xs mt-1 text-gray-500">{category.description}</p>
             </div>
 

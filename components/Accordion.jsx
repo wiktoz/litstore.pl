@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {VscChevronRight} from 'react-icons/vsc'
 
-const Accordion = ({ title, description}) => {
+const Accordion = ({ title, description, children}) => {
 
   const [isOpen, setIsOpen] = useState(false);
 

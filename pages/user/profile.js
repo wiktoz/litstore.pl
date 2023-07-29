@@ -14,10 +14,11 @@ const fetcher = url => fetch(url).then(r => r.json())
 const UserProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { data: session, status } = useSession()
-    const { data: user, error } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
+    const { data: user, errorUser } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
+    const { data: orders, errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
 
-    if(error) return <Loader/>
-    if(!user) return <Loader/>
+    if(errorUser || errorOrders) return <Loader/>
+    if(!user || !orders) return <Loader/>
 
     const addAddress = async (data) => {
         const endpoint = '/api/users/edit/'+session.user.id+'/addAddress'
@@ -33,35 +34,63 @@ const UserProfile = () => {
     }
 
     return(
-        <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2 bg-gray-50 rounded-md p-6 font-medium text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex flex-col gap-6 bg-gray-50 rounded-md p-6 font-medium text-sm col-span-2 md:col-span-1">
                 <div>
                     <p className="font-bold text-lg mb-2">
-                        Hello, {user.email}!
+                        Moje konto
                     </p>
                 </div>
                 {
                     session && session.user.role === "admin" ? 
                     <div>
                         <Link href="/admin">
-                            Admin Panel
+                            Panel administratora
                         </Link>
                     </div> 
                     : ""
                 }
                 <div>
+                    <p className="mb-2">Moje zakupy</p>
                     <Link href="/user/orders">
-                        My Orders
+                        <p className="text-sm font-light">Zamówienia</p>
                     </Link>
                 </div>
                 <div>
-                    <SignOutButton/>
+                    <p className="mb-1">Ustawienia</p>
+                    <Link href="/user/orders">
+                        <p className="text-sm font-light">Dane</p>
+                    </Link>
+                    <Link href="/user/orders">
+                        <p className="text-sm font-light">Adresy do wysyłki</p>
+                    </Link>
                 </div>
             </div>
-            <div className='grid grid-cols-6 md:grid-cols-12 gap-4'>
-                <div onClick={() => setIsOpen(true)} className='h-64 rounded-md col-span-2 text-gray-700 border-2 border-dotted border-gray-500 hover:bg-gray-500 hover:border-solid hover:cursor-pointer hover:text-white'>
+            <div className='grid grid-cols-1 md:grid-cols-1 gap-4 col-span-2'>
+                <p>Moje zamówienia</p>
+                {orders?.map((order) => {
+                    return(
+                        order.items.map((item) => {
+                            return(
+                                <div key={item._id}>
+                                    <img
+                                        className="w-16"
+                                        src={"/img/products/" + item.main_photo}
+                                        alt={item.name}
+                                    />
+                                        <p key={item._id}>{item.name}</p>
+                                </div>
+
+                            )
+                        })
+
+                    )
+                })}
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-1 gap-4 col-span-2'>
+                <div onClick={() => setIsOpen(true)} className='rounded-md col-span-2 py-4 text-gray-700 border-2 border-dotted border-gray-500 hover:bg-gray-500 hover:border-solid hover:cursor-pointer hover:text-white'>
                     <div className="flex justify-center items-center h-full">
-                        <PlusIcon className="w-8 h-8"/>
+                        <PlusIcon className="w-4 h-4"/>
                         <p className="text-sm mx-1">Add address</p>
                     </div>
                 </div>
@@ -69,7 +98,7 @@ const UserProfile = () => {
                     user && user.addresses && user.addresses.length > 0 ?
                     user.addresses.map((address) => {
                         return(
-                        <div key={address._id} className='h-64 rounded-md col-span-2 text-gray-700 border border-gray-500'>
+                        <div key={address._id} className='py-2 rounded-md col-span-2 text-gray-700 border border-gray-500'>
                             <div className="flex flex-col justify-center h-full p-2">
                                 <p className="text-sm font-bold mx-1 mb-2">{address.name} {address.surname}</p>
                                 <p className="text-sm mx-1">{address.street}</p>

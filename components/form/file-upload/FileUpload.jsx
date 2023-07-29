@@ -2,7 +2,7 @@ import React, {useState, useRef} from 'react';
 import {AiOutlineCloudUpload} from 'react-icons/ai'
 import {AiOutlineClose} from 'react-icons/ai'
 
-export default function FileInput(){
+export default function FileInput({multiple}){
 
 const wrapper = useRef();
 const [fileList, setFileList] = useState([]);
@@ -28,8 +28,8 @@ const fileRemove = (file) =>{
 }
 
 return (
-  <div className="max-w-xl mx-auto my-2">
-    <div className="p-5 border rounded-lg relative hover:bg-gray-100 transition-all" ref={wrapper}>
+  <div className="mx-auto my-2">
+    <div className="bg-white p-5 border rounded-lg relative hover:bg-gray-100 transition-all" ref={wrapper}>
       <div className="flex flex-col items-center justify-center">
         <div>
           <AiOutlineCloudUpload
@@ -42,8 +42,8 @@ return (
       </div>
       <input 
         className="absolute top-0 left-0 opacity-0 w-full h-full hover:cursor-pointer" 
-        type="file" 
-        multiple 
+        type="file"
+        multiple={multiple ? multiple : true}
         onChange={onFileDrop}
         onClick={(event)=> { 
           event.currentTarget.value = null

@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import { Dialog, Tab, Transition } from '@headlessui/react'
 import {XMarkIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
@@ -64,60 +64,16 @@ const MobileNavbar = ({categories,open,setOpen}) => {
                     ))}
                   </Tab.List>
                 </div>
-                <Tab.Panels as={Fragment}>
+                <Tab.Panels>
                   {categories.map((category) => (
-                    <Tab.Panel key={category.name} className="space-y-10 px-4 pt-10 pb-8">
-                      <div className="grid grid-cols-2 gap-x-4">
+                    <Tab.Panel key={category.name} className="w-full space-y-10 px-4 pt-4 pb-4 font-semibold">
+                      <div className="grid grid-cols-2 gap-x-4 w-full">
                         <Link href={"/"+category.slug} onClick={() => setOpen(false)}>Show All</Link>
-                        {category.featured ? category.featured.map((item) => (
-                          <div key={item.name} className="group relative text-sm">
-                            <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                              <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
-                            </div>
-                            <Link href={item.href} onClick={() => setOpen(false)} className="mt-6 block text-gray-900">
-                              <span className="absolute inset-0 z-20" aria-hidden="true" />
-                              {item.name}
-                            </Link>
-                            <p aria-hidden="true" className="mt-1">
-                              Shop now
-                            </p>
-                          </div>
-                        )) : ""}
                       </div>
-                      {category.sections ? category.sections.map((section) => (
-                        <div key={section.name}>
-                          <p id={`${category.id}-${section.id}-heading-mobile`} className="text-gray-900">
-                            {section.name}
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
-                            className="mt-6 flex flex-col space-y-6"
-                          >
-                            {section.items.map((item) => (
-                              <li key={item.name} className="flow-root">
-                                <a href={item.href} className="-m-2 block p-2 text-gray-500">
-                                  {item.name}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )) : ""}
                     </Tab.Panel>
                   ))}
                 </Tab.Panels>
               </Tab.Group>
-
-              <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                {navigation.pages ? navigation.pages.map((page) => (
-                  <div key={page.name} className="flow-root">
-                    <a href={page.href} className="-m-2 block p-2 text-gray-900">
-                      {page.name}
-                    </a>
-                  </div>
-                )) : ""}
-              </div>
 
               <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                 <div className="flow-root">

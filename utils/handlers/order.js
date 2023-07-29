@@ -1,5 +1,4 @@
 import Order from "../../models/order"
-import Product from "../../models/product"
 import connect from "../connectDb"
 
 const get = async () => {
@@ -25,8 +24,12 @@ const getById = async (id) => {
     })
     .populate("delivery.id").lean()
     .then(async (order) => {
-        const items = await order?.items.map(item => ({...item.id.product_id, qty: item.qty, unit: item.id.unit, price: item.id.price})) || []
-        order.items = items
+        order.items = order?.items.map(item => ({
+            ...item.id.product_id,
+            qty: item.qty,
+            unit: item.id.unit,
+            price: item.id.price
+        })) || []
         return order
     })
     .catch(err => {
@@ -34,7 +37,37 @@ const getById = async (id) => {
     })
 }
 
+const getByUserId = async (id) => {
+    await connect()
+
+    return Order.find({"buyer.user_id": id}).populate({
+        path : 'items.id',
+        populate : {
+            path : 'product_id'
+        }
+    })
+        .populate("delivery.id").lean()
+        .then(async (orders) => {
+            if(!orders) return []
+
+            return orders.map(order => {
+                order.delivery = order.delivery.id
+                order.items = order?.items.map(item => ({
+                    ...item.id.product_id,
+                    qty: item.qty,
+                    unit: item.id.unit,
+                    price: item.id.price
+                }))
+                return order
+            })
+        })
+        .catch(err => {
+            return { error: 1, errorMessage: err }
+        })
+}
+
 export {
     get,
-    getById
+    getById,
+    getByUserId
 }

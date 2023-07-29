@@ -1,7 +1,9 @@
 export default function Input(props){
     return(
         <div className="col-span-12 sm:col-span-12">
-
+            <label htmlFor={props.id} className="block text-sm font-medium text-gray-700">
+                {props.title}
+            </label>
             <input
                 { ...props.register ? props.register(props.id) : ""}
                 type="text"

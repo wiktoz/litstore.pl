@@ -7,7 +7,7 @@ const SignUp = () => {
     }
 
     return (
-        <div className='p-10'>
+        <div>
           <SignUpForm csrfToken={getToken}></SignUpForm>
         </div>
     )

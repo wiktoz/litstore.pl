@@ -4,12 +4,12 @@ import axios from 'axios'
 import InputArray from '../../../../components/form/InputArray'
 import { useRef } from 'react'
 import {BiAddToQueue} from 'react-icons/bi'
+import Button from "../../../../components/admin/Button";
 
 const AddVariant = () => {
     const inputArray = useRef()
 
-    const addOption = (e) => {
-        e.preventDefault()
+    const addOption = () => {
         inputArray.current.addInput()
     }
 
@@ -82,12 +82,11 @@ const AddVariant = () => {
                                         description="Type each option into separate field. Later on you can order options in which they will appear for the users." 
                                         ref={inputArray} 
                                     />
-                                    <button
-                                        className='my-2 flex flex-row items-center rounded-lg border border-transparent bg-gray-400 py-1 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:ring-0' 
-                                        onClick={addOption}>
-                                            <BiAddToQueue/> 
-                                            <span className="mx-1">Add Option</span>
-                                    </button>
+                                    <Button
+                                        onClick={addOption}
+                                        icon={<BiAddToQueue/>}
+                                        title={"Add Option"}
+                                    />
                                 </div>
                             </div>
                         </div>

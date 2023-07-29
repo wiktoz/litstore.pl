@@ -1,6 +1,8 @@
 import useSWR from "swr"
 import Loader from "../../../../components/Loader"
 import ShowBox from "../../../../components/admin/ShowBox"
+import {BiPlus} from 'react-icons/bi'
+import ButtonLink from "../../../../components/admin/ButtonLink";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -11,13 +13,20 @@ export default function ShowVariants(){
 
     return(
         <>
+            <div className="mb-4">
+                <ButtonLink
+                    icon={<BiPlus/>}
+                    title={"Add Variant"}
+                    link="/admin/products/variants/add"
+                />
+            </div>
         {
             data.map(variant => {
                 return(
                     <ShowBox
                         key={variant.slug}
-                        editLink={'/admin/categories/edit/' + variant.slug}
-                        deleteLink={'/admin/categories/delete/' + variant.slug}
+                        editLink={'/admin/products/variants/edit/' + variant.slug}
+                        deleteLink={'/admin/products/variants/delete/' + variant.slug}
                     >
                         <div className="flex flex-col">
                         <div className="mx-1">

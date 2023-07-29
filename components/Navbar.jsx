@@ -101,52 +101,12 @@ export default function Navbar() {
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
-                                    <div className="col-start-2 grid grid-cols-2 gap-x-8">
-                                      {category.featured ? category.featured.map((item) => (
-                                        <div key={item.slug} className="group relative text-base sm:text-sm">
-                                          <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                            <img
-                                              src={item.imageSrc}
-                                              alt={item.imageAlt}
-                                              className="object-cover object-center"
-                                            />
-                                          </div>
-                                          <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                            <span className="absolute inset-0 z-20" aria-hidden="true" />
-                                            {item.name}
-                                          </a>
-                                          <p aria-hidden="true" className="mt-1">
-                                            Shop now
-                                          </p>
-                                        </div>
-                                      )) : ""}
-                                    </div>
                                     <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
                                     <Popover.Button>
                                       <Link href={"/" + category.slug} onClick={() => close()}>
                                           Show Everything
                                       </Link>
                                       </Popover.Button>
-                                      {category.sections ? category.sections.map((section) => (
-                                        <div key={section.slug}>
-                                          <p id={`${section.name}-heading`} className="font-medium text-gray-900">
-                                            {section.name}
-                                          </p>
-                                          <ul
-                                            role="list"
-                                            aria-labelledby={`${section.name}-heading`}
-                                            className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                          >
-                                            {section.items.map((item) => (
-                                              <li key={item.name} className="flex">
-                                                <a href={item.href} className="hover:text-gray-800">
-                                                  {item.name}
-                                                </a>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      )) : ""}
                                     </div>
                                   </div>
                                 </div>
@@ -159,16 +119,6 @@ export default function Navbar() {
                       )}
                     </Popover>
                   ))}
-
-                  {navigation.pages ? navigation.pages.map((page) => (
-                    <a
-                      key={page.name}
-                      href={page.href}
-                      className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                    >
-                      {page.name}
-                    </a>
-                  )) : ""}
                 </div>
               </Popover.Group>
 

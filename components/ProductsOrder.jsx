@@ -17,7 +17,7 @@ const ProductsOrder = ({products, size}) => {
                                 </div>
                                 <div className='m-8 my-auto'>
                                     <p className="text-xs font-semibold text-gray-400 mb-1">{product.producer}</p>
-                                    <p className="text-sm font-normal">{product.name}</p>
+                                    <p className="text-sm font-normal text-gray-700">{product.name}</p>
                                 </div>
                                 <div className="mx-auto my-auto">
                                     <span>{formatPrice(product.price)}</span>

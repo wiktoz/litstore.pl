@@ -5,6 +5,7 @@ import mail from '../../../utils/nodemailer'
 import sha256 from 'crypto-js/sha256'
 import OrderCompleted from "../../../mails/OrderCompleted"
 import { render } from '@react-email/render'
+import { getToken } from "next-auth/jwt"
 
 
 const generateUrl = (fields) => {
@@ -18,6 +19,7 @@ const generateUrl = (fields) => {
 }
 
 const Pay = async (req, res) => {
+    const token = await getToken({req})
     await connect()
 
     const cart = req.body.cart
@@ -39,6 +41,8 @@ const Pay = async (req, res) => {
         /*
             check data correctness
         */
+
+        if(token?.id) cart.buyer.user_id = token.id
 
         const order = new Order({
             buyer: cart.buyer,

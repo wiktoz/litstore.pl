@@ -7,7 +7,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className='p-10'>
+    <div>
       <SignInForm csrfToken={getToken}></SignInForm>
     </div>
   )

@@ -6,8 +6,7 @@ const Carousel = ({items}) => {
 
     const prevSlide = (e) => {
         e.preventDefault()
-        const newIndex = currentIndex === 0 ? items.length -1 : currentIndex - 1
-        setCurrentIndex((currentIndex) == 0 ? items.length - 1 : currentIndex - 1)
+        setCurrentIndex((currentIndex) === 0 ? items.length - 1 : currentIndex - 1)
     }
 
     const nextSlide = (e) => {
@@ -23,7 +22,7 @@ const Carousel = ({items}) => {
             >
                 <ChevronLeftIcon className="w-6 h-6 text-gray-300" />
             </button>
-            <img src={items[currentIndex]} className="h-screen mx-auto" />
+            <img src={items[currentIndex]} className="w-full mx-auto" />
             <button 
                 onClick={(e) => nextSlide(e)}
                 className="absolute top-[50%] translate-y-[-50%] mx-2 right-0"

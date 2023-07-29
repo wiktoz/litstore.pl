@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
+import {useState} from "react";
 
 const variants = {
     out: {
@@ -17,7 +18,9 @@ const variants = {
   };
 
 const Transition = ({ children }) => {
-    const { asPath } = useRouter()
+    const router = useRouter()
+    const asPath = useState(router.asPath)
+
     return (
             <AnimatePresence
             initial={{opacity: 0}}

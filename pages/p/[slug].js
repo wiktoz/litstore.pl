@@ -165,13 +165,13 @@ const ProductPage = () => {
                     <p>
                         {
                             pickedProduct && cartItems.find(item => item.id === pickedProduct._id) ?
-                            <button onClick={(e) => handleAddToCart(e)} className="rounded-full bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50" disabled={true}>
+                            <button onClick={(e) => handleAddToCart(e)} className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={true}>
                                 <p className="text-sm">
                                     In Cart
                                 </p>
                             </button>
                             :
-                            <button onClick={(e) => handleAddToCart(e)} className="rounded-full bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50" disabled={!addAvailable}>
+                            <button onClick={(e) => handleAddToCart(e)} className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={!addAvailable}>
                                 <p className="text-sm">
                                     Add to Cart
                                 </p>

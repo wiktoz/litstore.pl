@@ -2,8 +2,6 @@ import {useState, useRef, forwardRef, useImperativeHandle} from 'react';
 import {AiOutlineCloudUpload} from 'react-icons/ai'
 import { Reorder } from "framer-motion"
 import {AiOutlineClose} from 'react-icons/ai'
-import Image from 'next/image'
-import AddressForm from "../AddressForm";
 
 const FileInputOrder = forwardRef((props, ref) => {
 
@@ -47,7 +45,7 @@ const fileRemove = (file) =>{
 
 return (
   <>
-  <div className="max-w-xl mx-auto my-2">
+  <div className="mx-auto my-2">
     <label htmlFor={props.id} className="block text-sm font-medium text-gray-700">
       {props.title}
     </label>

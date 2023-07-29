@@ -26,9 +26,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, router }) {
       {
         <SessionProvider session={session}>
           <ShoppingCartProvider>
+            <div className="bg-white text-black">
             {
               getLayout(<Component {...pageProps} />, pageProps)
             }
+            </div>
           </ShoppingCartProvider>
         </SessionProvider>}
     </>
