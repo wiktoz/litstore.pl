@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --tw-bg-opacity: 100;
+}
+
 html,
 body {
   padding: 0;
