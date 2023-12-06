@@ -1,5 +1,5 @@
 import Order from "../../models/order"
-import connect from "../connectDb"
+import connect from "../db/connect"
 
 const get = async () => {
     await connect()

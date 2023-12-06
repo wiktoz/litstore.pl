@@ -1,5 +1,5 @@
 import Product from "../../models/product"
-import connect from "../connectDb"
+import connect from "../db/connect"
 import Category from "../../models/category";
 
 const create = async (data) => {

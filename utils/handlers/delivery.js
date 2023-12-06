@@ -1,5 +1,6 @@
 import Delivery from "../../models/delivery"
-import connect from "../connectDb"
+import connect from "../db/connect"
+import {isValidObjectId, Types} from "mongoose";
 
 const get = async () => {
     await connect()
@@ -27,8 +28,15 @@ const getActive = async () => {
 
 const getBySlug = async (slug) => {
     await connect()
+
+    const query = await Delivery.findOne({
+        $or: [
+            { _id: isValidObjectId(slug) ? new Types.ObjectId(slug) : undefined },
+            { slug }
+        ]
+    })
     
-    return Delivery.findOne({$or: [ {slug: slug}, {_id: slug} ]})
+    return Delivery.findOne(query)
     .then(delivery => { 
         return delivery 
     })
@@ -40,5 +48,5 @@ const getBySlug = async (slug) => {
 export {
     get,
     getActive,
-    getBySlug
+    getBySlug,
 }

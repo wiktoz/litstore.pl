@@ -1,5 +1,5 @@
 import User from "../../models/user"
-import connect from "../connectDb"
+import connect from "../db/connect"
 
 const getByEmail = async (email) => {
     await connect()

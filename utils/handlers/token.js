@@ -1,5 +1,5 @@
 import Token from "../../models/token"
-import connect from "../connectDb"
+import connect from "../db/connect"
 import User from "../../models/user";
 
 const create = async (data) => {
