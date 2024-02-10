@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, models } from "mongoose"
+import Variant from "@/models/variant"
 
 const slug = require('mongoose-slug-updater')
 

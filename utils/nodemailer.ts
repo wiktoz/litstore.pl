@@ -1,6 +1,13 @@
 import nodemailer from 'nodemailer'
 
-const mail = (from, to, subject, html) => {
+interface Props {
+    from: string,
+    to: string,
+    subject: string,
+    html: string
+}
+
+const mail = ({from, to, subject, html}: Props) => {
     const message = {
         from: '"' + from + '"' + process.env.EMAIL_ADDRESS,
         to: to,

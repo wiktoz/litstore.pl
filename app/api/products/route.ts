@@ -1,14 +1,8 @@
-import Product from '../../../models/product'
-import connect from '../../../utils/db/connect'
+import { NextResponse } from "next/server"
+import { get } from "@/utils/handlers/product"
 
-import { NextRequest, NextResponse } from "next/server"
+export async function GET(){
+    const res = await get()
 
-export async function GET(request){
-    await connect()
-    
-    const res = await Product.find({active: true})
-
-    return NextResponse.json(res, {
-        status: 200,
-    })
+    return NextResponse.json(res, {status: 200})
 }

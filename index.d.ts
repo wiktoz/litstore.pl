@@ -1,20 +1,25 @@
-import {Schema} from "mongoose";
-
 interface User {
-    name: string,
-    surname: string,
-    address: Address
+    _id: string,
+    email: string,
+    password: string,
+    role: string,
+    billingAddress: Address,
+    addresses: [Address]
 }
 
 interface Address {
+    email: string,
+    name: string,
+    surname: string,
     street: string,
     house: string,
-    flat: string,
+    flat?: string,
     post_code: string,
     city: string
 }
 
 interface Category {
+    _id: string,
     name: string,
     description: string,
     seo_description?: string,
@@ -24,10 +29,12 @@ interface Category {
 }
 
 interface Subcategory extends Category {
+    _id: string,
     category_id: string
 }
 
 interface Delivery {
+    _id: string,
     name: string,
     img: string,
     price: number,
@@ -37,13 +44,29 @@ interface Delivery {
     slug: string
 }
 
+interface Variant {
+    _id: string
+    name: string,
+    displayName: string,
+    selectOption: string,
+    options: [VariantOption],
+    slug: string
+}
+
+interface VariantOption {
+    _id: string,
+    variant_id: Variant
+    name: string
+}
+
 interface Product {
+    _id: string,
     name: string,
     description: string,
     manufacturer?: string,
     category: Category,
     subcategory: Subcategory,
-    variant: [string],
+    variant: [Variant],
     main_photo: string,
     photos: [string],
     new_badge: boolean,
@@ -52,9 +75,46 @@ interface Product {
 }
 
 interface Item {
+    _id: string,
     product_id: string,
-    options: [],
-    stock: {type: Number, default: 0},
-    unit: {type: String, default: "szt." },
-    price
+    options: [{
+        variant_id: string,
+        option_id: string
+    }],
+    stock: number,
+    unit: string,
+    price: number
+}
+
+interface CartItem {
+    item_id: string,
+    qty: number
+}
+
+interface CartBuyer extends Address, Personal {
+    user?: User,
+    email: string
+}
+
+interface CartDelivery extends Address {
+    delivery_id: string
+}
+
+interface Cart {
+    buyer: CartBuyer | null,
+    delivery: CartDelivery | null,
+    items: CartItem[]
+}
+
+interface ShoppingCartContextType {
+    cartQty: number,
+    cartItems: CartItem[],
+    cartBuyer: CartBuyer,
+    cartDelivery: CartDelivery,
+    setBuyer: (buyer: CartBuyer) => void,
+    setDelivery: (delivery: CartDelivery) => void,
+    getItemQty: (id: string) => number,
+    increaseQty: (id: string) => void,
+    decreaseQty: (id: string) => void,
+    removeFromCart: (id: string) => void
 }

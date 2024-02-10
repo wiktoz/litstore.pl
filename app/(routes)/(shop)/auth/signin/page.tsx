@@ -4,7 +4,7 @@ const Page = () => {
 
   return (
     <div>
-      <SignInForm></SignInForm>
+      <SignInForm/>
     </div>
   )
 }

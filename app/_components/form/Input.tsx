@@ -1,8 +1,21 @@
 'use client'
 
 import {useState} from "react"
+import {UseFormRegister, UseFormSetValue} from "react-hook-form";
 
-const Input = ({id, title, type, value, autoComplete, errors, checker, setter}) => {
+interface Props {
+    id: string,
+    title: string,
+    type?: string,
+    value?: string,
+    autoComplete?: string,
+    errors: { [key: string]: { message?: string } },
+    checker: UseFormRegister<any>,
+    setter?: (value: string) => void,
+    setValue?: UseFormSetValue<any>
+}
+
+const Input = ({id, title, type, value, autoComplete, errors, checker, setter}:Props) => {
     const [currentValue, setCurrentValue] = useState(value || "")
 
     return (
@@ -12,11 +25,11 @@ const Input = ({id, title, type, value, autoComplete, errors, checker, setter}) 
             </label>
             <input
                 { ...checker ? checker(id) : ""}
-                type={type}
+                type={type ? type : "text"}
                 id={id}
                 name={id}
                 placeholder={title}
-                autoComplete={autoComplete ? autoComplete : ""}
+                autoComplete={autoComplete ? autoComplete : "off"}
                 value={currentValue}
                 onChange={ e => {
                     setCurrentValue(e.target.value)

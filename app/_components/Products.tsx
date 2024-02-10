@@ -1,13 +1,21 @@
 import Link from 'next/link'
-import Loader from "./Loader";
+import Loader from "@/components/Loader"
 
-const Products = ({products, size, error}) => {
-    if(error) return "Cannot load products. Try again later."
-    if(!products) return <Loader/>
+interface Props {
+    products: Product[],
+    error: string,
+    isLoading: boolean,
+    size?: string
+}
 
+const Products = ({products, error, isLoading, size}:Props) => {
     return(
         <div className={"grid grid-cols-2 gap-4 " + (size === "small" ? "md:grid-cols-6" : "md:grid-cols-4")}>
             {
+                isLoading ?
+                    <Loader/> :
+                error ?
+                    <div>Error: {JSON.stringify(error)}</div> :
                 products && products.length > 0 ?
                 products.map((product)=>{
                     return(
@@ -22,12 +30,12 @@ const Products = ({products, size, error}) => {
                                 <div className="h-full flex flex-col justify-between">
                                     <div className="grow flex justify-center">
                                         <div className="my-auto">
-                                            <img src={"/img/products/" + product.main_photo}/>
+                                            <img src={"/img/products/" + product.main_photo} alt={product.name}/>
                                         </div>
                                     </div>
 
                                     <div className='m-2 my-4'>
-                                        <p className="text-xs font-semibold text-gray-400 mb-1">{product.producer}</p>
+                                        <p className="text-xs font-semibold text-gray-400 mb-1">{product.manufacturer}</p>
                                         <p className="text-sm font-light text-gray-700">{product.name}</p>
                                     </div>
                                 </div>

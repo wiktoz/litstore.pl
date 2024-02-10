@@ -1,39 +1,47 @@
-import Link from 'next/link'
-import useShoppingCart from '/app/_context/ShoppingCart'
+import { useShoppingCart } from '@/context/ShoppingCart'
+import {fetcher, formatPrice} from "@/utils/helpers"
 import useSWR from 'swr'
-import Loader from '../Loader'
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-const formatPrice = (price) => {
-    return Intl.NumberFormat('pl', {style:'currency', currency:'PLN'}).format(price)
+interface Props {
+    previousStep?: () => void,
+    nextStep: () => void,
+    nextStepTitle: string
 }
 
-const SummaryBox = ({previousStep, buttonTitle, buttonLink, buttonOnClick}) => {
-    const {cartDelivery, cartItems} = useShoppingCart()
+const SummaryBox = ({previousStep, nextStep, nextStepTitle}:Props) => {
+    const {cartDelivery, cartItems, removeFromCart} = useShoppingCart() as ShoppingCartContextType
 
-    const deliveryUrl = cartDelivery.id ? '/api/deliveries/'+cartDelivery.id : null
+    const deliveryUrl = cartDelivery.delivery_id ? '/api/deliveries/'+cartDelivery.delivery_id : null
     
-    const {data: products, error: productsError} = useSWR('/api/product_item', fetcher)
-    const {data: delivery, error: deliveryError} = useSWR(deliveryUrl, fetcher)
+    const {data: products, error: productsError} = useSWR<Item[]>('/api/product_item', fetcher)
+    const {data: delivery, error: deliveryError} = useSWR<Delivery>(deliveryUrl, fetcher)
 
     if(productsError || deliveryError) return "An error has occurred."
     if(!products) return "No products"
-    
+
     const calcProductsTotal = () => {
-        return cartItems.reduce((total, cartItem) => {
-            const item = products.find(i => i._id === cartItem.id)
-            return total + (item?.price || 0) * cartItem.qty
+        return cartItems.reduce((total: number, cartItem: CartItem) => {
+            const item = products.find(i => i._id === cartItem.item_id)
+
+            if(!item)
+                removeFromCart(cartItem.item_id) // if item not found in db remove from cart
+
+            return total + (item ? item.price : 0) * cartItem.qty
         }, 0)
     }
 
     const calcDeliveryTotal = () => {
-        if(!delivery) return 0
+        if(!delivery)
+            return 0
+
         const productsTotal = calcProductsTotal()
 
-        if(productsTotal >= delivery.freeFrom) return 0
-        else return delivery.price
+        if(productsTotal >= delivery.free_from)
+            return 0
+
+        return delivery.price
     }
+
 
     return(
         <div className="my-4 md:mx-4 md:my-0 md:mb-4 rounded h-full relative">
@@ -44,7 +52,7 @@ const SummaryBox = ({previousStep, buttonTitle, buttonLink, buttonOnClick}) => {
                         <p>Products</p>
                         <p>{formatPrice(calcProductsTotal())}</p>
                     </div>
-                    {cartDelivery && cartDelivery.id ?
+                    {cartDelivery && cartDelivery.delivery_id ?
                     <div className='flex flex-row justify-between'>
                         <p>Delivery</p>
                         <p>{formatPrice(calcDeliveryTotal())}</p>
@@ -60,26 +68,20 @@ const SummaryBox = ({previousStep, buttonTitle, buttonLink, buttonOnClick}) => {
                         <p>{formatPrice(calcProductsTotal() + calcDeliveryTotal())}</p>
                     </div>
                 </div>
-                {previousStep ?
-                <Link href={previousStep}>
-                    <p className='text-xs text-gray-400 mb-4 hover:cursor-pointer hover:text-gray-500'>Go Back To Previus Step</p>
-                </Link>
-                : ""}
-                {buttonLink ? 
-                <Link href={buttonLink}>
-                        <button
-                            className="w-full inline-flex justify-center rounded border border-transparent bg-gray-700 p-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-0 focus:ring-offset-2"
-                        >
-                            {buttonTitle}
-                        </button>
-                </Link>
-                :
-                <button
-                    className="w-full inline-flex justify-center rounded border border-transparent bg-gray-700 p-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-0 focus:ring-offset-2"
-                    onClick={buttonOnClick}
-                >
-                    {buttonTitle}
-                </button>
+                {
+                    previousStep &&
+                    <div onClick={previousStep}>
+                        <p className='text-xs text-gray-400 mb-4 hover:cursor-pointer hover:text-gray-500'>Go Back To Previus Step</p>
+                    </div>
+                }
+                {
+                    nextStep &&
+                    <button
+                        className="w-full inline-flex justify-center rounded border border-transparent bg-gray-700 p-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-0 focus:ring-offset-2"
+                        onClick={nextStep}
+                    >
+                        {nextStepTitle}
+                    </button>
                 }
             </div>
         </div>

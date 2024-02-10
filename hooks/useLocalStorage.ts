@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import jsCookie from "js-cookie"
 
-export default function useLocalStorage(key, initial){
+export default function useLocalStorage<T>(key: string, initial: any){
     const [value, setValue] = useState(initial)
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export default function useLocalStorage(key, initial){
     useEffect(() => {
         if(value !== initial)
             jsCookie.set(key, JSON.stringify(value))
-    }, [key, value])
+    }, [initial, key, value])
 
     return [value, setValue]
 }

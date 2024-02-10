@@ -2,16 +2,23 @@
 
 import Input from "./Input"
 import { resolver } from "../validation/schema/address"
-import {useForm} from "react-hook-form"
+import { useForm } from "react-hook-form"
 
-const AddressForm = ({title, description, name, surname, email, street, postcode, city, submitData, disabled}) => {
+interface Props extends Address {
+    title?: string,
+    description?: string,
+    submitData: (data: Address) => void
+    disabled?: boolean
+}
 
-    const { register, handleSubmit, formState: {errors} } = useForm({resolver})
+const AddressForm = ({title, description, name, surname, email, street, post_code, city, submitData, disabled}:Props) => {
 
-    const onSubmit = (data) => {
-        if(data){
+    const { register, handleSubmit, formState: {errors} }
+        = useForm<Address>({resolver})
+
+    const onSubmit = (data: Address) => {
+        if(data)
             submitData(data)
-        }
     }
 
     return(
@@ -32,7 +39,7 @@ const AddressForm = ({title, description, name, surname, email, street, postcode
                         </p>
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} >
-                        <fieldset disabled={disabled}>
+                        <fieldset disabled={disabled ? disabled : false}>
                     <div className="overflow-hidden">
                         <div className="py-2">
                         <div className="grid grid-cols-12 gap-5">
@@ -87,7 +94,7 @@ const AddressForm = ({title, description, name, surname, email, street, postcode
                                     id="postcode"
                                     title="Postal Code"
                                     autoComplete="postal-code"
-                                    value={postcode}
+                                    value={post_code}
                                 />
                             </div>
                             <div className="col-span-6">

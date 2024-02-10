@@ -1,22 +1,10 @@
 'use client'
 
-import { useState } from "react"
+import {ReactElement, useState} from "react"
 import SidebarIcon from "./SidebarIcon"
 import Accordion from "./Accordion"
-import {BsCartCheck} from 'react-icons/bs'
-import {BiStore} from 'react-icons/bi'
-import {FaQuestion} from 'react-icons/fa'
-import {MdSettingsSuggest} from 'react-icons/md'
-import {AiFillEdit} from 'react-icons/ai'
-import {MdAddCircleOutline} from 'react-icons/md'
-import {BiShowAlt} from 'react-icons/bi'
-import {MdContactPhone} from 'react-icons/md'
-import {CgSize} from 'react-icons/cg'
-import {TbTruckDelivery, TbDiscount2} from 'react-icons/tb'
 import {AiOutlineMenu} from 'react-icons/ai'
 import {AiOutlineClose} from 'react-icons/ai'
-import {FiUsers} from 'react-icons/fi'
-import {FaWarehouse} from 'react-icons/fa'
 
 import {
     ReceiptPercentIcon,
@@ -35,7 +23,7 @@ import {
 
 } from "@heroicons/react/24/outline"
 
-const buttons = [
+const buttons:Button[] = [
     {
         title: "Products",
         icon: <BuildingStorefrontIcon className="h-5 w-5"/>,
@@ -68,7 +56,17 @@ const buttons = [
     }
 ]
 
-const accordions = [
+interface Button {
+    icon: ReactElement,
+    title: string,
+    link: string
+}
+interface AccordionType {
+    title: string,
+    items: Button[]
+}
+
+const accordions: AccordionType[] = [
     {
         title: "Products",
         items:  [

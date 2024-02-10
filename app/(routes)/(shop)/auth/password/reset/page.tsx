@@ -14,7 +14,7 @@ const ResetPassword = () => {
 
     return (
         <div className='p-10'>
-            <ResetPasswordForm/>
+            <ResetPasswordForm csrfToken={null}/>
         </div>
     )
 }

@@ -6,22 +6,20 @@ import { Popover, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import useShoppingCart from "/app/_context/ShoppingCart"
+import { useShoppingCart } from "@/context/ShoppingCart"
 import useSWR from 'swr'
-import Loader from './Loader'
-import MobileNavbar from './MobileNavbar'
-import SignOutButton from "./SignOutButton"
-import Spinner from "./Spinner";
+import MobileNavbar from '@/components/MobileNavbar'
+import SignOutButton from "@/components/SignOutButton"
+import Spinner from "@/components/Spinner"
+import { fetcher } from "@/utils/helpers"
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const { cartQty } = useShoppingCart()
+  const cart = useShoppingCart()
   const { data: session, status } = useSession()
 
   const { data: categories, error: error, isLoading: isCategoryLoading } = useSWR('/api/categories', fetcher)
@@ -70,7 +68,7 @@ export default function Navbar() {
                     isCategoryLoading ?
                         <Spinner/> :
                     categories && categories.length > 0 &&
-                    categories.map((category) => (
+                    categories.map((category: Category) => (
                     <Popover key={category.slug} className="flex">
                       {({ open }) => (
                         <>
@@ -130,13 +128,13 @@ export default function Navbar() {
                     <SignOutButton/>
                     :
                     <>
-                      <Link href="/auth/signin">
+                      <Link href={"/auth/signin"}>
                         <p className='hover:text-gray-800 hover:cursor-pointer'>
                           Sign In
                         </p>
                       </Link>
                       <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                      <Link href="/auth/signup">
+                      <Link href={"/auth/signup"}>
                         <p className='hover:text-gray-800 hover:cursor-pointer'>
                           Create account
                         </p>
@@ -148,7 +146,7 @@ export default function Navbar() {
 
                 {/* Search */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="/search" className="flex items-center p-2">
+                  <Link href={"/search"} className="flex items-center p-2">
                     <div className='flex flex-row align-items-center hover:cursor-pointer text-gray-400 hover:text-gray-600'>
                       <span className="sr-only">Search</span>
                       <MagnifyingGlassIcon className="h-5 w-5 flex-shrink-0"
@@ -170,13 +168,13 @@ export default function Navbar() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="/cart" className="flex items-center p-2">
+                  <Link href={"/cart"} className="flex items-center p-2">
                     <div className="flex flex-row align-items-center hover:cursor-pointer text-gray-400 hover:text-gray-600">
                       <ShoppingBagIcon
                         className="h-5 w-5 flex-shrink-0 "
                         aria-hidden="true"
                       />
-                      <span className="mx-1 h-full my-auto text-sm font-medium">{cartQty}</span>
+                      <span className="mx-1 h-full my-auto text-sm font-medium">{cart ? cart.cartQty : ""}</span>
                       <span className="sr-only">items in cart, view bag</span>
                     </div>
                   </Link>

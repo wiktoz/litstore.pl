@@ -2,10 +2,12 @@
 
 import Cart from "@/components/cart/Cart"
 import SummaryBox from "@/components/cart/SummaryBox"
-import useShoppingCart from "/app/_context/ShoppingCart"
+import {useShoppingCart} from "@/context/ShoppingCart";
+import {useRouter} from "next/navigation";
 
 const ShoppingCart = () => {
-    const {cartItems} = useShoppingCart()
+    const router = useRouter()
+    const {cartItems} = useShoppingCart() as ShoppingCartContextType
 
     return(
         <div className="grid grid-cols-12">
@@ -18,9 +20,9 @@ const ShoppingCart = () => {
                 <Cart />
             </div>
             <div className="col-span-12 md:col-span-4">
-                <SummaryBox  
-                    buttonLink="/cart/delivery"
-                    buttonTitle="Dalej"
+                <SummaryBox
+                    nextStep={() => router.push("/cart/delivery")}
+                    nextStepTitle="Dalej"
                 />
             </div>
             </>

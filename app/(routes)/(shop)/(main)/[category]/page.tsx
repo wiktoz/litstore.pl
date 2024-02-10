@@ -4,12 +4,11 @@ import useSWR from "swr"
 
 import Loader from "@/components/Loader"
 import Products from "@/components/Products"
+import {fetcher} from "@/utils/helpers"
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-const CategoryProducts = ({params}) => {
-    const { data: category, error: categoryError } = useSWR<Address>(params.category ? "/api/categories/slug/"+params.category : null, fetcher)
-    const { data: products, error: productsError } = useSWR(category ? "/api/products/category/"+category._id : null, fetcher)
+const CategoryProducts = ({params}: {params: { category: string }}) => {
+    const { data: category, error: categoryError } = useSWR<Category>(params.category ? "/api/categories/"+params.category : null, fetcher)
+    const { data: products, error: productsError, isLoading: isProductLoading } = useSWR<Product[]>(category ? "/api/products/category/"+category._id : null, fetcher)
 
     if(categoryError || productsError) return "no category"
     if(!category || !products) return <Loader/>
@@ -21,7 +20,7 @@ const CategoryProducts = ({params}) => {
                 <p className="text-xs mt-1 text-gray-500">{category.description}</p>
             </div>
 
-            <Products products={products} />
+            <Products products={products} error={productsError} isLoading={isProductLoading} />
         </div>
     )
 }

@@ -1,9 +1,19 @@
-import { useState } from "react";
+import {ReactElement, useState} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {VscChevronRight} from 'react-icons/vsc'
 import SidebarIcon from "./SidebarIcon";
 
-const Accordion = ({ title, items }) => {
+interface Button {
+  icon: ReactElement,
+  title: string,
+  link: string
+}
+interface Accordion {
+  title: string,
+  items: Button[]
+}
+
+const Accordion = ({ title, items }:Accordion) => {
 
   const [isOpen, setIsOpen] = useState(false);
 

@@ -5,10 +5,13 @@
       "dom.iterable",
       "esnext"
     ],
-    "baseUrl": "app/",
     "paths": {
       "@/*": ["./*"],
-      "@/components/*": ["_components/*"]
+      "@/components/*": ["app/_components/*"],
+      "@/context/*": ["app/_context/*"],
+      "@/styles/*": ["app/_styles/*"],
+      "@/utils/*": ["utils/*"],
+      "@/hooks/*": ["hooks/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -28,7 +31,6 @@
     ]
   },
   "include": [
-    "index.d.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",

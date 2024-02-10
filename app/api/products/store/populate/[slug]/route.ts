@@ -1,11 +1,10 @@
-import ProductItem from "/models/product_item"
-import Product from '/models/product'
-import Variant_option from "/models/variant_option"
-import Variant from "/models/variant"
-import connect from '/utils/db/connect'
-import {NextResponse} from "next/server";
+import Product from '@/models/product'
+import Variant from "@/models/variant"
+import connect from '@/utils/db/connect'
+import {NextRequest, NextResponse} from "next/server";
+import Item from "@/models/item";
 
-export async function GET(req, context){
+export async function GET(req: NextRequest, context: {params: { slug: string }}){
     const { slug } =  context.params
 
     await connect()
@@ -13,7 +12,7 @@ export async function GET(req, context){
     const product = await Product.findOne({slug: slug})
 
     if(product){
-        const items = await ProductItem.find({product_id: product._id}).populate("options")
+        const items = await Item.find({product_id: product._id}).populate("options")
         
         return NextResponse.json(items, {status: 200})
     }

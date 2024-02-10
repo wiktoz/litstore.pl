@@ -1,10 +1,8 @@
-import { get } from "/utils/handlers/order"
+import { get } from "@/utils/handlers/order"
 import {NextResponse} from "next/server";
 
-export async function GET(req){
-    const getResponse = await get()
+export async function GET(){
+    const response = await get()
 
-    if(getResponse?.error)
-        return NextResponse.json(getResponse, {status:500})
-    return NextResponse.json(getResponse, {status:200})
+    return NextResponse.json(response, {status:200})
 }

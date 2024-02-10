@@ -1,5 +1,5 @@
-import Delivery from "../../models/delivery"
-import connect from "../db/connect"
+import Delivery from "@/models/delivery"
+import connect from "@/utils/db/connect"
 import {isValidObjectId, Types} from "mongoose";
 
 const get = async () => {
@@ -26,7 +26,7 @@ const getActive = async () => {
     })
 }
 
-const getBySlug = async (slug) => {
+const getBySlug = async (slug: string) => {
     await connect()
 
     const query = await Delivery.findOne({

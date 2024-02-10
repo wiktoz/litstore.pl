@@ -1,13 +1,14 @@
-import Product from "../../models/product"
+import Product from "@/models/product"
 import connect from "../db/connect"
-import Category from "../../models/category";
+import Item from "@/models/item"
+import {isValidObjectId, Types} from "mongoose"
 
-const create = async (data) => {
+const create = async (data: Product) => {
     await connect()
     
-    return Category.create(data)
-    .then(category => { 
-        return category 
+    return Product.create(data)
+    .then(product => {
+        return product
     })
     .catch(err => {
         return { error: 1, errorMessage: err }
@@ -17,19 +18,24 @@ const create = async (data) => {
 const get = async () => {
     await connect()
     
-    return Product.find({})
-    .then(category => { 
-        return category 
+    return Product.find({ active: true })
+    .then((product) => {
+        return product
     })
     .catch(err => {
         return { error: 1, errorMessage: err }
     })
 }
 
-const getById = async (id) => {
+const getById = async (id: string) => {
     await connect()
     
-    return Product.findOne({_id: id})
+    return Product.findOne({
+        $or: [
+            {_id: isValidObjectId(id) ? new Types.ObjectId(id) : undefined},
+            {slug: id}
+        ]
+    })
     .then(product => { 
         return product 
     })
@@ -38,7 +44,7 @@ const getById = async (id) => {
     })
 }
 
-const getByCategoryId = async (id) => {
+const getByCategoryId = async (id: string) => {
     await connect()
     
     return Product.find({category: id})
@@ -50,7 +56,7 @@ const getByCategoryId = async (id) => {
     })
 }
 
-const getBySlug = async (slug) => {
+const getBySlug = async (slug:string) => {
     await connect()
     
     return Product.findOne({slug: slug})
@@ -62,14 +68,14 @@ const getBySlug = async (slug) => {
     })
 }
 
-const getStoreBySlug = async (slug) => {
+const getStoreBySlug = async (slug: string) => {
     await connect()
     
     const product = await Product.findOne({slug: slug})
 
     if(product){
-        return ProductItem.find({product_id: product._id})
-        .then((product)=>{
+        return Item.findOne({product_id: product._id})
+        .then((product: Item)=>{
             return product
         }).catch((err)=>{
             return { error: 1, errorMessage: err }
@@ -79,13 +85,13 @@ const getStoreBySlug = async (slug) => {
     return {}
 }
 
-const search = async (phrase) => {
+const search = async (phrase: string) => {
     await connect()
     
     return Product.find({ 
         name: { $regex: phrase, '$options': 'i' }
     }).exec()
-    .then(product => { 
+    .then((product: Product[]) => {
         return product 
     })
     .catch(err => {

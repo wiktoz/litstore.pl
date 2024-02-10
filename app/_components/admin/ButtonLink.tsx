@@ -1,6 +1,13 @@
-import Link from "next/link";
+import Link from "next/link"
+import {ReactElement} from "react"
 
-const ButtonLink = ({icon, title, link}) => {
+interface Props {
+    icon: ReactElement,
+    title: string,
+    link: string
+}
+
+const ButtonLink = ({icon, title, link}:Props) => {
     return(
         <Link
             href={link}

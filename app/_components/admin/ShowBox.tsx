@@ -2,8 +2,16 @@ import {MdOutlineDeleteForever} from 'react-icons/md'
 import {MdOutlineModeEditOutline} from 'react-icons/md'
 import {AiOutlineEye} from 'react-icons/ai'
 import Link from 'next/link'
+import {ReactElement} from "react";
 
-export default function ShowBox({children, showLink, editLink, deleteLink}){
+interface Props {
+    children: ReactElement,
+    showLink: string,
+    editLink: string,
+    deleteLink: string
+}
+
+export default function ShowBox({children, showLink, editLink, deleteLink}:Props){
     return(
         <div className="border rounded-lg p-2 my-2 w-full relative bg-white z-0">
             <div className="flex flex-row items-center justify-items-center">

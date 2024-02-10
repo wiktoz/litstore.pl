@@ -1,16 +1,14 @@
-import { Fragment } from 'react'
+import {Fragment, ReactElement} from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Transition from '@/components/layout/Transition'
-import {ShoppingCartProvider} from "/app/_context/ShoppingCart"
 
 export const metadata = {
-    title: 'LitStore.',
+    title: 'LitStore',
 }
 
-export default function ShopLayout({children}) {
+export default function ShopLayout({children}:{children: ReactElement}) {
     return (
-        <ShoppingCartProvider>
             <Fragment>
                 <div className="flex flex-col h-screen justify-between font-sans">
                     <Navbar></Navbar>
@@ -26,6 +24,5 @@ export default function ShopLayout({children}) {
                     </Transition>
                 </div>
             </Fragment>
-        </ShoppingCartProvider>
     )
 }

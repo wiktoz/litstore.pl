@@ -1,10 +1,10 @@
-import generateToken from '/utils/generateToken'
-import { create } from '/utils/handlers/token'
-import { getByEmail } from "/utils/handlers/user"
-import mail from '/utils/nodemailer'
-import {NextResponse} from "next/server"
+import generateToken from '@/utils/generateToken'
+import { create } from '@/utils/handlers/token'
+import { getByEmail } from "@/utils/handlers/user"
+import mail from '@/utils/nodemailer'
+import {NextRequest, NextResponse} from "next/server"
 
-export async function POST(req){
+export async function POST(req: NextRequest){
     const body = await req.json()
     const email = body.email
     const user = await getByEmail(email)

@@ -1,10 +1,9 @@
 import useSWR from "swr"
 import Loader from '../Loader'
 import ShowBox from "./ShowBox"
+import {fetcher} from "@/utils/helpers";
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-export default function AdminProducts({searchVal}){
+export default function AdminProducts({searchVal}:{searchVal: string}){
     const { data, error, isLoading } = useSWR(searchVal ? `/api/products/search/${searchVal}` : '/api/products', fetcher)
     if (error) return "An error has occurred."
 
@@ -18,7 +17,7 @@ export default function AdminProducts({searchVal}){
             !data ?
                 <div>No products</div> :
 
-            data.map(product => {
+            data.map((product:Product) => {
                 return(
                     <ShowBox
                         key={product.slug}
@@ -27,7 +26,7 @@ export default function AdminProducts({searchVal}){
                         deleteLink={'/admin/products/delete/' + product.slug}
                     >
                         <div className="w-24">
-                            <img src={'/img/products/' + product.main_photo} />
+                            <img src={'/img/products/' + product.main_photo} alt={product.name}/>
                         </div>
                         <div className="mx-6">
                             {product.new_badge ?

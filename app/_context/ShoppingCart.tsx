@@ -1,65 +1,76 @@
 'use client'
 
-import { useContext, createContext } from "react"
-import useLocalStorage from "/hooks/useLocalStorage"
+import {useContext, createContext, ReactNode} from "react"
+import useLocalStorage from "@/hooks/useLocalStorage"
 
-const def = { cart: [], buyer: {} }
+const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(undefined)
 
-const ShoppingCartContext = createContext({})
-
-export default function useShoppingCart(){
+export function useShoppingCart(){
     return useContext(ShoppingCartContext)
 }
 
-export function ShoppingCartProvider({children}){
-    const [cartItems, setCartItems] = useLocalStorage("cartItems", def.cart)
-    const [cartBuyer, setCartBuyer] = useLocalStorage("cartBuyer", def.buyer)
-    const [cartDelivery, setCartDelivery] = useLocalStorage("cartDelivery", {id: null, data: null})
+interface Props {
+    children: ReactNode
+}
 
-    const cartQty = cartItems.reduce((qty, item) => item.qty + qty, 0)
+export function ShoppingCartProvider({children}:Props){
+    const [cartItems, setCartItems] = useLocalStorage<CartItem[]>("cartItems", [])
+    const [cartBuyer, setCartBuyer] = useLocalStorage<CartBuyer>("cartBuyer", null)
+    const [cartDelivery, setCartDelivery] = useLocalStorage<CartDelivery>("cartDelivery", null)
 
-    function setBuyer(buyer){
+    const cartQty = cartItems.reduce((qty: number, item: CartItem) => item.qty + qty, 0)
+
+    function setBuyer(buyer: CartBuyer){
         setCartBuyer(buyer)
     }
 
-    function setDelivery(id, data){
-        setCartDelivery({id: id, data: data})
+    function setDelivery(delivery: CartDelivery){
+        setCartDelivery(delivery)
     }
 
-    function getItemQty(id){
-        return cartItems.find(item => item.id === id)?.qty || 0
+    function getItemQty(id: string){
+        return cartItems.find((cartItem: CartItem) => cartItem.item_id === id).qty || 0
     }
 
-    function increaseQty(id){
-        setCartItems(currItems => {
-            if(currItems.find(item => item.id === id) == null) 
-                return [...currItems, {id, qty: 1}]
-            else return currItems.map(item => {
-                if(item.id === id) return {...item, qty: item.qty + 1}
-                else return item
-            })
-        })
+    function increaseQty(id: string){
+        const item = cartItems.find((item: CartItem) => item.item_id === id)
+
+        if(!item)
+            return setCartItems([...cartItems, { item_id: id, qty: 1}])
+
+        return setCartItems(cartItems.map((item: CartItem) => {
+            if(item.item_id === id)
+                return {...item, qty: item.qty++}
+            return item
+        }))
     }
 
-    function decreaseQty(id){
-        setCartItems(currItems => {
-            if(currItems.find(item => item.id === id)?.qty === 1)
-                return currItems.filter(item => item.id !== id)
-            else return currItems.map(item => {
-                if(item.id === id) return {...item, qty: item.qty - 1}
-                else return item
-            })
-        })
+    function decreaseQty(id: string){
+        const item = cartItems.find((item: CartItem) => item.item_id === id)
+
+        if(!item)
+            return
+
+        if(item.qty === 1)
+            return removeFromCart(id)
+
+        return setCartItems(cartItems.map((item: CartItem) => {
+            if(item.item_id === id)
+                return {...item, qty: item.qty--}
+            return item
+        }))
     }
 
-    function removeFromCart(id){
-        setCartItems(currItems => {
-            return currItems.filter(item => item.id !== id)
-        })
+    function removeFromCart(id: string){
+        return setCartItems(cartItems.filter((item: CartItem) => item.item_id !== id))
     }
 
-    return <ShoppingCartContext.Provider
-            value={{cartQty, cartItems, cartBuyer, cartDelivery, setBuyer, setDelivery, getItemQty, increaseQty, decreaseQty, removeFromCart}}>
-        {children}
-    </ShoppingCartContext.Provider>
+    return(
+        <ShoppingCartContext.Provider
+            value={{cartQty, cartItems, cartBuyer, cartDelivery,
+                setBuyer, setDelivery, getItemQty,
+                increaseQty, decreaseQty, removeFromCart}}>
+            {children}
+        </ShoppingCartContext.Provider>
+    )
 }

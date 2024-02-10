@@ -1,17 +1,18 @@
-import { getByUserId } from "../../../../../utils/handlers/order"
-import { auth } from "/auth"
-import {NextResponse} from "next/server";
+import { getByUserId } from "@/utils/handlers/order"
+import { auth } from "@/auth"
+import {NextRequest, NextResponse} from "next/server";
 
-export async function GET(req, context){
-    const session = await auth(req)
+export async function GET(req: NextRequest, context: { params: {id: string} }){
+    const session = await auth()
     const { id } =  context.params
 
     if(!session)
-        return NextResponse.json({}, {status: 401})
+        return NextResponse.json({}, {status: 403})
 
-    const getResponse = await getByUserId(id)
+    if(session.user.id !== id && session.user.role !== "admin")
+        return NextResponse.json({}, {status: 403})
 
-    if(getResponse?.error)
-        return NextResponse.json(getResponse, {status:500})
-    return NextResponse.json(getResponse, {status:200})
+    const response = await getByUserId(id)
+
+    return NextResponse.json(response, {status:200})
 }

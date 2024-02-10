@@ -1,16 +1,9 @@
-import Product from "../../../../models/product"
-import connect from '../../../../utils/db/connect'
+import {NextRequest, NextResponse} from "next/server"
+import {getById} from "@/utils/handlers/product"
 
-const ProductById = async (req, res) => {
-    const { id } = req.query
+export async function GET(req: NextRequest, context: { params: {id: string} }){
+    const {id} = context.params
+    const res = await getById(id)
 
-    await connect()
-
-    await Product.findOne({_id: id}).then((product)=>{
-        return res.status(200).send(product)
-    }).catch((err)=>{
-        return res.status(503).send(err)
-    })  
+    return NextResponse.json(res, {status: 200})
 }
-
-export default ProductById

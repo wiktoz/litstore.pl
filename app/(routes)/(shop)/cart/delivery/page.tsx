@@ -1,20 +1,19 @@
 'use client'
 
 import SummaryBox from '@/components/cart/SummaryBox'
-import useShoppingCart from '/app/_context/ShoppingCart'
+import {useShoppingCart} from '@/context/ShoppingCart'
 import AddressForm from '@/components/form/AddressForm'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import DeliveryBox from '@/components/cart/delivery/DeliveryBox'
 
 const CartDelivery = () => {
-    const deliveryBox = useRef()
-    const {cartBuyer, setBuyer, setDelivery} = useShoppingCart()
+    const {setBuyer, cartBuyer} = useShoppingCart() as ShoppingCartContextType
     const [addressPicked, setAddressPicked] = useState(!!cartBuyer.name)
 
-    const handleAddressData = (data) => {
+    const handleAddressData = (data: CartBuyer) => {
         setBuyer(data)
         setAddressPicked(true)
-        deliveryBox.current?.scrollIntoView({behavior: 'smooth'})
+        //deliveryBox.current?.scrollIntoView({behavior: 'smooth'})
     }
 
     return(
@@ -41,8 +40,10 @@ const CartDelivery = () => {
                             name={cartBuyer.name ? cartBuyer.name : ""}
                             surname={cartBuyer.surname ? cartBuyer.surname : ""} 
                             email={cartBuyer.email ? cartBuyer.email : ""} 
-                            street={cartBuyer.street ? cartBuyer.street : ""} 
-                            postcode={cartBuyer.postcode ? cartBuyer.postcode : ""}  
+                            street={cartBuyer.street ? cartBuyer.street : ""}
+                            house={cartBuyer.house ? cartBuyer.house : ""}
+                            flat={cartBuyer.flat ? cartBuyer.flat : ""}
+                            post_code={cartBuyer.post_code ? cartBuyer.post_code : ""}
                             city={cartBuyer.city ? cartBuyer.city : ""} 
                             submitData={handleAddressData}
                             disabled={addressPicked}
@@ -51,7 +52,7 @@ const CartDelivery = () => {
                 </section>
                 <div className="py-6">
                 </div>
-                <section ref={deliveryBox} className="shadow rounded p-8">
+                <section className="shadow rounded p-8">
                     <div className="py-2">
                     <h3 className="text-lg font-semibold leading-6 text-gray-900">Delivery Method</h3>
                     <p className="mt-1 text-sm text-gray-600">Pick method which your products will be shipped to you</p>
@@ -63,7 +64,7 @@ const CartDelivery = () => {
                 <SummaryBox
                     previousStep="/cart"
                     buttonLink="/cart/summary"
-                    buttonTitle="Dalej"
+                    buttonTitle="Dalej" buttonOnClick={undefined}
                 />
             </div>
         </div>

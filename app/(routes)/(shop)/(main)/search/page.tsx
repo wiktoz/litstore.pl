@@ -5,10 +5,10 @@ import SearchBar from '@/components/form/SearchBar'
 import ProductsSearch from '@/components/ProductsSearch'
 
 const Search = () => {
-    const [searchVal, setSearchVal] = useState('')
+    const [searchVal, setSearchVal] = useState<string>('')
 
-    const handleSearch = (e) => {
-        setSearchVal(e.target.value)
+    const handleSearch = (value: string) => {
+        setSearchVal(value)
     }
 
     return(

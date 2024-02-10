@@ -1,29 +1,35 @@
 import useSWR from "swr"
 import DeliveryItem from './DeliveryItem'
-import useShoppingCart from "/app/_context/ShoppingCart"
+import { useShoppingCart } from "@/context/ShoppingCart"
 import Loader from "../../Loader"
 import Geowidget from '../../Geowidget'
 import AddressForm from "../../form/AddressForm"
-
-const fetcher = url => fetch(url).then(r => r.json())
+import {fetcher} from "@/utils/helpers";
 
 const DeliveryBox = () => {
     const { data: deliveries, error} = useSWR('/api/deliveries', fetcher)
-    const { cartDelivery, setDelivery } = useShoppingCart()
+    const { cartDelivery, setDelivery } = useShoppingCart() as ShoppingCartContextType
     
     if(error) return "An error has occurred"
     if(!deliveries) return <Loader />
 
-    const pickDelivery = (e, id) => {
-        e.preventDefault()
-
-        setDelivery(id, cartDelivery.data)
+    const pickDelivery = (id:string) => {
+        setDelivery({
+            ...cartDelivery,
+            delivery_id: id
+        })
     }
 
-    const handleAddressData = (data) => {
-        if(cartDelivery && cartDelivery.id){
-            setDelivery(cartDelivery.id, data)
-        }
+    const handleAddressData = (data: Address) => {
+        if(cartDelivery && cartDelivery.delivery_id)
+            setDelivery({
+                ...cartDelivery,
+                street: data.street,
+                house: data.house,
+                flat: data.flat,
+                post_code: data.post_code,
+                city: data.city
+            })
     }
 
     return(
@@ -31,16 +37,13 @@ const DeliveryBox = () => {
         <div className='flex flex-col lg:flex-row gap-2 pt-5'>
             {
                 deliveries && deliveries.length > 0 &&
-                deliveries.map(item => {
+                deliveries.map((item:Delivery) => {
                     return(
                         <DeliveryItem
                             key={item._id}
-                            id={item._id}
-                            name={item.name}
-                            img={item.img}
-                            price={item.price}
-                            isPicked={!!(cartDelivery && cartDelivery.id === item._id) }
-                            pickDelivery={ e => { pickDelivery(e, item._id) }}
+                            delivery={item}
+                            isPicked={(cartDelivery && cartDelivery.delivery_id === item._id) }
+                            pickDelivery={ () => { pickDelivery(item._id) }}
                         />
                     )
                 })
@@ -49,16 +52,23 @@ const DeliveryBox = () => {
         <div className="w-full my-4">
             {
                 deliveries && deliveries.length > 0 &&
-                deliveries.map(item => {
+                deliveries.map((item: Delivery) => {
                     return (
-                    cartDelivery && cartDelivery.id === item._id ?
+                    cartDelivery && cartDelivery.delivery_id === item._id ?
                         item.name === "InPost" ?
-                            <Geowidget key="InPostGeowidget" id={cartDelivery.id}/> :
+                            <Geowidget key="InPostGeowidget" id={cartDelivery.delivery_id}/> :
                             <div key="addressForm" className="border-gray-300 border-2 rounded-lg">
                                 <AddressForm
                                     submitData={handleAddressData}
                                     title="Dane do wysyłki"
                                     description="Podaj dane, na które wyślemy twoje zakupy"
+                                    city={""}
+                                    email={""}
+                                    house={""}
+                                    name={""}
+                                    post_code={""}
+                                    street={""}
+                                    surname={""}
                                 />
                             </div>
                     : ""

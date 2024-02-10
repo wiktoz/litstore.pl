@@ -1,6 +1,6 @@
 'use client'
 
-import {useSession} from 'next-auth/react'
+import {auth} from "@/auth"
 import Link from 'next/link'
 import useSWR from 'swr'
 import AddressForm from '@/components/form/AddressForm'
@@ -9,20 +9,19 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import axios from 'axios'
 import Loader from '@/components/Loader'
-import Image from "next/image";
-
-const fetcher = url => fetch(url).then(r => r.json())
+import {fetcher} from "@/utils/helpers"
+import {useSession} from "next-auth/react"
 
 const UserProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { data: session, status } = useSession()
-    const { data: user, errorUser } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
-    const { data: orders, errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
+    const { data: user, error: errorUser } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
+    const { data: orders, error: errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
 
     if(errorUser || errorOrders) return <Loader/>
     if(!user || !orders) return <Loader/>
 
-    const addAddress = async (data) => {
+    const addAddress = async (data: Address) => {
         const endpoint = '/api/users/edit/'+session.user.id+'/addAddress'
 
         axios.post(endpoint, data).then(response => {
@@ -152,7 +151,15 @@ const UserProfile = () => {
                     title="Add address"
                     description="Enter your details. You will be able to choose convenient data on every checkout with just one click"
                     submitData={addAddress}
-                    />
+                    city={""}
+                    post_code={""}
+                    street={""}
+                    house={""}
+                    flat={""}
+                    name={""}
+                    surname={""}
+                    email={""}
+                  />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

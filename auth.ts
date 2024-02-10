@@ -1,25 +1,36 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import connect from "./utils/db/connect";
-import User from "./models/user";
+import connect from "@/utils/db/connect";
+import User from "@/models/user";
 import bcrypt from "bcryptjs"
-
 
 export const {
     handlers: { GET, POST },
     auth,
 } = NextAuth({
     providers: [CredentialsProvider({
+        credentials: {
+            email: { label: 'email', type: 'text' },
+            password: { label: 'password', type: 'password' },
+        },
         async authorize(credentials) {
+            if (!credentials) throw new Error("No credentials to log in")
+
+            const { email, password } = credentials
             await connect()
 
-            const user = await User.findOne({email: credentials.email});
+            const user = await User.findOne({email: email})
 
             if (!user) {
                 throw new Error('No user found with this email')
             }
 
-            const checkPassword = await bcrypt.compareSync(credentials.password, user.password)
+            if(!credentials.password) {
+                throw new Error('No password provided')
+            }
+
+            // @ts-ignore
+            const checkPassword = bcrypt.compare(password, user.password)
             if (!checkPassword) {
                 throw new Error('Incorrect password')
             }
@@ -30,28 +41,21 @@ export const {
     ],
     pages: {
         signIn: '/auth/signin',
-        signUp: '/auth/signup',
-        verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-        async session({ session, token }){
-            if (session?.user) {
-                session.user.id = token.id
-                session.user.role = token.role
-            }
+        async session({session}){
             return session
         },
-        async jwt({ user, token }){
-            if (user?.role) {
-                token.role = user.role
-                token.id = user.id
+        async jwt({ token, user, session }){
+            if (session && session.user?.role) {
+                token.role = session.user.role
+                token.id = session.user.id
             }
             return token
         },
-        async authorized({ req, token }){
-            return token !== null
+        async authorized({auth}){
+            return auth?.user !== null
         }
     }
 })

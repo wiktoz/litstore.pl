@@ -1,13 +1,27 @@
 import Base64 from 'crypto-js/enc-base64'
 import xml2js from 'xml2json'
 import js2xml from 'js2xmlparser'
-import connect from '/utils/db/connect'
-import Order from '/models/order'
+import connect from '@/utils/db/connect'
+import Order from '@/models/order'
 import sha256 from "crypto-js/sha256"
+import {NextRequest} from "next/server";
 
-export async function GET(req, res){
-    const decode = Base64.parse(req.body.transactions).toString()
-    const dataJson = xml2js.toJson(decode, { object: true }).transactionList
+interface DataJsonType {
+    serviceID: string,
+
+}
+
+export async function GET(req: NextRequest){
+    if(!req.body)
+        return
+
+    const body = await req.json()
+    const decode = Base64.parse(body.transactions).toString()
+    const dataJson = await xml2js.toJson(decode, { object: true }).transactionList
+
+    if(!dataJson)
+        return
+
     const transaction = dataJson.transactions.transaction
 
     const PAYMENT_ID = process.env.PAYMENT_ID
