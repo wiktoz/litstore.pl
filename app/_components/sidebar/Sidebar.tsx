@@ -19,7 +19,7 @@ import {
     PencilSquareIcon,
     QuestionMarkCircleIcon,
     Cog8ToothIcon,
-    IdentificationIcon, PhoneIcon
+    PhoneIcon
 
 } from "@heroicons/react/24/outline"
 

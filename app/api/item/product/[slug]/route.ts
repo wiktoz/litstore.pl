@@ -1,15 +1,15 @@
-import ProductItem from "/models/product_item"
-import Product from '/models/product'
-import Variant from '/models/variant'
-import connect from '/utils/db/connect'
+import ProductItem from "@/models/item"
+import Product from '@/models/product'
+import Variant from '@/models/variant'
+import connect from '@/utils/db/connect'
 import {NextResponse} from "next/server";
 
-export async function GET(req, context){
-    const { id } = context.params
+export async function GET(context: { params: { slug: string } }) {
+    const { slug } = context.params
 
     await connect()
 
-    return await ProductItem.findOne({_id: id}).populate([
+    await ProductItem.find({product_id: slug}).populate([
         {
             path: 'product_id'
         },

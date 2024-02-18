@@ -1,10 +1,10 @@
-import connectDb from '../../utils/db/connect'
-import Delivery from '../../models/delivery'
+import connect from '@/utils/db/connect'
+import Delivery from '@/models/delivery'
 
 export default async function devSeed(){
-    await connectDb()
+    await connect()
 
-    /*Delivery.create(
+    await Delivery.create(
         {
             name: 'InPost',
             img: 'inpost.svg',
@@ -13,7 +13,8 @@ export default async function devSeed(){
             cod: false,
             active: true
         })
-    Delivery.create(    
+
+    await Delivery.create(
         {
             name: 'DPD',
             img: 'dpd.svg',
@@ -22,7 +23,8 @@ export default async function devSeed(){
             cod: false,
             active: true
         })
-    Delivery.create(
+
+    await Delivery.create(
         {
             name: 'DHL',
             img: 'dhl.svg',
@@ -30,5 +32,5 @@ export default async function devSeed(){
             freeFrom: 179,
             cod: false,
             active: true
-        })*/
+        })
 }

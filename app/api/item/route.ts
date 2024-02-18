@@ -1,8 +1,8 @@
-import ProductItem from "/models/product_item"
-import connect from '/utils/db/connect'
+import ProductItem from "@/models/item"
+import connect from '@/utils/db/connect'
 import {NextResponse} from "next/server";
 
-export async function GET(req){
+export async function GET(){
     await connect()
 
     return await ProductItem.find({}).then((product)=>{
