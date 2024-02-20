@@ -10,10 +10,9 @@ import Input from '@/components/form/Input'
 import axios from 'axios'
 import {useRef} from 'react'
 import Loader from '@/components/Loader'
+import {fetcher} from "@/utils/helpers"
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-export default function EditProduct({params}){
+export default function EditProduct({params}:{params: {slug: string}}){
     const router = useRouter()
     const { mutate } = useSWRConfig()
     const { slug } = params

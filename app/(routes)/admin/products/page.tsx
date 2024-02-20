@@ -7,7 +7,7 @@ import AdminProducts from "@/components/admin/Products"
 export default function ShowProduct(){
     const [searchVal, setSearchVal] = useState('')
 
-    const handleSearch = (e) => {
+    const handleSearch = (e:any) => {
         setSearchVal(e.target.value)
     }
 
