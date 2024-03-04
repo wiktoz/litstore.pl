@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 
 import useSWR from 'swr'
 import { useShoppingCart } from '@/context/ShoppingCart'
@@ -25,11 +25,16 @@ const ProductPage = ({params}:{params: {product: string}}) => {
     const [pickedProduct, setPickedProduct] = useState<Item>()
     const {cartItems, increaseQty} = useShoppingCart() as ShoppingCartContextType
 
-    const { data: product, error: productError } = useSWR<Product>(params.product ? '/api/products/slug/'+params.product : null, fetcher)
-    const { data: items, error: itemsError } = useSWR<Item[]>(params.product ? '/api/products/store/populate/'+params.product : null, fetcher)
+    const [photos, setPhotos] = useState<string[]>()
 
-    if (productError || itemsError) return "An error has occurred."
-    if (!product || !items) return <Loader />
+    const { data: product, error: productError, isLoading: isProductLoading } = useSWR<Product>(params.product ? '/api/products/'+params.product : null, fetcher)
+    const { data: items, error: itemsError, isLoading: isItemLoading } = useSWR<Item[]>(product ? '/api/items/product/'+product._id : null, fetcher)
+
+    useEffect(() => {
+        if(product){
+            setPhotos(["/img/products/"+product.main_photo, ...product.photos.map(photo => "/img/products/"+photo)])
+        }
+    }, [product]);
 
     const handleAddToCart = () => {
         if(pickedProduct) {
@@ -38,14 +43,19 @@ const ProductPage = ({params}:{params: {product: string}}) => {
     }
 
     const getMaxPrice = () => {
+        if(!items) return
         return Math.max(...items?.map((i) => i.price))
     }
 
     const getMinPrice = () => {
+        if(!items) return
         return Math.min(...items?.map((i) => i.price))
     }
 
     const printPrice = () => {
+        if(!items || items.length == 0)
+            return "Currently not available"
+
         let max = getMaxPrice()
         let min = getMinPrice()
 
@@ -55,6 +65,7 @@ const ProductPage = ({params}:{params: {product: string}}) => {
     }
 
     const pickOption = async (variantId: string, optionId: string) => {
+        if(!items) return
         setPickedOptions([...pickedOptions, {
             variant_id: variantId,
             option_id: optionId
@@ -92,14 +103,14 @@ const ProductPage = ({params}:{params: {product: string}}) => {
         </div>
     }
 
-
-
-    const photos = ["/img/products/"+product.main_photo, ...product.photos.map(photo => "/img/products/"+photo)]
-
     return(
         <div className="grid grid-cols-1 md:grid-cols-2 items-center">
             <div className="mx-auto px-8 md:mx-0">
-                <Carousel items={photos} />
+                {
+                    photos ?
+                        <Carousel items={photos} /> :
+                        <Loader/>
+                }
             </div>
             <div className="text-left w-full h-full flex flex-col justify-between px-6">
                 <div className="flex flex-row items-center text-gray-300 text-xs my-4" onClick={() => router.back()}>
@@ -107,19 +118,27 @@ const ProductPage = ({params}:{params: {product: string}}) => {
                     <p className="mx-2">Go Back To Products</p>
                 </div>
                 <div className="my-2">
-                    <p className="text-xs font-semibold text-gray-400 mb-2">{product.manufacturer}</p>
-                    <p className="text-xl font-semibold tracking-tight mb-4">{product.name}</p>
-                    <p className="text-lg font-semibold text-gray-700 mb-6">
+                    {
+                        isProductLoading ?
+                            <>
+                                <div className="text-xs font-semibold text-gray-400 mb-2 bg-gray-200 w-24 h-3 rounded-xl"></div>
+                                <div className="text-xl font-semibold tracking-tight mb-4 bg-gray-200 w-64 h-6 rounded-xl"></div>
+                            </> :
+                        !product ?
+                            <p>Cannot find product</p> :
+                        <>
+                            <p className="text-xs font-semibold text-gray-400 mb-2">{product.manufacturer}</p>
+                            <p className="text-xl font-semibold tracking-tight mb-4">{product.name}</p>
+                        </>
+                    }
+                    <p className="text-sm font-semibold text-gray-800 my-4">
                         {
                             addAvailable ?
                                 <span>{pickedProduct?.price} <span className="text-sm">PLN</span></span>
                                 :
-                                <span>{printPrice()} <span className="text-sm">PLN</span></span>
+                                <span>{printPrice()}</span>
                         }
                     </p>
-                    <div className="flex flex-row my-4 gap-2">
-
-                    </div>
                     <div>
                         {
                             addAvailable ?
@@ -135,7 +154,7 @@ const ProductPage = ({params}:{params: {product: string}}) => {
                                 </p>
                             </button>
                             :
-                            <button onClick={(e) => handleAddToCart()} className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={!addAvailable}>
+                            <button onClick={() => handleAddToCart()} className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={!addAvailable}>
                                 <p className="text-sm">
                                     Add to Cart
                                 </p>
@@ -144,7 +163,7 @@ const ProductPage = ({params}:{params: {product: string}}) => {
                     </p>
                     <Accordion
                         title="Description" 
-                        description={product.description}
+                        description={product ? product?.description : ""}
                     />
                     <Accordion
                         title="Delivery" 

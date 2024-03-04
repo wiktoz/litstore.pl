@@ -1,6 +1,6 @@
 import {SHA256} from "crypto-js";
 
-export const checkHashValidity = (ServiceID, OrderID, Hash) => {
+export const checkHashValidity = (ServiceID:string, OrderID:string, Hash:string) => {
     const PAYMENT_KEY = process.env.PAYMENT_KEY
     const hashFields = {
         "ServiceID": ServiceID,

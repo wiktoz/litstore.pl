@@ -1,10 +1,9 @@
 'use client'
 
 import useSWR from "swr"
-import ShowBox from "@/components/admin/ShowBox"
 import Loader from "@/components/Loader"
-
-const fetcher = url => fetch(url).then(r => r.json())
+import { fetcher } from "@/utils/helpers"
+import UserBox from "@/components/UserBox";
 
 const ShowUsers = () => {
     const { data: users, error } = useSWR('/api/users', fetcher)
@@ -13,20 +12,13 @@ const ShowUsers = () => {
     if(!users) return <Loader/>
 
     return(
-        <div>
+        <div className={"flex flex-col gap-2"}>
             {
-                users.map(user => {
+                users.map((user:User) => {
                     return(
-                        <ShowBox
-                            editLink={"/admin/users/edit/" + user._id}
-                            deleteLink={"/admin/users/delete/" + user._id}
-                            key={user._id}
-                        >
-                            <div>
-                                <p className="text-gray-800 my-1">{user.email}</p>
-                                <p className="text-gray-600 text-xs uppercase">{user.role}</p>
-                            </div>
-                        </ShowBox>
+                        <div key={user._id}>
+                            <UserBox u={user}/>
+                        </div>
                     )
                 })
             }

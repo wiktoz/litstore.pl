@@ -1,16 +1,34 @@
-export default function RadioBtn({title, name, description, options, value, errors, checker, setter}){
+import {UseFormRegister} from "react-hook-form";
+
+interface Option {
+    id: string,
+    name: string
+}
+
+interface RadioInterface {
+    title: string,
+    name: string,
+    description?: string,
+    options: Option[],
+    value?: string,
+    errors: { [key: string]: { message?: string } },
+    checker: UseFormRegister<any>,
+    setter: (value: string) => void,
+}
+
+export default function RadioBtn({title, name, description, options, value, errors, checker, setter}:RadioInterface){
     return(
         <div className="my-4">
             <legend className="text-sm text-gray-800">
                 {title}
             </legend>
             {
-                description ?
-                    <p className="text-sm text-gray-500">{description}</p> : ""
+                description &&
+                    <p className="text-xs text-gray-500">{description}</p>
             }
             <div className="flex flex-row">
                 {
-                    options.map(option => {
+                    options.map((option:Option) => {
                         return(
                             <div className="flex items-center px-4 py-2 bg-white first:rounded-l-lg last:rounded-r-lg border-r" key={option.id}>
                                 <input

@@ -1,8 +1,9 @@
-import useSWR from "swr"
-import Loader from "../../../..@/components/Loader"
-import ShowBox from "../../../..@/components/admin/ShowBox"
+'use client'
 
-const fetcher = url => fetch(url).then(r => r.json())
+import useSWR from "swr"
+import Loader from "@/components/Loader"
+import ShowBox from "@/components/admin/ShowBox"
+import {fetcher} from "@/utils/helpers";
 
 export default function ShowCategories(){
     const { data, error } = useSWR('/api/categories', fetcher)
@@ -12,7 +13,7 @@ export default function ShowCategories(){
     return(
         <>
         {
-            data.map(category => {
+            data.map((category:Category) => {
                 return(
                     <ShowBox
                         key={category.slug}
@@ -20,11 +21,13 @@ export default function ShowCategories(){
                         editLink={'/admin/categories/edit/' + category.slug}
                         deleteLink={'/admin/categories/delete/' + category.slug}
                     >
-                        <div className="w-24">
-                            <img src={'/img/categories/' + category.photo} />
-                        </div>
-                        <div className="mx-6">
-                            <p className="text-gray-700 text-md">{category.name}</p>
+                        <div>
+                            <div className="w-24">
+                                <img src={'/img/categories/' + category.bg_photo} alt={category.name} />
+                            </div>
+                            <div className="mx-6">
+                                <p className="text-gray-700 text-md">{category.name}</p>
+                            </div>
                         </div>
                     </ShowBox>
                 )

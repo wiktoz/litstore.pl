@@ -1,40 +1,56 @@
-import mongoose, { Schema, model, models } from "mongoose"
-import ProductItem from './item'
-import Delivery from './delivery'
+import { Schema, model, models } from "mongoose"
+import Delivery from "@/models/delivery"
+import Item from "@/models/item"
+import Product from "@/models/product"
+import PromoCode from "@/models/code"
 
 const schema = new Schema({
-    number: Number,
+    number: {type: String, required: true, unique: true,
+        default: () => Date.now().toString().slice(1, 11)
+    },
     buyer: {
-        user_id: String,
-        email: String,
-        name: String,
-        street: String,
-        house: String,
+        user_id: {type: Schema.Types.ObjectId, ref: 'User'},
+        email: {type: String, required: true},
+        name: {type: String, required: true},
+        surname: {type: String, required: true},
+        street: {type: String, required: true},
+        house: {type: String, required: true},
         flat: String,
-        city: String,
-        postcode: String
+        city: {type: String, required: true},
+        post_code: {type: String, required: true}
     },
     delivery: {
-        id: { type: Schema.Types.ObjectId, ref: 'Delivery' },
-        price: Number,
+        type: Delivery,
+        price: {type: Number, required: true},
+        email: {type: String, required: true},
+        name: {type: String, required: true},
+        surname: {type: String, required: true},
+        street: {type: String, required: true},
+        house: {type: String, required: true},
+        flat: String,
+        city: {type: String, required: true},
+        post_code: {type: String, required: true}
     },
     items: [{
-        id: { type: Schema.Types.ObjectId, ref: 'ProductItem' },
-        qty: Number
+        item: {type: Item, required: true},
+        product: {type: Product, required: true},
+        qty: {type: Number, required: true},
+        price: {type: Number, required: true}
     }],
+    promo_code: {
+        code: PromoCode,
+        discount: {type: Number, required: true}
+    },
     payment: {
-        amount: String,
-        method: String,
+        amount: {type: Number, required: true},
+        currency: {type: String, required: true},
+        method: {type: String, required: true},
         hash: String,
         url: String,
-        status: String,
+        status: {type: String, required: true, default: "PENDING"},
     },
-    status: {type: String, default: "payment" },
-    date: {
-        type: Date,
-        default: Date.now
-    }
-})
+    status: {type: String, default: "payment", required: true },
+}, { timestamps: true })
 
 const Order = models.Order || model('Order', schema)
 

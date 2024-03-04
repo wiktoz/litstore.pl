@@ -1,13 +1,15 @@
-import useSWR from "swr"
-import Loader from "../../../..@/components/Loader"
-import ShowBox from "../../../..@/components/admin/ShowBox"
-import {BiPlus} from 'react-icons/bi'
-import ButtonLink from "../../../..@/components/admin/ButtonLink";
+'use client'
 
-const fetcher = url => fetch(url).then(r => r.json())
+import useSWR from "swr"
+import Loader from "@/components/Loader"
+import ShowBox from "@/components/admin/ShowBox"
+import {BiPlus} from 'react-icons/bi'
+import ButtonLink from "@/components/admin/ButtonLink";
+import {fetcher} from "@/utils/helpers";
+
 
 export default function ShowVariants(){
-    const { data, error } = useSWR('/api/variants/get', fetcher)
+    const { data, error } = useSWR('/api/variants', fetcher)
     if (error) return "An error has occurred."
     if (!data) return <Loader></Loader>
 
@@ -21,10 +23,11 @@ export default function ShowVariants(){
                 />
             </div>
         {
-            data.map(variant => {
+            data.map((variant:Variant) => {
                 return(
                     <ShowBox
                         key={variant.slug}
+                        showLink={"#"}
                         editLink={'/admin/products/variants/edit/' + variant.slug}
                         deleteLink={'/admin/products/variants/delete/' + variant.slug}
                     >

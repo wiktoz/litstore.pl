@@ -2,12 +2,17 @@
 
 import Input from "@/components/form/Input";
 import {useState} from "react";
-import * as Yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
 import {useForm} from "react-hook-form";
-import FileUpload from "@/components/form/file-upload/FileUpload"
+import FileUpload from "@/components/form/FileUpload";
+import {resolver} from "@/components/validation/schema/mainSettings";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+interface Settings {
+    facebookLink: string,
+    instaLink: string,
+    shopName: string,
+    shopEmail: string,
+    shopPhone: string
+}
 
 const MainSettings = () => {
     const [facebookLink, setFacebookLink] = useState("")
@@ -16,17 +21,10 @@ const MainSettings = () => {
     const [shopEmail, setShopEmail] = useState("")
     const [shopPhone, setShopPhone] = useState("")
 
+    const [logo, setLogo] = useState<File[]>([])
 
-    const validationSchema = Yup.object().shape({
-        facebookLink: Yup.string().url("Not a valid URL"),
-        instaLink: Yup.string().url("Not a valid URL"),
-        shopName: Yup.string().required("Shop Name is required"),
-        shopEmail: Yup.string().email("Provide valid email").required("Shop E-mail is required"),
-        shopPhone: Yup.string().required("Shop Phone is required").matches(phoneRegExp, 'Phone number is not valid')
-    })
-
-    const resolver = yupResolver(validationSchema)
-    const { register, handleSubmit, formState: {errors} } = useForm({resolver})
+    const { register, handleSubmit, formState: {errors} }
+        = useForm<Settings>({resolver})
     const submitSettings = () => {
         console.log("submitting")
     }
@@ -79,7 +77,7 @@ const MainSettings = () => {
                     checker={register}
                     setter={setShopPhone}
                 />
-                <FileUpload multiple={false} />
+                <FileUpload files={logo} setFiles={setLogo} multiple={false} />
                 <button type="submit" className="mt-2 bg-gray-700 text-white px-4 py-2 rounded-lg">Submit</button>
             </form>
         </div>

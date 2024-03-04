@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-export default function TextareaOnCheckbox(props){
-    const [checked, setChecked] = useState(props.checked)
+interface Props {
+
+    checked: boolean,
+
+}
+
+export default function TextareaOnCheckbox({checked}:Props){
+    const [open, setOpen] = useState<boolean>(checked)
 
     const handleChange = () => {
-        setChecked(!checked)
+        setOpen(!open)
     }
 
     return(

@@ -1,5 +1,4 @@
 import crypto from "crypto"
-import bcrypt from "bcryptjs"
 
 const generateToken = async () => {
     const t = crypto.randomBytes(16).toString('hex')

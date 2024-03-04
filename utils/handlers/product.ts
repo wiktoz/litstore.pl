@@ -1,6 +1,7 @@
 import Product from "@/models/product"
 import connect from "../db/connect"
 import Item from "@/models/item"
+import Category from "@/models/category"
 import {isValidObjectId, Types} from "mongoose"
 
 const create = async (data: Product) => {
@@ -18,7 +19,7 @@ const create = async (data: Product) => {
 const get = async () => {
     await connect()
     
-    return Product.find({ active: true })
+    return Product.find({ active: true }).populate('category').exec()
     .then((product) => {
         return product
     })

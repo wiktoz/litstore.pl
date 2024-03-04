@@ -1,12 +1,11 @@
-import TextareaOnCheckbox from "../../../..@/components/form/TextareaOnCheckbox"
-import Checkbox from "../../../..@/components/form/Checkbox"
-import Textarea from "../../../..@/components/form/Textarea"
-import Loader from "../../../..@/components/Loader"
+import TextareaOnCheckbox from "@/components/form/TextareaOnCheckbox"
+import Checkbox from "@/components/form/Checkbox"
+import Textarea from "@/components/form/Textarea"
+import Loader from "@/components/Loader"
 import { useRouter } from "next/router"
 import useSWR from 'swr'
-import Input from "../../../..@/components/form/Input"
-
-const fetcher = url => fetch(url).then(r => r.json())
+import Input from "@/components/form/Input"
+import {fetcher} from "@/utils/helpers";
 
 export default function EditCategory(){
     const router = useRouter()

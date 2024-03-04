@@ -1,75 +1,49 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import Select from '@/components/form/Select'
 import Textarea from '@/components/form/Textarea'
-import FileInputOrder from '@/components/form/file-upload/FileUploadOrderFiles'
+import FileUpload from "@/components/form/FileUpload";
 import Checkbox from '@/components/form/Checkbox'
 import Input from '@/components/form/Input'
-import axios from 'axios'
-import {useRef} from 'react'
 import Loader from '@/components/Loader'
 import {fetcher} from "@/utils/helpers"
+import {useForm} from "react-hook-form";
+import {resolver} from "@/components/validation/schema/product";
+import {useEffect, useState} from "react";
+
+interface Photo {
+    blob: string,
+    name: string
+}
 
 export default function EditProduct({params}:{params: {slug: string}}){
-    const router = useRouter()
-    const { mutate } = useSWRConfig()
     const { slug } = params
 
-    const files = useRef()
+    const { data : categories, error: categoriesError } = useSWR<Category[]>('/api/categories', fetcher)
+    const { data : variants, error: variantsError } = useSWR<Variant[]>('/api/variants', fetcher)
+    const { data: product, error: productError } = useSWR<Product>('/api/products/'+slug, fetcher)
+    const { data: photos, error: photosError } = useSWR<Photo[]>("/api/products/"+slug+"/photos", fetcher)
+    
+    useEffect(() => {
+        if(photos){
+            const f = photos.map((photo:Photo) => {
+                const buffer = Buffer.from(photo.blob, 'base64');
+                const blob = new Blob([buffer])
+                return new File([blob], photo.name)
+            })
+            
+            setFiles(f)
+        }
+    }, [photos])
 
-    const { data : categories, error: categoriesError } = useSWR('/api/categories', fetcher)
-    const { data : variants, error: variantsError } = useSWR('/api/variants', fetcher)
-    const { data: product, error: productError } = useSWR('/api/products/slug/'+slug, fetcher)
+    const { register, handleSubmit, formState: {errors} }
+        = useForm<Product>({resolver})
+    
+    const [files, setFiles] = useState<File[]>([])
     
     if(categoriesError || variantsError || productError) return "An error has occurred."
     if(!product || !variants || !categories) return <Loader/>
-
-    let defaultFiles = [];
-    defaultFiles.push({id: product.main_photo, name: product.main_photo, img: '/img/products/'+product.main_photo, uploaded: true})
-    
-    product.photos.forEach(photo => {
-        defaultFiles.push({id: photo, img: '/img/products/'+photo, name: photo, uploaded: true})
-    })
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const fileArr = files.current.getFiles()
-        delete fileArr.img
-        delete fileArr.id
-
-        let formData = new FormData()
-        formData.append("id", slug)
-        formData.append("name", e.target.name.value)
-        formData.append("category", e.target.category.value)
-        formData.append("description", e.target.description.value)
-        formData.append("manufacturer", e.target.manufacturer.value)
-        formData.append("active", e.target.active.checked)
-        formData.append("new_badge", e.target.new_badge.checked)
-        fileArr.forEach(file=>{
-            formData.append("photos", JSON.stringify(file))
-            if(!file.uploaded)
-            formData.append("photos", file)
-        })
-
-        axios.post('/api/products/edit', formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            }
-        })
-        .then(function (response) {
-            e.target.reset()
-            files.current.fileRemoveAll()
-            console.log(slug)
-            mutate('/api/products/slug/'+response.data.slug)
-            router.push('/admin/products/edit/'+response.data.slug)
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
 
     return (
         <div className="py-2">
@@ -83,7 +57,7 @@ export default function EditProduct({params}:{params: {slug: string}}){
                     </div>
                 </div>
                 <div className="mt-5 md:col-span-3 md:mt-0">
-                    <form action="/api/products/add" method="POST" encType="multipart/form-data" onSubmit={handleSubmit}>
+                    <form>
                     <div className="shadow overflow-hidden rounded-md">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <div className="grid grid-cols-12 gap-6">
@@ -92,13 +66,17 @@ export default function EditProduct({params}:{params: {slug: string}}){
                                     title="Name"
                                     id="name"
                                     value={product.name}
+                                    checker={register}
+                                    errors={errors}
                                 />
                             </div>
                             <div className="col-span-4 sm:col-span-6">
                                 <Input
                                     title="Manufacturer"
                                     id="manufacturer"
-                                    value={product.producer}
+                                    value={product.manufacturer}
+                                    checker={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -106,44 +84,56 @@ export default function EditProduct({params}:{params: {slug: string}}){
                                 <Input 
                                     title="Manufacturer's model"
                                     id="model"
-                                    
+                                    checker={register}
+                                    errors={errors}
                                 />
                             </div>
 
-                            <Select
-                                id="category"
-                                title="Category"
-                                options={categories}
-                                value={product.category}
-                            />
-
-                            <Select
-                                id="variant"
-                                title="Variant"
-                                options={variants}
-                                value={product.variant[0]._id}
-                            />
+                            <div className={"col-span-12 sm:col-span-6"}>
+                                {
+                                    categories ?
+                                        <Select
+                                            id="category"
+                                            title="Category"
+                                            options={categories}
+                                        /> :
+                                        <Loader/>
+                                }
+                            </div>
+                            <div className={"col-span-12 sm:col-span-6"}>
+                                {
+                                    variants ?
+                                        <Select
+                                            id="variant"
+                                            title="Variant"
+                                            options={variants}
+                                        /> :
+                                        <Loader/>
+                                }
+                            </div>
                         </div>
 
-                        <div className="col-span-12 py-5">
-                            <Textarea
-                                id="description"
-                                title="Description"
-                                description="Describe your product"
-                                rows={6}
-                                value={product.description}
-                            />
-                            <p className="mt-2 text-sm text-gray-500">
+                            <div className="col-span-12 py-5">
+                                <Textarea
+                                    id="description"
+                                    title="Description"
+                                    description="Describe your product"
+                                    rows={6}
+                                    value={product.description}
+                                />
+                                <p className="mt-2 text-sm text-gray-500">
                             Brief description for your product. You can use HTML tags.
                             </p>
                         </div>
                         <div className="py-5">
-                            <FileInputOrder
-                                id="photos"
-                                title="Photos"
-                                files={defaultFiles}
-                                ref={files}
-                            />
+                            {
+                                files &&
+                                <FileUpload
+                                    files={files}
+                                    setFiles={setFiles}
+                                    multiple={true}
+                                />
+                            }
                         </div>
                         <div>
                             <Checkbox

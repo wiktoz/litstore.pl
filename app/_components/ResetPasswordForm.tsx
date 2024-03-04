@@ -2,33 +2,31 @@
 
 import axios from 'axios'
 import { useState } from "react"
-import Spinner from "./Spinner"
+import Spinner from "@/components/Spinner"
 
-const ResetPasswordForm = ({ csrfToken }) => {
+const ResetPasswordForm = ({ csrfToken }:{csrfToken: string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [email, setEmail] = useState('')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState<string>("")
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault()
-
+  const handleResetPassword = async () => {
     setIsLoading(true)
 
-    axios.post("/api/auth/password/reset", {
+    await axios.post("/api/auth/password/reset", {
       email: email
     })
-        .then(function (response) {
-            if(response.data?.error)
-              setMessage(response.data?.message)
-            else setSuccess(true)
-        })
-        .catch(function (error) {
-          setMessage("Connection error. Try again later.")
-          console.log(error)
-        }).finally(() => {
-          setIsLoading(false)
-      })
+    .then(function (response) {
+        if(response.data?.error)
+          setMessage(response.data?.message)
+        else setSuccess(true)
+    })
+    .catch(function (error) {
+      setMessage("Connection error. Try again later.")
+      console.log(error)
+    }).finally(() => {
+      setIsLoading(false)
+    })
   }
 
   return (
@@ -69,7 +67,7 @@ const ResetPasswordForm = ({ csrfToken }) => {
                   className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="e-mail"
                   value={email}
-                  onChange={e=>setEmail(e.target.value)}
+                  onChange={e=> setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -82,7 +80,7 @@ const ResetPasswordForm = ({ csrfToken }) => {
               <button
                   type="submit"
                   className={"w-full group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-semibold text-white focus:outline-none " + (!email || isLoading ? "opacity-70 hover:cursor-default hover:bg-gray-600" : "hover:bg-gray-700")}
-                  onClick={(e) => handleResetPassword(e)}
+                  onClick={(e) => {e.preventDefault(); handleResetPassword()}}
               >
                 {
                   isLoading ? <Spinner/> : "Reset password"

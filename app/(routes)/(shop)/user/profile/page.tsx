@@ -16,13 +16,13 @@ const UserProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { data: session, status } = useSession()
     const { data: user, error: errorUser } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
-    const { data: orders, error: errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
+    //const { data: orders, error: errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
 
-    if(errorUser || errorOrders) return <Loader/>
-    if(!user || !orders) return <Loader/>
+    if(errorUser ) return <Loader/>
+    if(!user ) return <Loader/>
 
     const addAddress = async (data: Address) => {
-        const endpoint = '/api/users/edit/'+session.user.id+'/addAddress'
+        const endpoint = session ? '/api/users/edit/'+session.user.id+'/addAddress' : ''
 
         axios.post(endpoint, data).then(response => {
             setIsOpen(false)
@@ -78,13 +78,13 @@ const UserProfile = () => {
                     </div>
                     {
                         user && user.addresses && user.addresses.length > 0 ?
-                            user.addresses.map((address) => {
+                            user.addresses.map((address:Address) => {
                                 return(
-                                    <div key={address._id} className='py-2 rounded-md col-span-2 text-gray-700 border border-gray-500'>
+                                    <div key={"22"} className='py-2 rounded-md col-span-2 text-gray-700 border border-gray-500'>
                                         <div className="flex flex-col justify-center h-full p-2">
                                             <p className="text-sm font-bold mx-1 mb-2">{address.name} {address.surname}</p>
                                             <p className="text-sm mx-1">{address.street}</p>
-                                            <p className="text-sm mx-1">{address.postcode} {address.city}</p>
+                                            <p className="text-sm mx-1">{address.post_code} {address.city}</p>
                                         </div>
                                     </div>
                                 )

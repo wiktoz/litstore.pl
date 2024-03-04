@@ -20,18 +20,18 @@ const Products = ({products, error, isLoading, size}:Props) => {
                 products.map((product)=>{
                     return(
                         <Link href={"/p/" + product.slug} key={product.slug}>
-                            <div className="rounded-md border hover:cursor-pointer relative h-full">
+                            <div className="rounded-md border hover:cursor-pointer relative h-full overflow-hidden">
                                 {
                                     product.new_badge ? 
                                     <div className="bg-gray-700 absolute top-0 right-0 rounded-tr-md rounded-bl-md">
                                         <p className="text-white text-xs px-2 py-1 tracking-tight">new</p>
                                     </div> : ""
                                 }
-                                <div className="h-full flex flex-col justify-between">
-                                    <div className="grow flex justify-center">
-                                        <div className="my-auto">
-                                            <img src={"/img/products/" + product.main_photo} alt={product.name}/>
-                                        </div>
+                                <div className="h-full flex flex-col">
+                                    <div className="flex rounded-t-md">
+                                        <img src={"/img/products/" + product.main_photo} alt={product.name}
+                                        className={"overflow-hidden"}
+                                        />
                                     </div>
 
                                     <div className='m-2 my-4'>

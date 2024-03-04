@@ -1,34 +1,26 @@
 'use client'
 
 import Input from "@/components/form/Input";
-import * as Yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
 import {useForm} from "react-hook-form";
 import {useState} from "react";
 import RadioBtn from "@/components/form/RadioBtn";
 import Datepicker from "@/components/Datepicker";
+import {resolver} from "@/components/validation/schema/promoCode";
+
+interface PromoCode {
+    code: string,
+    unit: string,
+    value: number
+}
 
 export default function ShowCodes(){
     const [code, setCode] = useState("")
-    const [unit, setUnit] = useState()
-    const [value, setValue] = useState(0)
+    const [unit, setUnit] = useState("")
+    const [value, setValue] = useState("0")
 
-    const validationSchema = Yup.object().shape({
-        code: Yup.string().required('Code is required'),
-        unit: Yup.string().required("Unit is required").oneOf(["cashValue", "percent"]),
-        value: Yup.number().required('Value is required').test({
-            name: 'max',
-            exclusive: false,
-            params: { },
-            message: 'Max value is 100%',
-            test: function (value) {
-                return this.parent.unit === "percent" ? value <= 100 : true
-            },
-        }),
-    })
+    const { register, handleSubmit, formState: {errors} }
+        = useForm<PromoCode>({resolver})
 
-    const resolver = yupResolver(validationSchema)
-    const { register, handleSubmit, formState: {errors} } = useForm({resolver})
     const submitNewCode = () => {
         console.log("submitting")
     }
@@ -60,7 +52,7 @@ export default function ShowCodes(){
                                 id="value"
                                 title="Promo Value"
                                 type="number"
-                                value={value}
+                                value={value.toString()}
                                 errors={errors}
                                 checker={register}
                                 setter={setValue}

@@ -1,9 +1,9 @@
-import Variant from "../../../models/variant"
-import VariantOption from '../../../models/variant_option'
-import connectDb from "../../../utils/db/connect"
+import Variant from "@/models/variant"
+import VariantOption from '@/models/variant_option'
+import connect from "@/utils/db/connect"
 
 export default async function createVariant(req,res){
-    await connectDb()
+    await connect()
 
     const body = JSON.parse(JSON.stringify(req.body))
 

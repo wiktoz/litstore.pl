@@ -1,3 +1,4 @@
+
 interface User {
     _id: string,
     email: string,
@@ -53,9 +54,47 @@ interface Variant {
     slug: string
 }
 
+interface Buyer extends Address {
+    user_id?: string
+}
+
+interface PromoCode {
+    code: string,
+    name: string,
+    description?: string,
+    date_start: string,
+    date_end: string,
+    unit: string,
+    value: number,
+    usage: {
+        max: number,
+        used?: number
+    }
+}
+
+interface Order {
+    _id: string,
+    buyer: Buyer,
+    delivery: Delivery,
+    items: [{
+        item: Item,
+        product: Product,
+        qty: number,
+    }],
+    promo_code?: PromoCode,
+    payment: {
+        amount: number,
+        method: string,
+        hash: string,
+        url: string,
+        status: string,
+    },
+    status: string,
+    date: string
+}
+
 interface VariantOption {
     _id: string,
-    variant_id: Variant
     name: string
 }
 

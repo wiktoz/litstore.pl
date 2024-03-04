@@ -1,76 +1,103 @@
-import { useState, forwardRef, useImperativeHandle} from 'react'
+import {useEffect, useState, Dispatch, SetStateAction} from 'react'
 import { Reorder } from "framer-motion"
-import {FaTimes} from 'react-icons/fa'
-import AddressForm from "./AddressForm";
+import {PlusIcon, TrashIcon} from "@heroicons/react/24/outline"
 
-const InputArray = forwardRef((props, ref) => {
-    const defaultState = [{id: 'idval0', value: ''},{id: 'idval1', value: ''}]
-    const [options, setOptions] = useState(defaultState)
+interface InputArrayProps {
+    title: string,
+    description: string,
+    options?: string[],
+    setOptions?: Dispatch<SetStateAction<string[]>>
+}
 
-    const changeValue = (i, e) => {
-        options[i].value = e.target.value
+export interface InputArrayOption {
+    id: string,
+    value: string
+}
+
+const InputArray = ({title, description, options, setOptions}:InputArrayProps) => {
+    const defaultState = [
+        { id: crypto.randomUUID(), value: "" },
+        { id: crypto.randomUUID(), value: "" }
+    ]
+    const optionsToInputArray = (opts:string[]) => {
+        return opts.map(option => {
+            return { id: crypto.randomUUID(), value: option }
+        })
+    }
+    
+    const [inputs, setInputs]
+        = useState<InputArrayOption[]>(options && options.length > 0 ? optionsToInputArray(options) : defaultState)
+
+    useEffect(() => {
+        if (setOptions) {
+            setOptions(inputs.map(input => input.value))
+        }
+    }, [inputs, setOptions])
+
+    const changeValue = (index:number, value:string) => {
+        let newInputs = [...inputs]
+        newInputs[index].value = value
+        setInputs(newInputs)
+    }
+
+    const removeInput = (index:number) => {
+        const newInputs = inputs.slice(0, index).concat(inputs.slice(index + 1));
+        setInputs(newInputs)
     }
 
     const addInput = () => {
-        setOptions([...options, {id: 'idval'+options.length, value: ''}])
+        setInputs([...inputs, { id: crypto.randomUUID(), value: "" }])
     }
-
-    const removeInput = (id, e) => {
-        e.preventDefault()
-        setOptions(options.filter(item => item.id !== id))
-    }
-
-    const removeAll = () => {
-        setOptions(defaultState)
-    }
-
-    useImperativeHandle(ref, () => ({
-        getValues: () => {
-            return options
-        },
-        addInput: () => {
-            return addInput()
-        },
-        removeAll: () => {
-            return removeAll()
-        }
-    }))
 
     return(
         <div className="col-span-12 sm:col-span-12">
-            <div>
-                <legend className="contents text-base font-medium text-gray-900">{props.title}</legend>
+            <div className={"mb-4"}>
+                <legend className="font-semibold text-gray-900 text-sm">{title}</legend>
                 {
-                props.description ?
-                    <p className="text-sm text-gray-500">{props.description}</p> : ""
+                    description &&
+                        <p className="text-xs text-gray-500">{description}</p>
                 }
             </div>
-            { options ?
-                <Reorder.Group axis="y" className="flex flex-col my-1" values={options} onReorder={setOptions}>
-                    {options.map((option, index) => (
-                        <Reorder.Item className="mb-1" key={option.id} value={option}>
-                            <div className="col-span-12 sm:col-span-12 flex flex-row mt-1">
-                                <input
-                                    type="text"
-                                    name="options[]"
-                                    id={option.id}
-                                    defaultValue={option.value}
-                                    onChange={(e) => changeValue(index, e)}
-                                    className={"block w-full border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm " + (options.length > 2 ? "rounded-l-lg" : "rounded-lg")}
-                                />
-                                { options.length > 2 ?
-                                <button onClick={(e) => removeInput(option.id, e)} className="p-2 text-sm font-medium text-white bg-gray-400 rounded-r-lg hover:bg-gray-600 focus:ring-0 focus:outline-none focus:ring-gray-300">
-                                    <FaTimes />
-                                    <span className="sr-only">Remove</span>
-                                </button> : ""
-                                }
-                            </div>
-                        </Reorder.Item>
-                    ))}
-                </Reorder.Group> : ""
+            { inputs &&
+                <Reorder.Group axis="y" values={inputs} onReorder={setInputs}>
+                    {
+                        inputs.map((option, index) => {
+                            return(
+                                <Reorder.Item className="mb-1" key={option.id} value={option}>
+                                    <div className="col-span-12 sm:col-span-12 flex flex-row mt-1">
+                                        <input
+                                            type="text"
+                                            name="options[]"
+                                            defaultValue={option.value}
+                                            onChange={(e) => changeValue(index, e.target.value)}
+                                            className={"block w-full border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm " + (inputs.length > 2 ? "rounded-l-lg" : "rounded-lg")}
+                                        />
+                                        {
+                                            inputs.length > 2 &&
+                                            <button
+                                                onClick={(e) => { e.preventDefault(); removeInput(index)}}
+                                                className="p-2 text-sm font-medium text-white bg-gray-600 rounded-r-lg hover:bg-gray-500 focus:ring-0 focus:outline-none focus:ring-gray-300"
+                                            >
+
+                                                <TrashIcon width={16} height={16} />
+                                                <span className="sr-only">Remove</span>
+                                            </button>
+                                        }
+                                    </div>
+                                </Reorder.Item>
+                            )
+                        })
+                    }
+                </Reorder.Group>
             }
+            <button
+                onClick={(e) => {e.preventDefault(); addInput()}}
+                className={"px-2 rounded-lg my-2 py-1 bg-gray-600 hover:bg-gray-500 text-xs text-white flex flex-row items-center gap-1"}
+            >
+                <PlusIcon width={16} height={16}/>
+                Add option
+            </button>
         </div>
     )
-})
-InputArray.displayName = "InputArray"
+}
 export default InputArray

@@ -1,17 +1,24 @@
 'use client'
 
-import { useCallback, useState } from "react"
+import {Dispatch, SetStateAction, useCallback, useState} from "react"
 import {FileRejection, useDropzone} from 'react-dropzone'
 import Image from "next/image"
 import { Reorder } from "framer-motion"
 import { TrashIcon, PhotoIcon, CursorArrowRippleIcon, CursorArrowRaysIcon } from "@heroicons/react/24/outline"
 
-const FileUpload = () => {
-    const [files, setFiles] = useState<File[]>([])
+interface FileUploadInterface {
+    files: File[], 
+    setFiles: Dispatch<SetStateAction<File[]>>,
+    multiple: boolean
+}
+
+const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
     const [errors, setErrors] = useState<string[]>([])
 
     const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
-        setFiles([...files, ...acceptedFiles])
+        if(!multiple) setFiles([...acceptedFiles])
+        else setFiles([...files, ...acceptedFiles])
+
         setErrors([])
 
         rejectedFiles.forEach((file) => {
@@ -24,7 +31,7 @@ const FileUpload = () => {
                 setErrors([...errors, "File cannot be uploaded. File type must be .png, .jpg, .jpeg, .gif."])
 
         })
-    }, [files, errors])
+    }, [multiple, setFiles, files, errors])
 
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -32,7 +39,8 @@ const FileUpload = () => {
         accept: {
             'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
         },
-        maxSize: 200000
+        maxSize: 400000,
+        multiple: multiple
     })
 
     const removeFile = (file: File) =>{
@@ -85,9 +93,9 @@ const FileUpload = () => {
                                             <Image
                                                 src={URL.createObjectURL(file)}
                                                 alt={file.name}
-                                                layout="fill"
-                                                objectFit="cover"
+                                                fill={true}
                                                 draggable={false}
+                                                style={{objectFit:"cover"}}
                                             />
                                         </div>
                                     </Reorder.Item>

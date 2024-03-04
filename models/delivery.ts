@@ -5,14 +5,16 @@ const slug = require('mongoose-slug-updater')
 mongoose.plugin(slug)
 
 const schema = new Schema({
-    name: String,
+    name: {type: String, required: true},
+    description: String,
     img: String,
-    price: Number,
-    freeFrom: Number,
-    cod: Boolean,
-    active: Boolean,
+    price: {type: Number, required: true},
+    free_from: Number,
+    cash_on_delivery: {type: Boolean, required: true},
+    personal_collection: {type: Boolean, required: true},
+    active: {type: Boolean, default: true},
     slug: { type: String, slug: "name", slugPaddingSize: 1, unique: true }
-})
+}, { timestamps: true })
 
 const Delivery = models.Delivery || model('Delivery', schema)
 

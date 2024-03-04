@@ -3,10 +3,9 @@
 import useSWR from 'swr'
 import Loader from '@/components/Loader'
 import SearchBar from '@/components/form/SearchBar'
+import {fetcher} from "@/utils/helpers"
 
-const fetcher = url => fetch(url).then(r => r.json())
-
-const formatDate = (date) => {
+const formatDate = (date:string) => {
     return new Date(date).toLocaleString("pl-PL", {dateStyle: 'medium', timeStyle: 'short'});
 }
 
@@ -15,9 +14,7 @@ const ShowOrders = () => {
 
     return(
         <div className="py-2">
-        <div className="mb-6">
-            <SearchBar/>
-        </div>
+
         <div className="bg-white rounded-md w-full flex items-center justify-between">
 			<div className="w-full">
 				<div className="inline-block min-w-full rounded-lg overflow-hidden">
@@ -52,7 +49,7 @@ const ShowOrders = () => {
 								<Loader/> :
 							error ?
 								<div>Error occurred.</div> :
-                            orders && orders.length > 0 && orders.map(order => {
+                            orders && orders.length > 0 && orders.map((order:any) => {
                                 return(
 							    <tr key={order._id}>
 								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
@@ -67,7 +64,7 @@ const ShowOrders = () => {
 								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
 									<p className="text-gray-900 whitespace-no-wrap">
                                         {
-                                            order.items.map(item => {
+                                            order.items.map((item:any) => {
                                                 return (
                                                     <p key={item.id}>{item.id}</p>
                                                 )

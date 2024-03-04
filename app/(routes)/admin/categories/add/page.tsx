@@ -1,31 +1,10 @@
-import TextareaOnCheckbox from "../../../..@/components/form/TextareaOnCheckbox"
-import Checkbox from "../../../..@/components/form/Checkbox"
-import Textarea from "../../../..@/components/form/Textarea"
+'use client'
+
+import TextareaOnCheckbox from "@/components/form/TextareaOnCheckbox"
+import Checkbox from "@/components/form/Checkbox"
+import Textarea from "@/components/form/Textarea"
 
 export default function AddCategory(){
-    const handleAddCategory = async (e) => {
-        e.preventDefault()
-
-        const data = {
-            name: e.target.name.value,
-            description: e.target.description.value
-        }
-
-          const JSONdata = JSON.stringify(data)
-          console.log(JSONdata)
-          const endpoint = '/api/categories'
-      
-          const options = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSONdata,
-          }
-      
-          const response = await fetch(endpoint, options)
-          console.log(response)
-    }
 
     return (
             <div className="py-2">
@@ -39,7 +18,7 @@ export default function AddCategory(){
                     </div>
                 </div>
                 <div className="mt-5 md:col-span-3 md:mt-0">
-                    <form action="#" method="POST" onSubmit={handleAddCategory}>
+                    <form>
                     <div className="shadow overflow-hidden rounded-md">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <div className="grid grid-cols-12 gap-6">
