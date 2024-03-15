@@ -22,9 +22,9 @@ export default function AddProduct(){
     const [newBadge, setNewBadge] = useState<boolean>(true)
 
     const { register, handleSubmit, formState: {errors} }
-        = useForm<Product>({resolver})
+        = useForm<ProductInterface>({resolver})
 
-    const submitProduct = async (data: Product) => {
+    const submitProduct = async (data: ProductInterface) => {
         const formData = new FormData()
 
         formData.append("name", data.name)
@@ -41,8 +41,6 @@ export default function AddProduct(){
             method: "POST",
             body: formData
         })
-
-        console.log(await res.json())
     }
 
     return (

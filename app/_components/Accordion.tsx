@@ -15,22 +15,22 @@ const Accordion = ({ title, description }:Props) => {
     <motion.div>
       <AnimatePresence>
         <motion.div
-          className="relative flex flex-row items-center justify-left leading-7 text-sm hover:cursor-pointer transition-all z-20"
-          onClick={() => setIsOpen(!isOpen)}
+            className="relative flex flex-row items-center justify-between leading-7 text-sm hover:cursor-pointer transition-all z-20"
+            onClick={() => setIsOpen(!isOpen)}
         >
-          <motion.div 
-          animate={{
-            rotate: isOpen ? 90 : 0
-          }}
-          className="leading-7 text-sm mr-2"
+          <p className="font-semibold">{title}</p>
+          <motion.div
+              animate={{
+                rotate: isOpen ? 90 : 0
+              }}
+              className="leading-7 text-sm mr-2"
           >
             <VscChevronRight></VscChevronRight>
           </motion.div>
-          <p className="font-semibold">{title}</p>
         </motion.div>
 
         {isOpen && (
-                    <motion.div
+            <motion.div
                         key={title}
                         initial={{ opacity: 0, height:0, y:-30 }}
                         animate={{

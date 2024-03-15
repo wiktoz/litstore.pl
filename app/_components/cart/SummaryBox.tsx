@@ -5,23 +5,24 @@ import useSWR from 'swr'
 interface Props {
     previousStep?: () => void,
     nextStep: () => void,
-    nextStepTitle: string
+    nextStepTitle: string,
+    nextStepActive?: boolean
 }
 
-const SummaryBox = ({previousStep, nextStep, nextStepTitle}:Props) => {
+const SummaryBox = ({previousStep, nextStep, nextStepTitle, nextStepActive = true}:Props) => {
     const {cartDelivery, cartItems, removeFromCart} = useShoppingCart() as ShoppingCartContextType
 
-    const deliveryUrl = cartDelivery.delivery_id ? '/api/deliveries/'+cartDelivery.delivery_id : null
+    const deliveryUrl = cartDelivery && cartDelivery.delivery_id ? '/api/deliveries/'+cartDelivery.delivery_id : null
     
-    const {data: products, error: productsError} = useSWR<Item[]>('/api/product_item', fetcher)
-    const {data: delivery, error: deliveryError} = useSWR<Delivery>(deliveryUrl, fetcher)
-
-    if(productsError || deliveryError) return "An error has occurred."
-    if(!products) return "No products"
+    const {data: items, error: itemsError, isLoading: itemsLoading} = useSWR<ItemInterface[]>('/api/items', fetcher)
+    const {data: delivery, error: deliveryError, isLoading: deliveryLoading} = useSWR<DeliveryInterface>(deliveryUrl, fetcher)
 
     const calcProductsTotal = () => {
-        return cartItems.reduce((total: number, cartItem: CartItem) => {
-            const item = products.find(i => i._id === cartItem.item_id)
+        if(!items || !cartItems)
+            return 0
+
+        return cartItems.reduce((total: number, cartItem: CartItemInterface) => {
+            const item = items.find(i => i._id === cartItem.item_id)
 
             if(!item)
                 removeFromCart(cartItem.item_id) // if item not found in db remove from cart
@@ -34,9 +35,9 @@ const SummaryBox = ({previousStep, nextStep, nextStepTitle}:Props) => {
         if(!delivery)
             return 0
 
-        const productsTotal = calcProductsTotal()
+        const itemsTotal = calcProductsTotal()
 
-        if(productsTotal >= delivery.free_from)
+        if(itemsTotal >= delivery.free_from)
             return 0
 
         return delivery.price
@@ -45,15 +46,19 @@ const SummaryBox = ({previousStep, nextStep, nextStepTitle}:Props) => {
 
     return(
         <div className="my-4 md:mx-4 md:my-0 md:mb-4 rounded h-full relative">
-            <div className="flex flex-col justify-between sticky top-5 bg-gray-100 p-4 rounded">
-                <p className="text-lg font-bold text-gray-800 tracking-tight">Podsumowanie</p>
-                <div className="text-sm py-10 text-gray-600">
+            <div className="flex flex-col justify-between sticky top-5 bg-gray-50 px-8 py-6 rounded-lg">
+                <div className={"flex flex-row py-2 items-center gap-1"}>
+                    <div className={"font-bold text-gray-700"}>
+                        Summary
+                    </div>
+                </div>
+                <div className="text-sm py-6 text-gray-600 flex flex-col gap-1">
                     <div className='flex flex-row justify-between'>
                         <p>Products</p>
                         <p>{formatPrice(calcProductsTotal())}</p>
                     </div>
                     {cartDelivery && cartDelivery.delivery_id ?
-                    <div className='flex flex-row justify-between'>
+                        <div className='flex flex-row justify-between'>
                         <p>Delivery</p>
                         <p>{formatPrice(calcDeliveryTotal())}</p>
                     </div>
@@ -75,13 +80,19 @@ const SummaryBox = ({previousStep, nextStep, nextStepTitle}:Props) => {
                     </div>
                 }
                 {
-                    nextStep &&
-                    <button
-                        className="w-full inline-flex justify-center rounded border border-transparent bg-gray-700 p-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-0 focus:ring-offset-2"
-                        onClick={nextStep}
-                    >
-                        {nextStepTitle}
-                    </button>
+                    nextStepActive ?
+                        <button
+                            className="w-full inline-flex justify-center rounded-lg border border-transparent bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-0 focus:ring-offset-2"
+                            onClick={nextStep}
+                        >
+                            {nextStepTitle}
+                        </button>
+                        :
+                        <button
+                            className="hover:cursor-default opacity-50 w-full inline-flex justify-center rounded-lg border border-transparent bg-gray-700 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-0 focus:ring-offset-2"
+                        >
+                            {nextStepTitle}
+                        </button>
                 }
             </div>
         </div>

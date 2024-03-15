@@ -2,7 +2,6 @@
 
 import useSWR from "swr"
 import Loader from "@/components/Loader"
-import ShowBox from "@/components/admin/ShowBox"
 import {fetcher} from "@/utils/helpers";
 
 export default function ShowCategories(){
@@ -13,13 +12,10 @@ export default function ShowCategories(){
     return(
         <>
         {
-            data.map((category:Category) => {
+            data.map((category:CategoryInterface) => {
                 return(
-                    <ShowBox
+                    <div
                         key={category.slug}
-                        showLink={'/' + category.slug}
-                        editLink={'/admin/categories/edit/' + category.slug}
-                        deleteLink={'/admin/categories/delete/' + category.slug}
                     >
                         <div>
                             <div className="w-24">
@@ -29,7 +25,7 @@ export default function ShowCategories(){
                                 <p className="text-gray-700 text-md">{category.name}</p>
                             </div>
                         </div>
-                    </ShowBox>
+                    </div>
                 )
             })
         }

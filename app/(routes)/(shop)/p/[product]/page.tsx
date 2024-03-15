@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react'
 
 import useSWR from 'swr'
-import { useShoppingCart } from '@/context/ShoppingCart'
+import {useShoppingCart} from '@/context/ShoppingCart'
 
 import Loader from '@/components/Loader'
 import Accordion from '@/components/Accordion'
@@ -12,6 +12,9 @@ import {FiChevronLeft} from 'react-icons/fi'
 import Carousel from '@/components/Carousel'
 import {fetcher} from "@/utils/helpers"
 import {useRouter} from "next/navigation"
+import Spinner from "@/components/Spinner"
+
+import OptionSelect from "@/components/OptionSelect"
 
 interface Option {
     variant_id?: string,
@@ -22,13 +25,14 @@ const ProductPage = ({params}:{params: {product: string}}) => {
     const router = useRouter()
     const [addAvailable, setAddAvailable] = useState(false)
     const [pickedOptions, setPickedOptions] = useState<Option[]>([])
-    const [pickedProduct, setPickedProduct] = useState<Item>()
+    const [pickedProduct, setPickedProduct] = useState<ItemInterface>()
     const {cartItems, increaseQty} = useShoppingCart() as ShoppingCartContextType
 
     const [photos, setPhotos] = useState<string[]>()
 
-    const { data: product, error: productError, isLoading: isProductLoading } = useSWR<Product>(params.product ? '/api/products/'+params.product : null, fetcher)
-    const { data: items, error: itemsError, isLoading: isItemLoading } = useSWR<Item[]>(product ? '/api/items/product/'+product._id : null, fetcher)
+    const { data: product, error: productError, isLoading: isProductLoading } = useSWR<ProductInterface>(params.product ? '/api/products/'+params.product : null, fetcher)
+    const { data: items, error: itemsError, isLoading: itemsLoading } = useSWR<ItemInterface[]>(product ? '/api/items/product/'+product._id : null, fetcher)
+    const { data: variants, error: variantsError, isLoading: variantsLoading } = useSWR<VariantInterface[]>(product && product?.variant.length > 0 ? '/api/variants/'+product.variant : null, fetcher)
 
     useEffect(() => {
         if(product){
@@ -42,45 +46,63 @@ const ProductPage = ({params}:{params: {product: string}}) => {
         }
     }
 
-    const getMaxPrice = () => {
-        if(!items) return
-        return Math.max(...items?.map((i) => i.price))
+    const getMaxPrice = (itemsList:ItemInterface[]) => {
+        return Math.max(...itemsList?.map((i) => i.price))
     }
 
-    const getMinPrice = () => {
-        if(!items) return
-        return Math.min(...items?.map((i) => i.price))
+    const getMinPrice = (itemsList:ItemInterface[]) => {
+        return Math.min(...itemsList?.map((i) => i.price))
     }
 
-    const printPrice = () => {
-        if(!items || items.length == 0)
-            return "Currently not available"
-
-        let max = getMaxPrice()
-        let min = getMinPrice()
+    const printPrice = (itemsList:ItemInterface[]) => {
+        let max = getMaxPrice(itemsList)
+        let min = getMinPrice(itemsList)
 
         if(min === max) return min
 
         return min + " - " + max
     }
 
-    const pickOption = async (variantId: string, optionId: string) => {
+    function isSubarray(itemOpt:Option[], pickedOpt:Option[]) {
+        return pickedOpt.every((subElem: Option) =>
+            itemOpt.some((arrElem: Option) =>
+                arrElem.variant_id === subElem.variant_id && arrElem.option_id === subElem.option_id
+            )
+        );
+    }
+
+    const pickOption = async (variant_id: string, option_id: string) => {
         if(!items) return
-        setPickedOptions([...pickedOptions, {
-            variant_id: variantId,
-            option_id: optionId
-        }])
 
-        const picked = items.filter((item: Item) => item.options == pickedOptions)
+        const optionsRemoved = pickedOptions.filter(option => option.variant_id !== variant_id)
 
-        if(picked.length === 1){
-            setPickedProduct(picked[0])
+        const options = [...optionsRemoved, {
+            variant_id: variant_id,
+            option_id: option_id
+        }]
+        setPickedOptions(options)
+
+        const filteredItems = items.filter((item:ItemInterface) => isSubarray(item.options, options))
+
+        if(filteredItems.length === 1){
+            setPickedProduct(filteredItems[0])
             setAddAvailable(true)
         }
         else{
             setPickedProduct(undefined)
             setAddAvailable(false)
         }
+    }
+
+    const checkStock = (variant_id:string, option_id:string) => {
+        if(!items)
+            return 0
+
+        const filteredItems = items.filter(item => {
+            return item.options.some(option => option.variant_id === variant_id && option.option_id === option_id)
+        })
+
+        return filteredItems.reduce((acc, item) => acc + item.stock, 0);
     }
 
     const pickedProductAvailability = () => {
@@ -104,76 +126,125 @@ const ProductPage = ({params}:{params: {product: string}}) => {
     }
 
     return(
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center">
-            <div className="mx-auto px-8 md:mx-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 items-center px-8 py-3 lg:px-16 lg:py-6">
+            <div className="px-6 flex flex-row items-center text-gray-300 text-xs my-4 md:hidden hover:cursor-pointer" onClick={() => router.back()}>
+                <FiChevronLeft></FiChevronLeft>
+                <p className="mx-2">Go Back To Products</p>
+            </div>
+            <div className="w-full px-6 md:mx-0 self-start">
                 {
                     photos ?
-                        <Carousel items={photos} /> :
+                        <Carousel items={photos}/> :
                         <Loader/>
                 }
             </div>
             <div className="text-left w-full h-full flex flex-col justify-between px-6">
-                <div className="flex flex-row items-center text-gray-300 text-xs my-4" onClick={() => router.back()}>
-                    <FiChevronLeft></FiChevronLeft> 
+                <div className="items-center text-gray-300 text-xs my-4 hidden md:flex hover:cursor-pointer"
+                     onClick={() => router.back()}>
+                    <FiChevronLeft></FiChevronLeft>
                     <p className="mx-2">Go Back To Products</p>
                 </div>
-                <div className="my-2">
+                <div className="my-6">
                     {
                         isProductLoading ?
                             <>
-                                <div className="text-xs font-semibold text-gray-400 mb-2 bg-gray-200 w-24 h-3 rounded-xl"></div>
-                                <div className="text-xl font-semibold tracking-tight mb-4 bg-gray-200 w-64 h-6 rounded-xl"></div>
+                                <div
+                                    className="text-xs font-semibold text-gray-400 mb-2 bg-gray-200 w-24 h-3 rounded-xl"></div>
+                                <div
+                                    className="text-xl font-semibold tracking-tight mb-4 bg-gray-200 w-64 h-6 rounded-xl"></div>
                             </> :
-                        !product ?
-                            <p>Cannot find product</p> :
-                        <>
-                            <p className="text-xs font-semibold text-gray-400 mb-2">{product.manufacturer}</p>
-                            <p className="text-xl font-semibold tracking-tight mb-4">{product.name}</p>
-                        </>
+                            !product ?
+                                <p>Cannot find product</p> :
+                                <>
+                                    <p className="text-xs font-semibold text-gray-400 mb-2">{product.manufacturer}</p>
+                                    <p className="text-xl font-semibold tracking-tight mb-4">{product.name}</p>
+                                </>
                     }
-                    <p className="text-sm font-semibold text-gray-800 my-4">
+                    <div className="text-md text-gray-800 my-4">
                         {
-                            addAvailable ?
-                                <span>{pickedProduct?.price} <span className="text-sm">PLN</span></span>
-                                :
-                                <span>{printPrice()}</span>
+                            itemsLoading || !items ?
+                                <Spinner/> :
+                            items.length === 0 ?
+                                <div className={"text-sm text-gray-500"}>Currently not available</div> :
+                                <div className={"flex flex-row gap-1 items-center"}>
+                                    <div className={"font-medium"}>
+                                        {
+                                            pickedProduct ? pickedProduct.price : printPrice(items)
+                                        }
+                                    </div>
+                                    <div className="text-xs">PLN</div>
+                                </div>
                         }
-                    </p>
+                    </div>
                     <div>
+                        {
+                            variantsLoading ?
+                                <div
+                                    className="text-xl font-semibold tracking-tight mb-4 bg-gray-200 w-64 h-6 rounded-xl"></div> :
+                                variants &&
+                                <div className={"w-full lg:w-1/2"}>
+                                    {
+                                        variants.map((variant: VariantInterface) => {
+                                        return (
+                                            <div key={variant._id}>
+                                                <div className={"flex gap-2"}>
+                                                    <OptionSelect
+                                                        variant={variant._id}
+                                                        options={variant.options}
+                                                        pickOption={pickOption}
+                                                        checkStock={checkStock}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div className={"my-4"}>
                         {
                             addAvailable ?
                                 pickedProductAvailability() : null
                         }
                     </div>
-                    <p>
+                    <div className={"font-semibold w-full lg:w-1/2"}>
                         {
+                            items && items.length > 0 ?
                             pickedProduct && cartItems && cartItems.find(item => item.item_id === pickedProduct._id) ?
-                            <button className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={true}>
-                                <p className="text-sm">
-                                    In Cart
-                                </p>
-                            </button>
-                            :
-                            <button onClick={() => handleAddToCart()} className="rounded-2xl bg-gray-600 text-white my-6 px-20 py-2 shadow disabled:opacity-50 w-full md:w-auto" disabled={!addAvailable}>
-                                <p className="text-sm">
-                                    Add to Cart
-                                </p>
-                            </button>
+                                <button
+                                    className="rounded-lg bg-black text-white py-2 shadow disabled:opacity-50 w-full"
+                                    disabled={true}>
+                                    <p className="text-sm">
+                                        In Bag
+                                    </p>
+                                </button>
+                                :
+                                <button onClick={() => handleAddToCart()}
+                                    className="rounded-lg bg-black text-white py-2 shadow disabled:opacity-50 w-full"
+                                    disabled={!addAvailable}>
+                                    <p className="text-sm">
+                                        Add To Bag
+                                    </p>
+                                </button> : ""
                         }
-                    </p>
-                    <Accordion
-                        title="Description" 
-                        description={product ? product?.description : ""}
-                    />
-                    <Accordion
-                        title="Delivery" 
-                        description={"Free ship worldwide from $100"}
-                    />
+                    </div>
+                    <div className={"flex flex-col gap-2 my-8"}>
+                        <Accordion
+                            title="Description"
+                            description={product ? product?.description : ""}
+                        />
+                        <Accordion
+                            title="Delivery"
+                            description={"Free ship worldwide from $100"}
+                        />
+                    </div>
                 </div>
                 <div></div>
             </div>
         </div>
     )
 }
+
 
 export default ProductPage

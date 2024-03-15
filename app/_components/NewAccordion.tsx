@@ -1,6 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
+import {Dispatch, ReactNode, SetStateAction} from "react";
 
-const NewAccordion = ({ expanded, setExpanded, children, header }) => {
+interface Props {
+    expanded: boolean,
+    setExpanded: Dispatch<SetStateAction<boolean>>,
+    children: ReactNode,
+    header: ReactNode
+}
+
+const NewAccordion = ({ expanded, setExpanded, children, header }:Props) => {
     return (
         <>
             <motion.header

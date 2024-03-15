@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import connect from "@/utils/db/connect";
 import User from "@/models/user";
 import bcrypt from "bcryptjs"
+import {JWT} from "@auth/core/jwt";
 
 export const {
     handlers: { GET, POST },
@@ -44,17 +45,17 @@ export const {
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-        async session({session}){
+        async session({session}:{session:any}){
             return session
         },
-        async jwt({ token, user, session }){
+        async jwt({ token, user, session }:{token:JWT, user:any, session?:any}){
             if (session && session.user?.role) {
                 token.role = session.user.role
                 token.id = session.user.id
             }
             return token
         },
-        async authorized({auth}){
+        async authorized({auth}:{auth:any}){
             return auth?.user !== null
         }
     }

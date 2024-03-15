@@ -4,7 +4,7 @@ import Item from "@/models/item"
 import Category from "@/models/category"
 import {isValidObjectId, Types} from "mongoose"
 
-const create = async (data: Product) => {
+const create = async (data: ProductInterface) => {
     await connect()
     
     return Product.create(data)
@@ -19,7 +19,7 @@ const create = async (data: Product) => {
 const get = async () => {
     await connect()
     
-    return Product.find({ active: true }).populate('category').exec()
+    return await Product.find({ active: true }).populate('category').exec()
     .then((product) => {
         return product
     })
@@ -76,7 +76,7 @@ const getStoreBySlug = async (slug: string) => {
 
     if(product){
         return Item.findOne({product_id: product._id})
-        .then((product: Item)=>{
+        .then((product: ItemInterface)=>{
             return product
         }).catch((err)=>{
             return { error: 1, errorMessage: err }
@@ -92,7 +92,7 @@ const search = async (phrase: string) => {
     return Product.find({ 
         name: { $regex: phrase, '$options': 'i' }
     }).exec()
-    .then((product: Product[]) => {
+    .then((product: ProductInterface[]) => {
         return product 
     })
     .catch(err => {

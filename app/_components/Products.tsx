@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Loader from "@/components/Loader"
 
 interface Props {
-    products: Product[],
+    products: ProductInterface[],
     error: string,
     isLoading: boolean,
     size?: string

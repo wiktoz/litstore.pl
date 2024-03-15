@@ -5,18 +5,16 @@ import { useState } from "react"
 import Spinner from "./Spinner"
 import Link from "next/link"
 
-export default function SignUp({ csrfToken }) {
+export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState('')
 
   const Router = useRouter()
 
-  const handleSignUp = async (e) => {
-    e.preventDefault()
-
+  const handleSignUp = async () => {
     if(!email || !password || !repeatPassword) return
 
     if(password !== repeatPassword){
@@ -36,12 +34,12 @@ export default function SignUp({ csrfToken }) {
 
     const response = await r.json()
 
-    setMessage(null)
+    setMessage('')
     if(response?.error){
       setIsLoading(false)
       setMessage(response.error)
     }
-    else await Router.push('/user/profile')
+    else Router.push('/user/profile')
   }
 
   return (
@@ -53,7 +51,6 @@ export default function SignUp({ csrfToken }) {
               Sign Up
             </h2>
           </div>
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
                 <label htmlFor="email-address" className="sr-only">
@@ -121,7 +118,7 @@ export default function SignUp({ csrfToken }) {
               <button
                 type="submit"
                 className={"w-full group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-semibold text-white focus:outline-none " + (!email || !password || !repeatPassword || isLoading ? "opacity-70 hover:cursor-default hover:bg-gray-600" : "hover:bg-gray-700")}
-                onClick={(e)=>handleSignUp(e)}
+                onClick={(e)=> { e.preventDefault(); handleSignUp()}}
               >
                 {
                   isLoading ? <Spinner/> : "Sign up"
@@ -132,14 +129,6 @@ export default function SignUp({ csrfToken }) {
       </div>
     </>
   )
-}
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
 }
 
 

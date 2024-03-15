@@ -19,13 +19,12 @@ export async function POST(req: NextRequest){
         token: resetToken
     })
 
-    if(createToken?.error)
-        return NextResponse.json({error: true, message: "Cannot create token."}, { status: 200 })
-
     const link = process.env.PAGE_LINK + "/auth/password/change/id/"+user._id+"/token/"+resetToken
     const html = "Link to reset your password: " + link
 
-    const sendMail = await mail("LitStore.pl", email, "Reset Password", html)
+    /*
+    * SEND EMAIL WITH CODE
+    * */
 
     return NextResponse.json({message: "Token created."}, { status: 200 })
 }

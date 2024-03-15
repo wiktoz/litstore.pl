@@ -1,18 +1,27 @@
 import useSWR from "swr"
 import Loader from "./Loader"
 import Products from "./Products"
+import {fetcher} from "@/utils/helpers";
 
-const fetcher = url => fetch(url).then(r => r.json())
+interface Props {
+    searchVal: string,
+    size: string
+}
 
-export default function ProductsSearch({searchVal, size}){
-    const { data, error } = useSWR(searchVal ? `/api/products/search/${searchVal}` : '/api/products', fetcher)
+export default function ProductsSearch({searchVal, size}:Props){
+    const { data, error, isLoading } = useSWR<ProductInterface[]>(searchVal ? `/api/products/search/${searchVal}` : '/api/products', fetcher)
     if (error) return "An error has occurred."
     if (!data) return <Loader></Loader>
 
     return(
         <>
         {
-            <Products products={data} size={size}/>
+            <Products
+                products={data}
+                size={size}
+                error={error}
+                isLoading={isLoading}
+            />
         }
         </>
     )

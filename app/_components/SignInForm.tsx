@@ -10,13 +10,11 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState('')
 
   const Router = useRouter()
 
-  const handleSignIn = async (e) => {
-    e.preventDefault()
-
+  const handleSignIn = async () => {
     if(!email || !password) return
 
     setIsLoading(true)
@@ -29,7 +27,7 @@ export default function SignIn() {
 
     const response = await signIn("credentials", options)
 
-    setMessage(null)
+    setMessage('')
     if(response?.error){
       setIsLoading(false)
       setMessage(response.error)
@@ -97,7 +95,7 @@ export default function SignIn() {
               <button
                 type="submit"
                 className={"w-full group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-semibold text-white focus:outline-none " + (!email || !password || isLoading ? "opacity-70 hover:cursor-default hover:bg-gray-600" : "hover:bg-gray-700")}
-                onClick={(e)=>handleSignIn(e)}
+                onClick={(e)=> { e.preventDefault(); handleSignIn()}}
               >
                 {
                   isLoading ? <Spinner/> : "Sign in"

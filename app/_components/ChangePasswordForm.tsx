@@ -5,17 +5,15 @@ import { useState } from "react"
 import Spinner from "./Spinner"
 import { useRouter } from "next/navigation"
 
-const ChangePasswordForm = ({ id, token }) => {
+const ChangePasswordForm = ({ id, token }:{id:string, token:string}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [password, setPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState('')
 
     const Router = useRouter()
 
-    const handleChangePassword = async (e) => {
-        e.preventDefault()
-
+    const handleChangePassword = async () => {
         if(!password || !repeatPassword) return
 
         if(password !== repeatPassword){
@@ -90,7 +88,7 @@ const ChangePasswordForm = ({ id, token }) => {
                         <button
                             type="submit"
                             className={"w-full group relative flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-semibold text-white focus:outline-none " + (!password || !repeatPassword || isLoading ? "opacity-70 hover:cursor-default hover:bg-gray-600" : "hover:bg-gray-700")}
-                            onClick={(e) => handleChangePassword(e)}
+                            onClick={(e) => { e.preventDefault(); handleChangePassword() }}
                         >
                             {
                                 isLoading ? <Spinner/> : "Change password"

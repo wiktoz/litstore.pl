@@ -7,10 +7,11 @@ import {
 
 import Image from "next/image";
 import Link from "next/link";
+import {fetcher} from "@/utils/helpers";
 
-const Product = ({product}:{product:Product}) => {
+const Product = ({product}:{product:ProductInterface}) => {
     const { data: items, error: itemsError, isLoading: itemsLoading}
-        = useSWR<Item[]>("/api/items/product/" + product.slug)
+        = useSWR("/api/items/product/" + product._id, fetcher)
 
     return(
         <div className={"flex border shadow p-4 rounded-2xl justify-between bg-white"}>
@@ -54,19 +55,19 @@ const Product = ({product}:{product:Product}) => {
                         {
                             itemsLoading ?
                                 <Spinner/> :
-                                itemsError ?
-                                    <div className={"text-gray-800 text-xs"}>
-                                    Failed fetching data
-                                    </div> :
-                                    items ?
-                                        <div>
-                                            {items.length} variants
-                                        </div> :
+                            itemsError ?
+                                <div className={"text-gray-800 text-xs"}>
+                                Failed fetching data
+                                </div> :
+                            !items ?
+                                <div className={"text-xs flex items-center text-red-600 gap-0.5"}>
+                                    <ExclamationCircleIcon width={16} height={16}/>
+                                    No items to sell
+                                </div> :
 
-                                        <div className={"text-xs flex items-center text-red-600 gap-0.5"}>
-                                            <ExclamationCircleIcon width={16} height={16}/>
-                                            No items to sell
-                                        </div>
+                                <div className={"text-xs text-gray-600"}>
+                                    {items.length} variants
+                                </div>
                         }
                     </div>
                 </div>

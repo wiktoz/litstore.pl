@@ -4,7 +4,7 @@ const Page = () => {
 
     return (
         <div>
-          <SignUpForm csrfToken={null}/>
+          <SignUpForm/>
         </div>
     )
 }

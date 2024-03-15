@@ -9,9 +9,6 @@ export async function GET(req: NextRequest, context: { params: {id: string} }){
     if(!session)
         return NextResponse.json({}, {status: 403})
 
-    if(session.user.id !== id && session.user.role !== "admin")
-        return NextResponse.json({}, {status: 403})
-
     const response = await getByUserId(id)
 
     return NextResponse.json(response, {status:200})

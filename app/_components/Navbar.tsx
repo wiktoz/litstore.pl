@@ -19,14 +19,14 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const cart = useShoppingCart()
+  const {cartQty} = useShoppingCart() as ShoppingCartContextType
   const { data: session, status } = useSession()
 
-  const { data: categories, error: error, isLoading: isCategoryLoading } = useSWR('/api/categories', fetcher)
+  const { data: categories, error: error, isLoading: isCategoryLoading } = useSWR<CategoryInterface[]>('/api/categories', fetcher)
 
   return (
     <div className="bg-white">
-      <MobileNavbar categories={categories} open={open} setOpen={setOpen}/>
+      <MobileNavbar categories={categories ? categories : []} open={open} setOpen={setOpen}/>
 
       {/* Standard Menu */}
       <header className="relative bg-white">
@@ -63,21 +63,21 @@ export default function Navbar() {
 
               {/* Flyout menus */}
               <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
-                <div className="flex h-full space-x-8">
+                <div className="flex h-full space-x-8 items-center">
                   {
                     isCategoryLoading ?
                         <Spinner/> :
                     categories && categories.length > 0 &&
-                    categories.map((category: Category) => (
+                    categories.map((category: CategoryInterface) => (
                     <Popover key={category.slug} className="flex">
                       {({ open }) => (
                         <>
                           <div className="relative flex">
                             <Popover.Button
-                              className={classNames(
+                              className={"tracking-wide px-1 " + classNames(
                                 open
                                   ? 'border-gray-600 text-gray-600'
-                                  : 'border-transparent text-gray-600 hover:text-gray-800 tracking-wide',
+                                  : 'border-transparent text-gray-600 hover:text-gray-800 ',
                                 'relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm transition-colors duration-200 ease-out focus:outline-none'
                               )}
                             >
@@ -174,7 +174,7 @@ export default function Navbar() {
                         className="h-5 w-5 flex-shrink-0 "
                         aria-hidden="true"
                       />
-                      <span className="mx-1 h-full my-auto text-sm font-medium">{cart ? cart.cartQty : ""}</span>
+                      <span className="mx-1 h-full my-auto text-sm font-medium">{cartQty}</span>
                       <span className="sr-only">items in cart, view bag</span>
                     </div>
                   </Link>

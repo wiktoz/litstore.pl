@@ -1,10 +1,10 @@
-import { Fragment } from 'react'
+import {Fragment, ReactNode} from 'react'
 import Head from 'next/head'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
 import Transition from './Transition'
 
-export default function ShopLayout({children}) {
+export default function ShopLayout({children}:{children:ReactNode}) {
     return (
         <Fragment>
         <Head>

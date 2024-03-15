@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import {usePathname} from "next/navigation"
+import {ReactNode} from "react";
 
 const variants = {
     out: {
@@ -18,24 +19,21 @@ const variants = {
       }
   };
 
-const Transition = ({ children }) => {
+const Transition = ({ children }: {children:ReactNode}) => {
     const pathname = usePathname()
 
     return (
-            <AnimatePresence
-            initial={{opacity: 0}}
-            mode='wait'
-            >
-            <motion.div
-            key={pathname}
-            variants={variants}
-            animate="in"
-            initial="out"
-            exit="out"
-            className="w-full"
-            >
-                {children}
-            </motion.div>
+            <AnimatePresence>
+                <motion.div
+                key={pathname}
+                variants={variants}
+                animate="in"
+                initial="out"
+                exit="out"
+                className="w-full"
+                >
+                    {children}
+                </motion.div>
             </AnimatePresence>
         );
 };

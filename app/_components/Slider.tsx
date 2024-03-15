@@ -1,7 +1,6 @@
 'use client'
 
-import Image from "next/image"
-import {useEffect, useState, useRef} from 'react'
+import {useEffect, useState} from 'react'
 import {motion} from 'framer-motion'
 
 export default function Slider(){
@@ -23,25 +22,16 @@ export default function Slider(){
     const delay = 7000
 
     const [index, setIndex] = useState(0)
-    const timeoutRef = useRef(null);
 
-    function resetTimeout() {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
     useEffect(() => {
-        resetTimeout()
-        timeoutRef.current = setTimeout(
-          () =>
-            setIndex((prevIndex) =>
-              prevIndex === slides.length - 1 ? 0 : prevIndex + 1
-            ),
-          delay
-        );
-    
-        return () => {
-          resetTimeout();
-        };
-    }, [index])
+        const intervalId = setInterval(() => {
+            // Increment slider value by 1 (or reset to 0 if it reaches max)
+            setIndex(prevValue => (prevValue === 2 ? 0 : prevValue + 1))
+        }, delay);
+
+        // Cleanup function to clear the interval when component unmounts
+        return () => clearInterval(intervalId)
+    }, []);
 
     return(
         <div className="w-full z-0">

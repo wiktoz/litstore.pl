@@ -4,36 +4,36 @@ import Input from "./Input"
 import { resolver } from "../validation/schema/address"
 import { useForm } from "react-hook-form"
 
-interface Props extends Address {
+interface Props extends AddressInterface {
     title?: string,
     description?: string,
-    submitData: (data: Address) => void
+    submitData: (data: AddressInterface) => void
     disabled?: boolean
 }
 
 const AddressForm = ({title, description, name, surname, email, street, post_code, city, submitData, disabled}:Props) => {
 
     const { register, handleSubmit, formState: {errors} }
-        = useForm<Address>({resolver})
+        = useForm<AddressInterface>({resolver})
 
-    const onSubmit = (data: Address) => {
+    const onSubmit = (data: AddressInterface) => {
         if(data)
             submitData(data)
     }
 
     return(
         <div>
-                <div className="rounded px-6 py-2">
-                    <div className="py-4">
-                        <h3 className="text-lg font-semibold leading-6 text-gray-900">
+                <div className="rounded-lg py-2">
+                    <div>
+                        <h3 className="text-md font-semibold text-gray-900">
                             {
-                                title ? 
+                                typeof title !== undefined ?
                                 title : "Personal Information"
                             }
                         </h3>
-                        <p className="mt-1 text-sm text-gray-600">
+                        <p className="mt-1 text-xs text-gray-600">
                             {
-                                description ? 
+                                typeof description !== undefined ?
                                 description : "Enter your details. The invoice will be issued for the following data"
                             }
                         </p>
@@ -91,7 +91,7 @@ const AddressForm = ({title, description, name, surname, email, street, post_cod
                                 <Input
                                     checker={register}
                                     errors={errors} 
-                                    id="postcode"
+                                    id="post_code"
                                     title="Postal Code"
                                     autoComplete="postal-code"
                                     value={post_code}
@@ -108,7 +108,7 @@ const AddressForm = ({title, description, name, surname, email, street, post_cod
                                 />
                             </div>
                             <div className="col-span-12">
-                                <button type="submit" className="px-6 py-3 my-2 bg-gray-700 text-white rounded">
+                                <button type="submit" className="text-sm w-full py-2 my-2 bg-gray-700 text-white rounded-lg">
                                     Save
                                 </button>
                             </div>

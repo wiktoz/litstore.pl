@@ -1,12 +1,12 @@
-import connect from '/utils/db/connect'
-import User from '/models/user'
-import hashPassword from "/utils/hashPassword";
+import connect from '@/utils/db/connect'
+import User from '@/models/user'
+import hashPassword from "@/utils/hashPassword";
 import {NextRequest, NextResponse} from "next/server"
 
-export async function POST(req){
+export async function POST(req:NextRequest){
     const body = await req.json()
 
-    if(body.email.isEmpty)
+    if(!body.email)
         return NextResponse.json({error: "Email cannot be empty!"}, {status:200})
     if(body.password.length < 7)
         return NextResponse.json({error: "Password has to be at least 8 characters!"},{status:200})

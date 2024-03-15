@@ -1,12 +1,12 @@
-import Product from '/models/product'
-import connect from '/utils/db/connect'
-import {NextResponse} from "next/server";
+import Product from '@/models/product'
+import connect from '@/utils/db/connect'
+import {NextRequest, NextResponse} from "next/server"
 
-export async function GET(req, context){
+export async function GET(req:NextRequest, context: {params: {phrase: string} }){
     const { phrase } =  context.params
     await connect()
 
-    return Product.find({
+    return await Product.find({
         $and: [ {active: true}, {
             $or: [
                 {name: {$regex: phrase, '$options': 'i'}},

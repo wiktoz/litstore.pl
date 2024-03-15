@@ -3,7 +3,7 @@ interface SelectInterface {
     title: string,
     autoComplete?: string,
     value?: string,
-    options: VariantOption[]
+    options: VariantOptionInterface[]
 }
 
 export default function Select({id, title, autoComplete, value, options}:SelectInterface){
@@ -21,7 +21,7 @@ export default function Select({id, title, autoComplete, value, options}:SelectI
             >
                 <option hidden className={"text-gray-500"}>{title}</option>
                 {
-                    options.map((item: VariantOption) => {
+                    options.map((item: VariantOptionInterface) => {
                         return(
                             <option 
                                 value={item._id} 

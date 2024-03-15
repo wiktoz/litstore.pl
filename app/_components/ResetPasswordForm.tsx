@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useState } from "react"
 import Spinner from "@/components/Spinner"
 
-const ResetPasswordForm = ({ csrfToken }:{csrfToken: string}) => {
+const ResetPasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [email, setEmail] = useState('')
@@ -52,7 +52,6 @@ const ResetPasswordForm = ({ csrfToken }:{csrfToken: string}) => {
               <p>We will send a link to reset your password.</p>
             </div>
           </div>
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
                 <label htmlFor="email-address" className="sr-only">

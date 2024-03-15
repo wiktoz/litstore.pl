@@ -5,19 +5,7 @@ import {isValidObjectId, Types} from "mongoose";
 const get = async () => {
     await connect()
     
-    return Delivery.find({})
-    .then(delivery => { 
-        return delivery
-    })
-    .catch(err => {
-        return { error: 1, errorMessage: err }
-    })
-}
-
-const getActive = async () => {
-    await connect()
-    
-    return Delivery.find({active: true})
+    return await Delivery.find({active: true})
     .then(delivery => { 
         return delivery
     })
@@ -47,6 +35,5 @@ const getBySlug = async (slug: string) => {
 
 export {
     get,
-    getActive,
     getBySlug
 }

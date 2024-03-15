@@ -1,18 +1,18 @@
 import React from "react"
 import { motion } from "framer-motion"
 
-const spinTransition = {
-  repeatType: Infinity,
-  ease: "linear",
-  duration: 1
-};
-
 export default function Spinner() {
   return (
     <motion.span
-    className="mx-auto rounded-full w-5 h-5 block border border-gray-200 border-t-gray-600"
+    className="rounded-full w-5 h-5 block border border-gray-200 border-t-gray-600"
     animate={{ rotate: 360 }}
-    transition={spinTransition}
+    transition={{
+      repeat: Infinity,
+      repeatType: "loop",
+      ease: "linear",
+      duration: 1
+    }}
+    exit={{ x: -300, opacity: 0 }}
   />
   );
 }

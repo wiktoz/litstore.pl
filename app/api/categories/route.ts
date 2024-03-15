@@ -11,8 +11,9 @@ export async function POST(req:NextRequest){
     const session = await auth()
     const body = await req.json()
 
-    if(!session || session.user.role !== "admin")
+    if(!session)
         return NextResponse.json("Insufficient permission", {status:401})
+
 
     const response = await create(body)
 

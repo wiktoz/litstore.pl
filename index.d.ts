@@ -1,14 +1,12 @@
-
-interface User {
-    _id: string,
+interface UserInterface extends AddressInterface {
+    readonly _id: string,
     email: string,
     password: string,
     role: string,
-    billingAddress: Address,
-    addresses: [Address]
+    address: [AddressInterface]
 }
 
-interface Address {
+interface AddressInterface {
     email: string,
     name: string,
     surname: string,
@@ -19,49 +17,53 @@ interface Address {
     city: string
 }
 
-interface Category {
-    _id: string,
+interface CategoryInterface {
+    readonly _id: string,
     name: string,
     description: string,
     seo_description?: string,
     bg_photo?: string,
     active: boolean,
-    slug: string
+    readonly slug: string
 }
 
-interface Subcategory extends Category {
-    _id: string,
+interface SubcategoryInterface extends CategoryInterface {
+    readonly _id: string,
     category_id: string
 }
 
-interface Delivery {
-    _id: string,
+interface DeliveryInterface {
+    readonly _id: string,
     name: string,
     img: string,
     price: number,
     free_from: number,
     cod: boolean,
     active: boolean,
-    slug: string
+    readonly slug: string
 }
 
-interface Variant {
-    _id: string
+interface VariantInterface {
+    readonly _id: string
     name: string,
-    displayName: string,
-    selectOption: string,
-    options: [VariantOption],
-    slug: string
+    display_name: string,
+    select_option: string,
+    options: [VariantOptionInterface],
+    readonly slug: string
 }
 
-interface Buyer extends Address {
+interface BuyerInterface extends AddressInterface {
     user_id?: string
 }
 
-interface PromoCode {
+interface PromoCodeInterface {
+    readonly _id: string,
     code: string,
     name: string,
     description?: string,
+    categories?: string[],
+    subcategories?: string[],
+    products?: string[],
     date_start: string,
     date_end: string,
     unit: string,
@@ -72,48 +74,60 @@ interface PromoCode {
     }
 }
 
-interface Order {
-    _id: string,
-    buyer: Buyer,
-    delivery: Delivery,
+interface OrderInterface {
+    readonly _id: string,
+    buyer: BuyerInterface,
+    delivery: {
+        type: Delivery,
+        price: number,
+        email: string,
+        name: string,
+        surname: string,
+        street: string,
+        house: string,
+        flat?: String,
+        city: string,
+        post_code: string
+    },
     items: [{
-        item: Item,
-        product: Product,
+        item: ItemInterface,
+        product: ProductInterface,
         qty: number,
+        price: number
     }],
-    promo_code?: PromoCode,
+    promo_code?: PromoCodeInterface,
     payment: {
         amount: number,
+        currency: string,
         method: string,
         hash: string,
         url: string,
         status: string,
     },
     status: string,
-    date: string
 }
 
-interface VariantOption {
-    _id: string,
+interface VariantOptionInterface {
+    readonly _id: string,
     name: string
 }
 
-interface Product {
-    _id: string,
+interface ProductInterface {
+    readonly _id: string,
     name: string,
     description: string,
     manufacturer?: string,
-    category: Category,
-    subcategory: Subcategory,
-    variant: [Variant],
+    category: CategoryInterface,
+    subcategory: SubcategoryInterface,
+    variant: [VariantInterface],
     main_photo: string,
     photos: [string],
     new_badge: boolean,
     active: boolean,
-    slug: string
+    readonly slug: string
 }
 
-interface Item {
+interface ItemInterface {
     _id: string,
     product_id: string,
     options: [{
@@ -125,33 +139,33 @@ interface Item {
     price: number
 }
 
-interface CartItem {
+interface CartItemInterface {
     item_id: string,
     qty: number
 }
 
-interface CartBuyer extends Address, Personal {
-    user?: User,
+interface CartBuyerInterface extends AddressInterface {
+    user?: UserInterface,
     email: string
 }
 
-interface CartDelivery extends Address {
+interface CartDeliveryInterface extends AddressInterface {
     delivery_id: string
 }
 
-interface Cart {
-    buyer: CartBuyer | null,
-    delivery: CartDelivery | null,
-    items: CartItem[]
+interface CartInterface {
+    buyer: CartBuyerInterface | null,
+    delivery: CartDeliveryInterface | null,
+    items: CartItemInterface[]
 }
 
 interface ShoppingCartContextType {
     cartQty: number,
-    cartItems: CartItem[],
-    cartBuyer: CartBuyer,
-    cartDelivery: CartDelivery,
-    setBuyer: (buyer: CartBuyer) => void,
-    setDelivery: (delivery: CartDelivery) => void,
+    cartItems: CartItemInterface[],
+    cartBuyer: CartBuyerInterface,
+    cartDelivery: CartDeliveryInterface,
+    setBuyer: (buyer: CartBuyerInterface) => void,
+    setDelivery: (delivery: CartDeliveryInterface) => void,
     getItemQty: (id: string) => number,
     increaseQty: (id: string) => void,
     decreaseQty: (id: string) => void,

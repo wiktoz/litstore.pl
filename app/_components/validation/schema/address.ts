@@ -7,7 +7,7 @@ const addressSchema = object().shape({
     email: string().email('Not valid email').required('Email is required'),
     street: string().required('Street is required'),
     city: string().required("City is required"),
-    postcode: string().required("Postcode is required")
+    post_code: string().required("Postcode is required")
 })
 
 const resolver = yupResolver(addressSchema)

@@ -19,7 +19,7 @@ const Datepicker = () => {
     const days = ["Pn", "Wt", "Śr", "Czw", "Pt", "Sb", "Ndz"]
     const locale = 'pl'
 
-    const formatCurrentMonth = (month, year) => {
+    const formatCurrentMonth = (month:number, year:number) => {
         let first = new Date(year, month - 1, 1).getDay()
         const maxDay = new Date(year, month, 0).getDate()
 
@@ -61,11 +61,11 @@ const Datepicker = () => {
         }
     }
 
-    const leadingZero = (val) => {
+    const leadingZero = (val:number) => {
         return String(val).padStart(2, '0')
     }
 
-    const pickDate = (pDay) => {
+    const pickDate = (pDay:number) => {
         setDay(pDay)
         setMonth(previewMonth)
         setYear(previewYear)
@@ -99,7 +99,7 @@ const Datepicker = () => {
                                 return(
                                     <div key={i}
                                          className={"flex justify-items-center items-center text-center hover:cursor-pointer w-10 h-10 " + (d === day && previewMonth === month && previewYear === year ? "bg-gray-200 rounded-full" : "")}
-                                         onClick={() => pickDate(d)}
+                                         onClick={() => d && pickDate(d)}
                                     >
                                         <p className="w-full text-sm">
                                             {d}

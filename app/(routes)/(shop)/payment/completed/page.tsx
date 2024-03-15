@@ -1,22 +1,20 @@
 'use client'
 
-import ProductsOrder from '@/components/ProductsOrder'
 import useSWR from 'swr'
 import Loader from '@/components/Loader'
 import { useSearchParams } from 'next/navigation'
+import {fetcher} from "@/utils/helpers";
 
-const getColor = (status) => {
+const getColor = (status:string) => {
     if(status === "PENDING") return "text-orange-500"
     if(status === "SUCCESS") return "text-green-500"
     if(status === "FAILURE") return "text-red-800"
     return "text-black"
 }
 
-const formatDate = (date) => {
+const formatDate = (date:string) => {
     return new Date(date).toLocaleString("pl-PL", {dateStyle: 'medium', timeStyle: 'short'});
 }
-
-const fetcher = url => fetch(url).then(r => r.json())
 
 const PaymentCompleted = () => {
     const params = useSearchParams()
@@ -50,7 +48,7 @@ const PaymentCompleted = () => {
                 <p className='text-right text-xs'>
                     Order placed
                     <span className='ml-1'>
-                        {formatDate(order?.date)}
+                        {formatDate(order.createdAt)}
                     </span>
                 </p>
                 <p className="text-sm mb-4 text-right">
@@ -62,7 +60,6 @@ const PaymentCompleted = () => {
                     </span>
                 </p>
             </div>
-            <ProductsOrder products={order?.items}/>
             <section className='grid grid-cols-12 rounded my-4 bg-gray-50 text-gray-700 text-sm'>
                     <div className="col-span-6 px-6 py-10">
                         <p className='font-bold mb-2'>Invoice data</p>
@@ -71,8 +68,6 @@ const PaymentCompleted = () => {
                         <p>{order?.buyer.postcode} {order?.buyer.city}</p>
                     </div>
                     <div className='col-span-6 flex flex-row items-center'>
-                        <div>
-                        </div>
                         <div className="px-6">
                             <p className='font-bold mb-2'>Delivery method <span className='font-normal text-xs'>(+{order?.delivery?.price} PLN)</span></p>
                             {/* eslint-disable-next-line @next/next/no-img-element */}

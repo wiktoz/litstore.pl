@@ -19,7 +19,7 @@ export default function AdminProducts({searchVal}:{searchVal: string}){
 
             <div className={"flex flex-col gap-2 my-4"}>
                 {
-                    data.map((p:Product) => {
+                    data.map((p:ProductInterface) => {
                         return(
                             <div key={p.slug}>
                                 <Product product={p}/>

@@ -1,7 +1,6 @@
 import {NextRequest, NextResponse} from "next/server"
 import { get } from "@/utils/handlers/product"
 import fs from "fs"
-import { promises as fsPromises } from 'fs'
 import Product from "@/models/product"
 
 export async function GET(){
@@ -11,7 +10,7 @@ export async function GET(){
 }
 
 export async function POST(req: NextRequest){
-    const data = await req.formData()
+    const data: FormData = await req.formData()
     const files: File[] = data.getAll("images") as unknown as File[]
 
     if(!files)
@@ -21,7 +20,6 @@ export async function POST(req: NextRequest){
     /*
         Uploading data
      */
-    console.log(data.get("new_badge"))
     const product = await Product.create({
         name: data.get("name"),
         description: data.get("description"),
@@ -37,38 +35,36 @@ export async function POST(req: NextRequest){
     /*
         Uploading files to local storage
      */
-    const arr = Array.from(files)
+    const images:string[] =
+        await Promise.all(
+            Array.from(files).map(async (file: File, index: number) => {
+                const bytes = await file.arrayBuffer()
+                const buffer = Buffer.from(bytes)
 
-    const imagesPromises = arr.map(async (file: File, index: number) => {
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
+                const fileExt = file.name.split('.').pop()
+                let fileName
 
-        const fileExt = file.name.split('.').pop()
-        let fileName
+                if (index == 0)
+                    fileName = product.slug + "." + fileExt
+                else
+                    fileName = product.slug + "-" + index + "." + fileExt
 
-        if (index == 0)
-            fileName = product.slug + "." + fileExt
-        else
-            fileName = product.slug + "-" + index + "." + fileExt
+                fs.writeFileSync(`public/img/products/${fileName}`, buffer)
+                return fileName
+            })
+        )
 
-        fs.writeFileSync(`public/img/products/${fileName}`, buffer)
-        console.log(index)
 
-        return fileName
-    })
-
-    const images = await Promise.all(imagesPromises)
-
-    console.log(images)
-
+    /*
+        Updating photo names to slug versions (for SEO)
+        e.g. slug.png, slug-1.png ...
+     */
     const updatedProduct = await Product.updateOne({_id: product._id}, {
         $set: {
             main_photo: images[0],
             photos: images.slice(1)
         }
     })
-
-    console.log(updatedProduct)
 
     return NextResponse.json({success: true, message: "Uploaded", product: updatedProduct}, { status: 200 })
 }

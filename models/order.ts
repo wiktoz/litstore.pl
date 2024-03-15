@@ -14,32 +14,32 @@ const schema = new Schema({
         name: {type: String, required: true},
         surname: {type: String, required: true},
         street: {type: String, required: true},
-        house: {type: String, required: true},
+        house: {type: String, required: false},
         flat: String,
         city: {type: String, required: true},
         post_code: {type: String, required: true}
     },
     delivery: {
-        type: Delivery,
+        id: {type: String, required: true},
         price: {type: Number, required: true},
-        email: {type: String, required: true},
+        email: {type: String, required: false},
         name: {type: String, required: true},
-        surname: {type: String, required: true},
+        surname: {type: String, required: false},
         street: {type: String, required: true},
-        house: {type: String, required: true},
+        house: {type: String, required: false},
         flat: String,
         city: {type: String, required: true},
         post_code: {type: String, required: true}
     },
     items: [{
-        item: {type: Item, required: true},
-        product: {type: Product, required: true},
+        item_id: {type: String, required: true},
+        product_id: {type: String, required: true},
         qty: {type: Number, required: true},
         price: {type: Number, required: true}
     }],
     promo_code: {
-        code: PromoCode,
-        discount: {type: Number, required: true}
+        code: { type:String },
+        discount: {type: Number }
     },
     payment: {
         amount: {type: Number, required: true},

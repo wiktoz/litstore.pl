@@ -12,7 +12,7 @@ export async function GET(req:NextRequest, context: { params: { slug: string } }
 
     const product = await getById(slug)
 
-    return await Item.find({product_id: product._id}).then((product)=>{
+    return await Item.find({product_id: product._id}).populate('options').then((product)=>{
         return NextResponse.json(product, {status: 200})
     }).catch((err)=>{
         return NextResponse.json(err, {status: 503})

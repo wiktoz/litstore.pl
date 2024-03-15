@@ -1,9 +1,9 @@
-import {isValid, remove} from "/utils/handlers/token"
-import { changePassword } from "/utils/handlers/user"
-import hashPassword from "/utils/hashPassword"
-import {NextResponse} from "next/server"
+import {isValid, remove} from "@/utils/handlers/token"
+import { changePassword } from "@/utils/handlers/user"
+import hashPassword from "@/utils/hashPassword"
+import {NextRequest, NextResponse} from "next/server"
 
-export async function POST (req, context){
+export async function POST (req: NextRequest, context: { params: {id: string, token: string} }){
     const { id, token } =  context.params
     const body = await req.json()
     const password = body.password
@@ -16,16 +16,12 @@ export async function POST (req, context){
     if (!isTokenValid.valid)
         return NextResponse.json(isTokenValid, { status: 200 })
 
-    const hash = await hashPassword(password)
+    const hash = hashPassword(password)
     const updatePassword = await changePassword(id, hash)
-
-    if (updatePassword?.error)
-        return NextResponse.json(updatePassword, { status: 200 })
-
     const removeToken = await remove(id, token)
 
-    if (removeToken?.error)
-        return NextResponse.json(removeToken, { status: 200 })
+    if(!updatePassword || !removeToken)
+        return NextResponse.json({message: "Cannot update password"}, {status:200})
 
     return NextResponse.json({message: "Password successfully updated"}, { status: 200 })
 }

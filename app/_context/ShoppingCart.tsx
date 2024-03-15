@@ -1,7 +1,7 @@
 'use client'
 
-import {useContext, createContext, ReactNode} from "react"
-import useLocalStorage from "@/hooks/useLocalStorage"
+import {useContext, createContext, ReactNode, useState} from "react"
+import Cookies from "js-cookie";
 
 const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(undefined)
 
@@ -13,40 +13,92 @@ interface Props {
     children: ReactNode
 }
 
-export function ShoppingCartProvider({children}:Props){
-    const [cartItems, setCartItems] = useLocalStorage<CartItem[]>("cartItems", [])
-    const [cartBuyer, setCartBuyer] = useLocalStorage<CartBuyer>("cartBuyer", null)
-    const [cartDelivery, setCartDelivery] = useLocalStorage<CartDelivery>("cartDelivery", null)
+const defaultBuyer:CartBuyerInterface = {
+    city: "",
+    email: "",
+    house: "",
+    name: "",
+    post_code: "",
+    street: "",
+    surname: ""
+}
 
-    const cartQty = cartItems.reduce((qty: number, item: CartItem) => item.qty + qty, 0)
+const defaultDelivery:CartDeliveryInterface = {
+    city: "",
+    email: "",
+    house: "",
+    name: "",
+    post_code: "",
+    street: "",
+    surname: "",
+    delivery_id: ""
+}
 
-    function setBuyer(buyer: CartBuyer){
+const ShoppingCartProvider = ({children}:Props) => {
+    const [cartItems, setCartItems] = useState<CartItemInterface[]>(() => {
+        const items = Cookies.get("cartItems")
+
+        if(items)
+            return JSON.parse(items)
+        return []
+    })
+
+    const [cartBuyer, setCartBuyer] = useState<CartBuyerInterface>(() => {
+        const buyer = Cookies.get("cartBuyer")
+
+        if(buyer)
+            return JSON.parse(buyer)
+        return defaultBuyer
+    })
+    const [cartDelivery, setCartDelivery] = useState<CartDeliveryInterface>(() => {
+        const delivery = Cookies.get("cartDelivery")
+
+        if(delivery)
+            return JSON.parse(delivery)
+        return defaultDelivery
+    })
+
+    const cartQty = cartItems.reduce((qty: number, item: CartItemInterface) => item.qty + qty, 0)
+
+    function setBuyer(buyer: CartBuyerInterface){
         setCartBuyer(buyer)
+        Cookies.set("cartBuyer", JSON.stringify(buyer))
     }
 
-    function setDelivery(delivery: CartDelivery){
+    function setDelivery(delivery: CartDeliveryInterface){
         setCartDelivery(delivery)
+        Cookies.set("cartDelivery", JSON.stringify(delivery))
     }
 
     function getItemQty(id: string){
-        return cartItems.find((cartItem: CartItem) => cartItem.item_id === id).qty || 0
+        if(!cartItems)
+            return 0
+        return cartItems.find((cartItem: CartItemInterface) => cartItem.item_id === id)?.qty || 0
     }
 
     function increaseQty(id: string){
-        const item = cartItems.find((item: CartItem) => item.item_id === id)
+        if(!cartItems)
+            return
+
+        const item = cartItems.find((item: CartItemInterface) => item.item_id === id)
 
         if(!item)
             return setCartItems([...cartItems, { item_id: id, qty: 1}])
 
-        return setCartItems(cartItems.map((item: CartItem) => {
+        const newItems = cartItems.map((item: CartItemInterface) => {
             if(item.item_id === id)
-                return {...item, qty: item.qty++}
+                return {...item, qty: item.qty += 1}
             return item
-        }))
+        })
+
+        setCartItems(newItems)
+        Cookies.set("cartItems", JSON.stringify(newItems))
     }
 
     function decreaseQty(id: string){
-        const item = cartItems.find((item: CartItem) => item.item_id === id)
+        if(!cartItems)
+            return
+        const item = cartItems.find((item: CartItemInterface) => item.item_id === id)
 
         if(!item)
             return
@@ -54,15 +106,24 @@ export function ShoppingCartProvider({children}:Props){
         if(item.qty === 1)
             return removeFromCart(id)
 
-        return setCartItems(cartItems.map((item: CartItem) => {
+        const newItems = cartItems.map((item: CartItemInterface) => {
             if(item.item_id === id)
-                return {...item, qty: item.qty--}
+                return {...item, qty: item.qty -= 1}
             return item
-        }))
+        })
+
+        setCartItems(newItems)
+        Cookies.set("cartItems", JSON.stringify(newItems))
     }
 
     function removeFromCart(id: string){
-        return setCartItems(cartItems.filter((item: CartItem) => item.item_id !== id))
+        if(!cartItems)
+            return
+
+        const newItems = cartItems.filter((item: CartItemInterface) => item.item_id !== id)
+
+        setCartItems(newItems)
+        Cookies.set("cartItems", JSON.stringify(newItems))
     }
 
     return(
@@ -74,3 +135,5 @@ export function ShoppingCartProvider({children}:Props){
         </ShoppingCartContext.Provider>
     )
 }
+
+export default ShoppingCartProvider

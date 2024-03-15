@@ -1,6 +1,5 @@
 'use client'
 
-import {auth} from "@/auth"
 import Link from 'next/link'
 import useSWR from 'swr'
 import AddressForm from '@/components/form/AddressForm'
@@ -15,14 +14,13 @@ import {useSession} from "next-auth/react"
 const UserProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { data: session, status } = useSession()
-    const { data: user, error: errorUser } = useSWR(session ? "/api/users/" + session.user.id : null, fetcher)
-    //const { data: orders, error: errorOrders } = useSWR(session ? "/api/orders/user/" + session.user.id : null, fetcher)
+    const { data: user, error: errorUser } = useSWR(session && session.user ? "/api/users/" + session.user.id : null, fetcher)
 
     if(errorUser ) return <Loader/>
     if(!user ) return <Loader/>
 
-    const addAddress = async (data: Address) => {
-        const endpoint = session ? '/api/users/edit/'+session.user.id+'/addAddress' : ''
+    const addAddress = async (data: AddressInterface) => {
+        const endpoint = session && session.user ? '/api/users/edit/'+session.user.id+'/addAddress' : ''
 
         axios.post(endpoint, data).then(response => {
             setIsOpen(false)
@@ -43,15 +41,6 @@ const UserProfile = () => {
                             Moje konto
                         </p>
                     </div>
-                    {
-                        session && session.user.role === "admin" ?
-                        <div>
-                            <Link href={"/admin"}>
-                                Panel administratora
-                            </Link>
-                        </div>
-                        : ""
-                    }
                     <div>
                         <p className="mb-2">Moje zakupy</p>
                         <Link href={"/user/orders"}>
@@ -78,7 +67,7 @@ const UserProfile = () => {
                     </div>
                     {
                         user && user.addresses && user.addresses.length > 0 ?
-                            user.addresses.map((address:Address) => {
+                            user.addresses.map((address:AddressInterface) => {
                                 return(
                                     <div key={"22"} className='py-2 rounded-md col-span-2 text-gray-700 border border-gray-500'>
                                         <div className="flex flex-col justify-center h-full p-2">
@@ -95,31 +84,7 @@ const UserProfile = () => {
             </div>
             <div className='flex flex-col gap-4 col-span-1 md:col-span-2 py-4'>
                 <p className={"text-sm font-semibold"}>Moje zamówienia</p>
-                {
-                    orders && orders.length > 0 ?
-                        orders?.map((order) => {
-                        return(
-                            <div key={order._id} className={"border border-gray-400 rounded-md p-2"}>
-                                <div className={"text-xs"}>numer zamówienia <span className={"font-semibold"}>{order._id}</span></div>
-                                {
-                                    order.items.map((item) => {
-                                        return(
-                                            <div key={item._id}>
-                                                <img
-                                                    className="w-16"
-                                                    src={"/img/products/" + item.main_photo}
-                                                    alt={item.name}
-                                                />
-                                                    <p key={item._id}>{item.name}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
-                        </div>
-                        )
-                    }) :
-                    <p className={"text-xs"}>Brak zamówień</p>
-                }
+
             </div>
             <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>

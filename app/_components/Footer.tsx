@@ -6,8 +6,8 @@ import Link from "next/link"
 export default function Footer(){
     return(
         <footer className="bg-gray-50 mt-16">
-  <div className="mx-auto max-w-screen-xl space-y-12 px-4 py-16 sm:px-6 lg:px-8">
-    <div className="sm:flex sm:items-center sm:justify-between">
+  <div className="mx-auto max-w-screen-xl space-y-12 px-12 py-16">
+    <div className="flex items-center justify-between">
         <Image 
             src="/img/litstore.png" 
             className="mr-3 h-4 w-auto"
@@ -17,7 +17,7 @@ export default function Footer(){
             alt="logo"
         />
 
-      <div className="mt-8 flex gap-6 text-gray-500 sm:mt-0">
+      <div className="flex gap-6 text-gray-500">
         <a className="hover:opacity-75" href="" target="_blank" rel="noreferrer">
           <span className="sr-only"> Facebook </span>
 
@@ -61,9 +61,9 @@ export default function Footer(){
         <p className="font-bold text-gray-800">Information</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href="/privacy-policy"> Privacy Policy </Link>
-          <Link className="hover:opacity-75" href="/terms-and-conditions"> Terms & Conditions</Link>
-          <Link className="hover:opacity-75" href="/contact"> Contact us </Link>
+          <Link className="hover:opacity-75" href={"/privacy-policy"}> Privacy Policy </Link>
+          <Link className="hover:opacity-75" href={"/terms-and-conditions"}> Terms & Conditions</Link>
+          <Link className="hover:opacity-75" href={"/contact"}> Contact us </Link>
         </nav>
       </div>
 
@@ -71,8 +71,8 @@ export default function Footer(){
         <p className="font-bold text-gray-800">Customer Service</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href="/delivery-and-payments"> Delivery & Payments </Link>
-          <Link className="hover:opacity-75" href="/returns-and-refunds"> Returns & Refunds </Link>
+          <Link className="hover:opacity-75" href={"/delivery-and-payments"}> Delivery & Payments </Link>
+          <Link className="hover:opacity-75" href={"/returns-and-refunds"}> Returns & Refunds </Link>
         </nav>
       </div>
 
@@ -80,7 +80,7 @@ export default function Footer(){
         <p className="font-bold text-gray-800">Helpful Links</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href="/faq"> FAQs </Link>
+          <Link className="hover:opacity-75" href={"/faq"}> FAQs </Link>
         </nav>
       </div>
     </div>

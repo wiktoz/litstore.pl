@@ -1,7 +1,7 @@
-import User from "../../models/user"
-import connect from "../db/connect"
+import User from "@/models/user"
+import connect from "@/utils/db/connect"
 
-const getByEmail = async (email) => {
+const getByEmail = async (email:string) => {
     await connect()
     
     return User.findOne({email: email})
@@ -16,7 +16,7 @@ const getByEmail = async (email) => {
     })
 }
 
-const getById = async (id) => {
+const getById = async (id:string) => {
     await connect()
     
     return User.findOne({_id: id})
@@ -28,7 +28,7 @@ const getById = async (id) => {
         })
 }
 
-const changePassword = async (id, password) => {
+const changePassword = async (id:string, password:string) => {
     await connect()
 
     return User.updateOne({_id: id}, {password: password})

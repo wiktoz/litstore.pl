@@ -1,8 +1,8 @@
-import Token from "../../models/token"
-import connect from "../db/connect"
-import User from "../../models/user";
+import Token from "@/models/token"
+import connect from "@/utils/db/connect"
+import User from "@/models/user"
 
-const create = async (data) => {
+const create = async (data:any) => {
     await connect()
 
     return Token.create(data)
@@ -14,7 +14,7 @@ const create = async (data) => {
         })
 }
 
-const isValid = async (id, token) => {
+const isValid = async (id:string, token:string) => {
     await connect()
 
     return Token.findOne({ userId: id, token: token})
@@ -27,7 +27,7 @@ const isValid = async (id, token) => {
         })
 }
 
-const remove = async (id, token) => {
+const remove = async (id:string, token:string) => {
     await connect()
 
     return Token.deleteOne({userId: id, token: token})

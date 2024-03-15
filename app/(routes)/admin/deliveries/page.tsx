@@ -2,27 +2,19 @@
 
 import useSWR from "swr"
 import Loader from "@/components/Loader"
-import ShowBox from "@/components/admin/ShowBox"
 import { fetcher } from "@/utils/helpers"
 
-
 export default function ShowDeliveries(){
-    const { data, error } = useSWR<Delivery[]>('/api/deliveries', fetcher)
+    const { data, error } = useSWR<DeliveryInterface[]>('/api/deliveries', fetcher)
     if (error) return "An error has occurred."
     if (!data) return <Loader/>
 
     return(
         <>
         {
-            data.map((delivery:Delivery) => {
+            data.map((delivery:DeliveryInterface) => {
                 return(
-                    <ShowBox
-                        key={delivery.slug}
-                        editLink={'/admin/deliveries/edit/' + delivery.slug}
-                        deleteLink={'/admin/deliveries/delete/' + delivery.slug}
-                        showLink={""}
-                    >
-                        <div>
+                        <div key={delivery._id}>
                             <div className="w-24 h-24 flex items-center mx-2">
                                 <img src={'/img/delivery/' + delivery.img} alt={delivery.name} />
                             </div>
@@ -34,7 +26,6 @@ export default function ShowDeliveries(){
                                 </div>
                             </div>
                         </div>
-                    </ShowBox>
                 )
             })
         }

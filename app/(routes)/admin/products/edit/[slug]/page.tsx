@@ -20,11 +20,15 @@ interface Photo {
 export default function EditProduct({params}:{params: {slug: string}}){
     const { slug } = params
 
-    const { data : categories, error: categoriesError } = useSWR<Category[]>('/api/categories', fetcher)
-    const { data : variants, error: variantsError } = useSWR<Variant[]>('/api/variants', fetcher)
-    const { data: product, error: productError } = useSWR<Product>('/api/products/'+slug, fetcher)
+    const { data : categories, error: categoriesError } = useSWR<CategoryInterface[]>('/api/categories', fetcher)
+    const { data : variants, error: variantsError } = useSWR<VariantInterface[]>('/api/variants', fetcher)
+    const { data: product, error: productError } = useSWR<ProductInterface>('/api/products/'+slug, fetcher)
     const { data: photos, error: photosError } = useSWR<Photo[]>("/api/products/"+slug+"/photos", fetcher)
-    
+
+    const [description, setDescription] = useState<string>(product ? product.description : "")
+    const [active, setActive] = useState<boolean>(product ? product.active : true)
+    const [newBadge, setNewBadge] = useState<boolean>(product ? product.new_badge : false)
+
     useEffect(() => {
         if(photos){
             const f = photos.map((photo:Photo) => {
@@ -38,7 +42,7 @@ export default function EditProduct({params}:{params: {slug: string}}){
     }, [photos])
 
     const { register, handleSubmit, formState: {errors} }
-        = useForm<Product>({resolver})
+        = useForm<ProductInterface>({resolver})
     
     const [files, setFiles] = useState<File[]>([])
     
@@ -120,6 +124,7 @@ export default function EditProduct({params}:{params: {slug: string}}){
                                     description="Describe your product"
                                     rows={6}
                                     value={product.description}
+                                    setter={setDescription}
                                 />
                                 <p className="mt-2 text-sm text-gray-500">
                             Brief description for your product. You can use HTML tags.
@@ -141,6 +146,7 @@ export default function EditProduct({params}:{params: {slug: string}}){
                                 title='Active'
                                 description='Decide if your product will be active'
                                 checked={product.active}
+                                setter={setActive}
                             />
                         </div>
                         <div>
@@ -149,6 +155,7 @@ export default function EditProduct({params}:{params: {slug: string}}){
                                 title='New Badge'
                                 description='Decide if the "new" badge will be displayed'
                                 checked={product.new_badge}
+                                setter={setNewBadge}
                             />
                         </div>
                         </div>

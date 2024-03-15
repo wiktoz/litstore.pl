@@ -1,7 +1,7 @@
 import {LuStar, LuUser2, LuUserCog2} from "react-icons/lu";
 import Link from 'next/link'
 
-const UserBox = ({u}:{u:User}) => {
+const UserBox = ({u}:{u:UserInterface}) => {
     return(
         <div className={"rounded-2xl shadow"}>
             <div className={"flex flex-row h-full w-full"}>
