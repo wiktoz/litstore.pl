@@ -8,7 +8,7 @@ const schema = new Schema({
     description: String,
     seo_description: String,
     bg_photo: String,
-    active: {type: String, default: true, required: true},
+    active: {type: Boolean, default: true, required: true},
     slug: { type: String, slug: "name", slugPaddingSize: 1, unique: true }
 },
 { timestamps: true })

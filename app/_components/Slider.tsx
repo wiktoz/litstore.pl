@@ -35,36 +35,35 @@ export default function Slider(){
 
     return(
         <div className="w-full z-0">
-            <div className="w-full overflow-hidden">
-      <motion.div
-        className="flex flex-nowrap"
-        animate={{
-            x: `calc(${-index} * 100%)`
-        }}
-        transition={{ type: "tween", stiffness: 300 }}
-      >
-        {slides.map((item, index) => (
-          <div
-            className="min-w-full basis-full"
-            key={index}
-          >
-            <img src={item.link} className="rounded-md"></img>
-          </div>
-        ))}
-      </motion.div>
-
-      <div className="slideshowDots flex flex-row justify-center my-2">
-        {slides.map((_, idx) => (
-          <div
-            key={idx}
-            className={`slideshowDot ${index === idx ? "bg-gray-400" : "bg-gray-100"} m-2 w-2 h-2 rounded-full hover:cursor-pointer`}
-            onClick={() => {
-              setIndex(idx);
-            }}
-          ></div>
-        ))}
-      </div>
-    </div>
+            <div className="w-full overflow-hidden relative">
+                <motion.div
+                    className="flex flex-nowrap"
+                    animate={{
+                        x: `calc(${-index} * 100%)`
+                    }}
+                    transition={{type: "tween", stiffness: 300}}
+                >
+                    {slides.map((item, index) => (
+                        <div
+                            className="min-w-full basis-full"
+                            key={index}
+                        >
+                            <img src={item.link}></img>
+                        </div>
+                    ))}
+                </motion.div>
+                <div className="slideshowDots flex flex-row justify-center my-2 absolute bottom-0 left-1/2 transform -translate-x-1/2">
+                    {slides.map((_, idx) => (
+                        <div
+                            key={idx}
+                            className={`slideshowDot ${index === idx ? "bg-black" : "bg-gray-100"} m-2 w-2 h-2 rounded-full hover:cursor-pointer opacity-50`}
+                            onClick={() => {
+                                setIndex(idx);
+                            }}
+                        ></div>
+                    ))}
+                </div>
+            </div>
         </div>
     )
 }

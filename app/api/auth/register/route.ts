@@ -20,7 +20,7 @@ export async function POST(req:NextRequest){
 
 
     //create new user
-    const hash = await hashPassword(body.password)
+    const hash = hashPassword(body.password)
 
     const newUser = new User({
         email: body.email,

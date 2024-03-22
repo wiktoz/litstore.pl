@@ -1,7 +1,7 @@
 'use client'
 
 import Input from "./Input"
-import { resolver } from "../validation/schema/address"
+import { resolver } from "@/validation/schema/frontend/address"
 import { useForm } from "react-hook-form"
 
 interface Props extends AddressInterface {

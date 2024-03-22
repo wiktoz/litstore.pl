@@ -5,6 +5,9 @@ import {usePathname} from "next/navigation"
 import {ReactNode} from "react";
 
 const variants = {
+    no: {
+      opacity:0
+    },
     out: {
       opacity: 0,
       transition: {
@@ -28,7 +31,7 @@ const Transition = ({ children }: {children:ReactNode}) => {
                 key={pathname}
                 variants={variants}
                 animate="in"
-                initial="out"
+                initial="no"
                 exit="out"
                 className="w-full"
                 >

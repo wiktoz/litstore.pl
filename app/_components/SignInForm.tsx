@@ -32,15 +32,15 @@ export default function SignIn() {
       setIsLoading(false)
       setMessage(response.error)
     }
-    else await Router.push('/user/profile')
+    else Router.push('/user/profile')
   }
 
   return (
     <>
-    <div className="flex min-h-full w-full items-center justify-center py-12 px-2 sm:px-6 lg:px-8">
+    <div className="flex w-full items-center justify-center py-12 px-2 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-4">
           <div>
-            <h2 className="text-2xl font-bold text-gray-700 tracking-tight">
+            <h2 className="text-xl font-bold text-gray-800">
               Sign In
             </h2>
           </div>
@@ -80,7 +80,7 @@ export default function SignIn() {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <div className="text-sm">
+              <div className="text-xs">
                 <Link href={"/auth/password/reset"} className="font-medium text-gray-600 hover:text-gray-500">
                   Forgot your password?
                 </Link>

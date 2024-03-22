@@ -23,8 +23,8 @@ const Products = ({products, error, isLoading, size}:Props) => {
                             <div className="rounded-md border hover:cursor-pointer relative h-full overflow-hidden">
                                 {
                                     product.new_badge ? 
-                                    <div className="bg-gray-700 absolute top-0 right-0 rounded-tr-md rounded-bl-md">
-                                        <p className="text-white text-xs px-2 py-1 tracking-tight">new</p>
+                                    <div className="bg-gray-900 absolute top-0 right-0 rounded-tr-md rounded-bl-md">
+                                        <p className="text-white text-xs px-2 py-0.5 tracking-tight">new</p>
                                     </div> : ""
                                 }
                                 <div className="h-full flex flex-col">
@@ -34,7 +34,7 @@ const Products = ({products, error, isLoading, size}:Props) => {
                                         />
                                     </div>
 
-                                    <div className='m-2 my-4'>
+                                    <div className='m-4'>
                                         <p className="text-xs font-semibold text-gray-400 mb-1">{product.manufacturer}</p>
                                         <p className="text-sm font-light text-gray-700">{product.name}</p>
                                     </div>

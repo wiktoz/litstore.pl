@@ -20,7 +20,7 @@ const OptionSelect = ({variant, options, pickOption, checkStock}:Props) => {
         <AnimatePresence>
         <motion.div className={"relative w-full transition-all"} onClick={() => setOpen(!open)} onBlur={() => setOpen(false)}>
             <motion.div
-                className={"flex flex-row items-center p-2 px-4 text-sm text-gray-500 border border-black hover:cursor-pointer "
+                className={"flex flex-row items-center p-2 px-4 text-sm text-gray-500 border border-gray-500 hover:cursor-pointer "
                     + (open ? "rounded-t-lg border-b-0" : "rounded-lg")}>
                 <div className={"grow"}>
                 {
@@ -28,7 +28,10 @@ const OptionSelect = ({variant, options, pickOption, checkStock}:Props) => {
                         <div className={"text-black"}>
                             {pickedOption.name}
                         </div> :
-                        "select size"
+                        <div className={"text-xs"}>
+                            select size
+                        </div>
+
                 }
                 </div>
                 <motion.div

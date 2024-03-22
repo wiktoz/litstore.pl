@@ -5,12 +5,12 @@ import Link from "next/link"
 
 export default function Footer(){
     return(
-        <footer className="bg-gray-50 mt-16">
+        <footer className="bg-gray-100 mt-16">
   <div className="mx-auto max-w-screen-xl space-y-12 px-12 py-16">
     <div className="flex items-center justify-between">
         <Image 
-            src="/img/litstore.png" 
-            className="mr-3 h-4 w-auto"
+            src="/img/litstore-black.png"
+            className="mr-3 h-3 w-auto"
             width="0"
             height="0"
             sizes="100vw"

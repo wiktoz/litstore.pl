@@ -44,7 +44,7 @@ const Accordion = ({ title, description }:Props) => {
                         exit={{ opacity: 0, height:0, y:-30}}
                         className="my-2"
                     >
-                        <p className="text-xs rounded-lg border-gray-200 leading-5 border p-4" dangerouslySetInnerHTML={{ __html: description}}></p>
+                        <p className="text-xs leading-5 border-t p-2" dangerouslySetInnerHTML={{ __html: description}}></p>
                     </motion.div>
                 )
         }

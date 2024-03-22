@@ -68,7 +68,7 @@ const DeliveryBox = ({submitData}:Props) => {
                         <>
                         {
                             cartDelivery && cartDelivery.delivery_id === item._id &&
-                            <div key="addressForm" className=" rounded-lg">
+                            <div key={"addressForm" + item._id} className="rounded-lg">
                                 {
                                     item.name === "InPost" ?
                                         <Geowidget
