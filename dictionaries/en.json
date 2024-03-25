@@ -1,0 +1,20 @@
+{
+  "navbar": {
+    "sign_in": "Sign In",
+    "create_account": "Create account"
+  },
+
+  "footer": {
+    "information": "Information",
+    "privacy_policy": "Privacy Policy",
+    "terms_conditions": "Terms & Conditions",
+    "contact": "Contact us",
+
+    "customer_service": "Customer Service",
+    "delivery_payments": "Delivery & Payments",
+    "returns_refunds": "Returns & Refunds",
+
+    "helpful_links": "Helpful Links",
+    "faq": "FAQs"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "navbar": {
+    "sign_in": "Eintragen",
+    "create_account": "Konto erstellen"
+  },
+
+  "footer": {
+    "information": "Information",
+    "privacy_policy": "Datenschutzbestimmungen",
+    "terms_conditions": "Bedingungen und Konditionen",
+    "contact": "Kontakt",
+
+    "customer_service": "Kundenbetreuung",
+    "delivery_payments": "Lieferung und Zahlungen",
+    "returns_refunds": "Rückgabe und Rückerstattung",
+
+    "helpful_links": "Hilfreiche Links",
+    "faq": "FAQs"
+  }
+}

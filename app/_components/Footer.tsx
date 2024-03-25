@@ -1,9 +1,11 @@
-'use client'
-
 import Image from "next/image"
 import Link from "next/link"
+import {useTranslations} from 'next-intl'
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Footer(){
+  const t = useTranslations('footer')
+
     return(
         <footer className="bg-gray-100 mt-16">
   <div className="mx-auto max-w-screen-xl space-y-12 px-12 py-16">
@@ -58,34 +60,37 @@ export default function Footer(){
       className="text-sm grid grid-cols-1 gap-8 border-t border-gray-100 pt-12 sm:grid-cols-2 lg:grid-cols-4"
     >
       <div>
-        <p className="font-bold text-gray-800">Information</p>
+        <p className="font-bold text-gray-800">{t('information')}</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href={"/privacy-policy"}> Privacy Policy </Link>
-          <Link className="hover:opacity-75" href={"/terms-and-conditions"}> Terms & Conditions</Link>
-          <Link className="hover:opacity-75" href={"/contact"}> Contact us </Link>
+          <Link className="hover:opacity-75" href={"/privacy-policy"}> {t('privacy_policy')}</Link>
+          <Link className="hover:opacity-75" href={"/terms-and-conditions"}> {t('terms_conditions')}</Link>
+          <Link className="hover:opacity-75" href={"/contact"}> {t('contact')}</Link>
         </nav>
       </div>
 
       <div>
-        <p className="font-bold text-gray-800">Customer Service</p>
+        <p className="font-bold text-gray-800">{t('customer_service')}</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href={"/delivery-and-payments"}> Delivery & Payments </Link>
-          <Link className="hover:opacity-75" href={"/returns-and-refunds"}> Returns & Refunds </Link>
+          <Link className="hover:opacity-75" href={"/delivery-and-payments"}> {t('delivery_payments')}</Link>
+          <Link className="hover:opacity-75" href={"/returns-and-refunds"}> {t('returns_refunds')}</Link>
         </nav>
       </div>
 
       <div>
-        <p className="font-bold text-gray-800">Helpful Links</p>
+        <p className="font-bold text-gray-800">{t('helpful_links')}</p>
 
         <nav className="mt-4 flex flex-col space-y-2 text-sm text-gray-500">
-          <Link className="hover:opacity-75" href={"/faq"}> FAQs </Link>
+          <Link className="hover:opacity-75" href={"/faq"}> {t('faq')} </Link>
         </nav>
+      </div>
+      <div className={"text-gray-500 justify-right"}>
+        <LanguageSwitcher/>
       </div>
     </div>
 
-    <p className="text-xs text-gray-500">&copy; 2022 LitStore.pl</p>
+    <p className="text-xs text-gray-500">&copy; {new Date().getFullYear()} LitStore.pl v1.0</p>
   </div>
 </footer>
     )

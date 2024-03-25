@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "sign_in": "S'inscrire",
+    "create_account": "Créer un compte",
+    "logout": "Déconnexion"
+  },
+
+  "footer": {
+    "information": "Information",
+    "privacy_policy": "Politique de confidentialité",
+    "terms_conditions": "Conditions générales d'utilisation",
+    "contact": "Contactez nous",
+
+    "customer_service": "Service clientèle",
+    "delivery_payments": "Livraison et paiements",
+    "returns_refunds": "Retours et remboursements",
+
+    "helpful_links": "Liens utiles",
+    "faq": "FAQs"
+  }
+}
