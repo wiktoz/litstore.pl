@@ -4,9 +4,10 @@ import useSWR from 'swr'
 import Loader from '@/components/Loader'
 import { useSearchParams } from 'next/navigation'
 import {fetcher} from "@/utils/helpers";
+import {ArrowPathIcon, CheckIcon} from "@heroicons/react/24/outline";
 
 const getColor = (status:string) => {
-    if(status === "PENDING") return "text-orange-500"
+    if(status === "PENDING") return "text-orange-400"
     if(status === "SUCCESS") return "text-green-500"
     if(status === "FAILURE") return "text-red-800"
     return "text-black"
@@ -29,45 +30,52 @@ const PaymentCompleted = () => {
 
     return(
         <div>
-            <div className='my-10 text-center w-auto'>
-                <p className="font-bold text-3xl mb-2">Order completed</p>
-                <div className="text-sm mb-8">
-                    <p>
-                        Your order #{order._id} has been completed.
-                    </p>
-                    { order?.payment.status === "SUCCESS" ?
-                        <p>
+            <div className='my-10 w-auto'>
+                <div className="text-sm py-8">
+                    <p className="font-bold text-2xl mb-4">Order completed</p>
+                    <div className={"flex items-center gap-1"}>
+                        <CheckIcon width={14} height={14}/>
+                        Order has been completed.
+                    </div>
+                    {order.payment.status === "SUCCESS" ?
+                        <div className={"flex items-center gap-1"}>
+                            <CheckIcon width={14} height={14}/>
                             Payment completed.
-                        </p>
+                        </div>
                         :
-                        <p>
-                            Waiting for payment to be processed.
-                        </p>
+                        <div className={"flex items-center gap-1"}>
+                            <ArrowPathIcon width={14} height={14}/>
+                            Waiting for payment to be processed...
+                        </div>
                     }
                 </div>
-                <p className='text-right text-xs'>
-                    Order placed
-                    <span className='ml-1'>
-                        {formatDate(order.createdAt)}
-                    </span>
-                </p>
-                <p className="text-sm mb-4 text-right">
-                    <span className='mr-1 text-xs'>
-                        payment
-                    </span>
-                    <span className={"font-bold " + getColor(order?.payment.status)}>
-                        {order?.payment.status}
-                    </span>
-                </p>
+                <div className={"flex gap-8"}>
+                    <div>
+                        <p className={"text-xs text-gray-700"}>order number</p>
+                        <p className={"font-semibold"}>#{order._id}</p>
+                    </div>
+                    <div>
+                        <p className={"text-xs text-gray-700"}>placed on</p>
+                        <p className={"font-semibold"}>{formatDate(order.createdAt)}</p>
+                    </div>
+                    <div>
+                        <p className={"text-xs text-gray-700"}>payment</p>
+                        <p className={"font-semibold"}>
+                            <span className={getColor(order.payment.status)}>
+                                {order.payment.status}
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
             <section className='grid grid-cols-12 rounded my-4 bg-gray-50 text-gray-700 text-sm'>
-                    <div className="col-span-6 px-6 py-10">
-                        <p className='font-bold mb-2'>Invoice data</p>
-                        <p>{order?.buyer.name} {order?.buyer.surname}</p>
-                        <p>{order?.buyer.street}</p>
-                        <p>{order?.buyer.postcode} {order?.buyer.city}</p>
-                    </div>
-                    <div className='col-span-6 flex flex-row items-center'>
+                <div className="col-span-6 px-6 py-10">
+                    <p className='font-bold mb-2'>Invoice data</p>
+                    <p>{order?.buyer.name} {order?.buyer.surname}</p>
+                    <p>{order?.buyer.street}</p>
+                    <p>{order?.buyer.postcode} {order?.buyer.city}</p>
+                </div>
+                <div className='col-span-6 flex flex-row items-center'>
                         <div className="px-6">
                             <p className='font-bold mb-2'>Delivery method <span className='font-normal text-xs'>(+{order?.delivery?.price} PLN)</span></p>
                             {/* eslint-disable-next-line @next/next/no-img-element */}

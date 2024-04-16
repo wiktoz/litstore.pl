@@ -1,23 +1,29 @@
-import {Dispatch, SetStateAction} from "react"
+import {Dispatch, SetStateAction, useState} from "react"
+import {UseFormRegister} from "react-hook-form";
 
 interface CheckboxInterface {
     id: string,
     title: string,
     description?: string,
     checked: boolean,
-    setter: Dispatch<SetStateAction<boolean>>
+    errors: { [key: string]: { message?: string } },
+    checker: UseFormRegister<any>,
+    setter?: Dispatch<SetStateAction<boolean>>
 }
 
-export default function Checkbox({id, checked, title, description, setter}:CheckboxInterface){
+export default function Checkbox({id, checked, title, description, errors, checker, setter}:CheckboxInterface){
+    const [state, setState] = useState<boolean>(checked || true)
     const changeState = () => {
-        setter(!checked)
+        if(setter) setter(!state)
+        setState(!state)
     }
 
     return(
         <div className="col-span-12">
-            <div className="flex mb-4 items-center">
-                <div className="flex h-5 ">
+            <div className="flex items-center">
+                <div className="flex">
                     <input
+                        {...checker ? checker(id) : ""}
                         id={id}
                         name={id}
                         type="checkbox"
@@ -27,11 +33,12 @@ export default function Checkbox({id, checked, title, description, setter}:Check
                     />
                 </div>
                 <div className="ml-2">
-                    <label htmlFor={id} >
+                    <label htmlFor={id}>
                         <p className="text-sm text-gray-700 font-semibold">{title}</p>
                         <p className="text-gray-500 text-xs">{description}</p>
                     </label>
                 </div>
+                <div className="text-red-600 text-xs">{errors ? errors[id]?.message : ""}</div>
             </div>
         </div>
     )

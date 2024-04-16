@@ -18,19 +18,19 @@ interface RadioInterface {
 
 export default function RadioBtn({title, name, description, options, value, errors, checker, setter}:RadioInterface){
     return(
-        <div className="my-4">
-            <legend className="text-sm text-gray-800">
+        <div>
+            <legend className="text-xs text-gray-700 mx-1">
                 {title}
             </legend>
             {
                 description &&
                     <p className="text-xs text-gray-500">{description}</p>
             }
-            <div className="flex flex-row">
+            <div className="flex flex-row my-1">
                 {
                     options.map((option:Option) => {
                         return(
-                            <div className="flex items-center px-4 py-2 bg-white first:rounded-l-lg last:rounded-r-lg border-r" key={option.id}>
+                            <div className="flex items-center px-4 py-2 bg-white first:rounded-l-lg last:rounded-r-lg border border-gray-300 border-l-0 first:border" key={option.id}>
                                 <input
                                     { ...checker ? checker(name) : ""}
                                     id={option.id}

@@ -26,11 +26,11 @@ export default function SignIn() {
     }
 
     const response = await signIn("credentials", options)
-
     setMessage('')
+
     if(response?.error){
       setIsLoading(false)
-      setMessage(response.error)
+      setMessage("Incorrect credentials")
     }
     else Router.push('/user/profile')
   }

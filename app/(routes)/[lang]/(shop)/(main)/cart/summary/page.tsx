@@ -15,7 +15,7 @@ const CartSummary = () => {
     const {cartItems,cartDelivery, cartBuyer} = useShoppingCart() as ShoppingCartContextType
 
     useEffect(() => {
-        if(!cartBuyer.name)
+        if(!cartBuyer.name || !cartItems || cartItems.length === 0)
             router.push('/cart/delivery')
     })
 
@@ -58,46 +58,49 @@ const CartSummary = () => {
                         <div className='w-full h-1 rounded bg-gray-300'></div>
                     </div>
                 </section>
-                <section>
-                    <div className={"flex flex-row px-1 py-2 items-center gap-1"}>
-                        <div className={"font-bold text-gray-700"}>
-                            Invoice
-                        </div>
-                        <div className={"text-xs text-gray-500 hover:cursor-pointer"}>
-                            (edit)
-                        </div>
-                    </div>
-                    <div className="text-gray-700 flex flex-col text-sm bg-gray-50 p-6 py-8 rounded-lg">
-                        <p className='font-bold mb-2'>Invoice data</p>
-                        <p>{cartBuyer.name} {cartBuyer.surname}</p>
-                        <p>{cartBuyer.street}</p>
-                        <p>{cartBuyer.post_code} {cartBuyer.city}</p>
-                    </div>
-                </section>
-                <section>
-                    <div className={"flex flex-row px-1 py-2 items-center gap-1"}>
-                        <div className={"font-bold text-gray-700"}>
-                            Delivery
-                        </div>
-                        <div className={"text-xs text-gray-500 hover:cursor-pointer"}>
-                            (edit)
-                        </div>
-                    </div>
-                    <div className='grid grid-cols-12 items-center rounded-lg bg-gray-50 text-gray-700 text-sm'>
-                        <div className='col-span-6 flex flex-row items-center'>
-                            <div className="p-6">
-                                <img className='w-24 my-4' src={"/img/delivery/" + delivery.img} alt={delivery.name}/>
-                                <p className={"font-medium"}>{delivery.name}</p>
-                                <p><span className='font-normal text-xs'>(+{delivery.price} PLN)</span></p>
+                <div className={"flex flex-col md:flex-row gap-4"}>
+                    <div className={"w-full md:w-1/2"}>
+                        <div className={"flex flex-row px-1 py-2 items-center gap-1"}>
+                            <div className={"font-bold text-gray-700"}>
+                                Invoice
+                            </div>
+                            <div className={"text-xs text-gray-500 hover:cursor-pointer"}>
+                                (edit)
                             </div>
                         </div>
-                        <div className="col-span-6 px-6 py-10">
-                            <p>{cartDelivery.name} {cartDelivery.surname}</p>
-                            <p>{cartDelivery.street}</p>
-                            <p>{cartDelivery.post_code} {cartDelivery.city}</p>
+                        <div className="text-gray-700 flex flex-col text-sm bg-gray-50 p-6 py-8 rounded-lg">
+                            <p className='font-bold mb-2'>Invoice data</p>
+                            <p>{cartBuyer.name} {cartBuyer.surname}</p>
+                            <p>{cartBuyer.street}</p>
+                            <p>{cartBuyer.post_code} {cartBuyer.city}</p>
                         </div>
                     </div>
-                </section>
+                    <div className={"w-full md:w-1/2"}>
+                        <div className={"flex flex-row px-1 py-2 items-center gap-1"}>
+                            <div className={"font-bold text-gray-700"}>
+                                Delivery
+                            </div>
+                            <div className={"text-xs text-gray-500 hover:cursor-pointer"}>
+                                (edit)
+                            </div>
+                        </div>
+                        <div className='items-center rounded-lg bg-gray-50 text-gray-700 text-sm flex grow'>
+                            <div className='w-1/2 flex flex-row items-center'>
+                                <div className="p-6">
+                                    <img className='w-24 my-4' src={"/img/delivery/" + delivery.img}
+                                         alt={delivery.name}/>
+                                    <p className={"font-medium"}>{delivery.name}</p>
+                                    <p><span className='font-normal text-xs'>(+{delivery.price} PLN)</span></p>
+                                </div>
+                            </div>
+                            <div className="w-1/2 px-6 py-10">
+                                <p>{cartDelivery.name} {cartDelivery.surname}</p>
+                                <p>{cartDelivery.street}</p>
+                                <p>{cartDelivery.post_code} {cartDelivery.city}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <section>
                     <div className={"flex flex-row px-1 py-2 items-center gap-1"}>
                         <div className={"font-bold text-gray-700"}>

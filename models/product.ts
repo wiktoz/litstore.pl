@@ -14,6 +14,10 @@ const schema = new Schema({
     variant: [{type: Schema.Types.ObjectId, ref: 'Variant' }],
     main_photo: String,
     photos: {type: Array, required: true},
+    price: {
+        min: Number,
+        max: Number
+    },
     new_badge: {type: Boolean, default: false},
     active: {type: Boolean, default: true},
     slug: { type: String, slug: "name", slugPaddingSize: 1, unique: true }

@@ -7,12 +7,13 @@ import { Reorder } from "framer-motion"
 import { TrashIcon, PhotoIcon, CursorArrowRippleIcon, CursorArrowRaysIcon } from "@heroicons/react/24/outline"
 
 interface FileUploadInterface {
+    title?: string,
     files: File[], 
     setFiles: Dispatch<SetStateAction<File[]>>,
     multiple: boolean
 }
 
-const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
+const FileUpload = ({title, files, setFiles, multiple}:FileUploadInterface) => {
     const [errors, setErrors] = useState<string[]>([])
 
     const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -54,9 +55,17 @@ const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
     }
 
     return(
-        <div className={"flex flex-col gap-2 text-sm"}>
-            <div {...getRootProps()} className={"hover:cursor-pointer shadow flex flex-col gap-2 p-4 rounded-2xl border " +
-                (isDragActive ? "border-dashed border-gray-500 bg-gray-50" : "bg-white border-white")}>
+        <div className={"flex flex-col gap-1 text-sm"}>
+            <div>
+                {
+                    title &&
+                    <div className={"block text-xs text-gray-700 px-1"}>
+                        {title}
+                    </div>
+                }
+            </div>
+            <div {...getRootProps()} className={"hover:cursor-pointer flex flex-col gap-2 p-4 rounded-lg border border-gray-300 " +
+                (isDragActive ? "border-dashed border-gray-500 bg-gray-50" : "bg-white")}>
                 <input {...getInputProps()} />
                 {
                     isDragActive ?
@@ -64,7 +73,7 @@ const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
                             <CursorArrowRaysIcon width={20} height={20}/>
                             Drop files here
                         </div> :
-                        <div className={"py-4 px-2 flex flex-row items-center gap-1"}>
+                        <div className={"py-4 px-2 flex flex-row items-center gap-2 text-gray-700"}>
                             <CursorArrowRippleIcon width={20} height={20}/>
                             Drag and drop some files here, or click to select files
                         </div>
@@ -72,15 +81,15 @@ const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
             </div>
             {
                 files && files.length > 0 &&
-                <div className={"shadow flex flex-col gap-2 rounded-2xl bg-white p-4"}>
+                <div className={"flex flex-col gap-2 rounded-lg p-4 border border-gray-300 bg-white"}>
                     <Reorder.Group axis="x" values={files} onReorder={setFiles}
-                                   className={"flex flex-row gap-2 overflow-auto scroll-light py-2"}>
+                                   className={"flex flex-row gap-2 overflow-auto scroll-light"}>
                         {
                             files.map(file => {
                                 return (
                                     <Reorder.Item key={file.name} value={file}
-                                                  className={"flex flex-col bg-gray-50 rounded-2xl p-2 gap-2"}>
-                                        <div className={"flex flex-row items-center justify-between my-2"}>
+                                                  className={"border border-gray-300 overflow-hidden flex flex-col rounded-lg"}>
+                                        <div className={"flex flex-row items-center justify-between bg-gray-50 p-2 py-4"}>
                                             <div className={"text-xs flex flex-row items-center gap-1"}>
                                                 <PhotoIcon width={14} height={14}/>
                                                 {printFileName(file.name)}
@@ -89,13 +98,14 @@ const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
                                                 <TrashIcon width={16} height={16}/>
                                             </div>
                                         </div>
-                                        <div className={"relative w-32 h-32 mb-2"}>
+                                        <div className={"relative w-32 h-36"}>
                                             <Image
                                                 src={URL.createObjectURL(file)}
                                                 alt={file.name}
                                                 fill={true}
                                                 draggable={false}
                                                 style={{objectFit:"cover"}}
+                                                className={""}
                                             />
                                         </div>
                                     </Reorder.Item>
@@ -103,7 +113,7 @@ const FileUpload = ({files, setFiles, multiple}:FileUploadInterface) => {
                             })
                         }
                     </Reorder.Group>
-                    <div className={"text-xs px-1"}>{files.length} {files.length === 1 ? "image" : "images"}</div>
+                    <div className={"text-xs px-1 pt-4"}>{files.length} {files.length === 1 ? "image" : "images"}</div>
                 </div>
             }
             <div className={"flex flex-col text-xs text-red-600 gap-1 px-1"}>{

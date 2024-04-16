@@ -2,7 +2,7 @@ import useSWR from "swr";
 import Spinner from "@/components/Spinner"
 import {
     ExclamationCircleIcon,
-    CheckIcon, PencilSquareIcon, EyeIcon
+    CheckIcon, PencilSquareIcon, EyeIcon, Square2StackIcon
 } from "@heroicons/react/24/outline"
 
 import Image from "next/image";
@@ -64,7 +64,11 @@ const Product = ({product}:{product:ProductInterface}) => {
                                     <ExclamationCircleIcon width={16} height={16}/>
                                     No items to sell
                                 </div> :
-
+                            items.length === 0 ?
+                                <div className={"text-xs flex items-center text-red-600 gap-0.5"}>
+                                    <ExclamationCircleIcon width={16} height={16}/>
+                                    No items to sell
+                                </div> :
                                 <div className={"text-xs text-gray-600"}>
                                     {items.length} variants
                                 </div>
@@ -74,8 +78,18 @@ const Product = ({product}:{product:ProductInterface}) => {
             </div>
             <div className={"flex flex-col gap-2 self-center"}>
                 <div>
+                    <Link href={"/admin/products/items/" + product.slug}>
+                        <div
+                            className={"text-xs flex items-center justify-end text-gray-800 hover:text-gray-400 gap-1"}>
+                            items
+                            <Square2StackIcon width={16} height={16}/>
+                        </div>
+                    </Link>
+                </div>
+                <div>
                     <Link href={"/admin/products/edit/" + product.slug}>
-                        <div className={"text-xs flex items-center justify-end text-gray-800 hover:text-gray-400 gap-1"}>
+                        <div
+                            className={"text-xs flex items-center justify-end text-gray-800 hover:text-gray-400 gap-1"}>
                             edit
                             <PencilSquareIcon width={16} height={16}/>
                         </div>
@@ -83,7 +97,8 @@ const Product = ({product}:{product:ProductInterface}) => {
                 </div>
                 <div>
                     <Link href={"/p/" + product.slug}>
-                        <div className={"text-xs flex items-center justify-end text-gray-800 hover:text-gray-400 gap-1"}>
+                        <div
+                            className={"text-xs flex items-center justify-end text-gray-800 hover:text-gray-400 gap-1"}>
                             preview
                             <EyeIcon width={16} height={16}/>
                         </div>

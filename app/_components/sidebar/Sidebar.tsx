@@ -22,6 +22,8 @@ import {
     PhoneIcon
 
 } from "@heroicons/react/24/outline"
+import Image from "next/image";
+import Link from "next/link"
 
 const buttons:Button[] = [
     {
@@ -81,11 +83,6 @@ const accordions: AccordionType[] = [
                 link: "/admin/products/add"
             },
             {
-                icon: <PencilSquareIcon className="h-5 w-5"/>,
-                title: "Edit",
-                link: "/admin/products/edit"
-            },
-            {
                 icon: <Squares2X2Icon className="h-5 w-5"/>,
                 title: "Variants",
                 link: "/admin/products/variants"
@@ -104,11 +101,6 @@ const accordions: AccordionType[] = [
                 icon: <PlusCircleIcon className="h-5 w-5"/>,
                 title: "Add",
                 link: "/admin/categories/add"
-            },
-            {
-                icon: <PencilSquareIcon className="h-5 w-5"/>,
-                title: "Edit",
-                link: "/admin/categories/edit"
             }
         ]
     },
@@ -144,13 +136,27 @@ export default function Sidebar(){
         <>
         <div className={`${isNavOpen ? "block" : "hidden"} md:hidden opacity-60 bg-black w-screen h-screen fixed top-0 left-0`}></div>
         <div className={`${isNavOpen ? "hidden" : "block"} z-20 block md:hidden w-full sticky top-0 h-16 bg-gray-800 text-white items-center`}>
-            <div 
-                className="flex flex-row items-center justify-end h-full">
-                <div>
-                    <AiOutlineMenu 
-                        className="font-thin text-2xl hover:cursor-pointer mx-4" 
-                        onClick={handleMenu}
-                    />
+            <div className={"flex flex-row items-center justify-between h-full"}>
+                <div className={"mx-4"}>
+                    <Link href={"/admin"} className={"w-auto"}>
+                        <Image
+                            src="/img/litstore.png"
+                            className="h-5 w-auto align-bottom opacity-80"
+                            width="0"
+                            height="0"
+                            sizes="100vw"
+                            alt="logo"
+                        />
+                    </Link>
+                </div>
+                <div
+                    className="flex flex-row items-center justify-end h-full">
+                    <div>
+                        <AiOutlineMenu
+                            className="font-thin text-2xl hover:cursor-pointer mx-4"
+                            onClick={handleMenu}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,8 +166,17 @@ export default function Sidebar(){
                 <div className="block md:hidden absolute right-0 top-2 hover:cursor-pointer">
                     <AiOutlineClose onClick={handleMenu}></AiOutlineClose>
                 </div>
-                <div className="text-xl font-bold leading-6 mt-4 mb-2">
-                    <h1>Dashboard</h1>
+                <div className="text-xl font-bold leading-6 my-4 mx-1">
+                    <Link href={"/admin"} className={"w-auto"}>
+                        <Image
+                            src="/img/litstore.png"
+                            className="h-5 w-auto align-bottom opacity-80"
+                            width="0"
+                            height="0"
+                            sizes="100vw"
+                            alt="logo"
+                        />
+                    </Link>
                 </div>
                 {
                     buttons.map((item, index)=>{

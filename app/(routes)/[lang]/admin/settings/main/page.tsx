@@ -4,7 +4,7 @@ import Input from "@/components/form/Input";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import FileUpload from "@/components/form/FileUpload";
-import {resolver} from "@/components/validation/schema/mainSettings";
+import {resolver} from "@/validation/schema/frontend/mainSettings"
 
 interface Settings {
     facebookLink: string,

@@ -3,7 +3,8 @@ import Item from "@/models/item"
 import Order from "@/models/order"
 import sha256 from 'crypto-js/sha256'
 import Delivery from "@/models/delivery";
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest} from "next/server";
+import {auth} from "@/auth";
 
 
 const generateUrl = (fields: {
@@ -110,7 +111,7 @@ const updatePaymentInfo = async (order_id: string, hash:string, url:string) => {
     }
 }
 
-export async function POST(req:NextRequest, res:NextResponse){
+export async function POST(req:NextRequest){
     const body = await req.json()
     const cart = body.cart
 
@@ -161,10 +162,10 @@ export async function POST(req:NextRequest, res:NextResponse){
     /*
         Inserting order to database
      */
-    //const session = await auth(req, res)
+    const session = await auth()
 
     const buyer = {
-        //user_id: "",
+        user_id: "",
         email: cart.buyer.email,
         name: cart.buyer.name,
         surname: cart.buyer.surname,
@@ -175,10 +176,13 @@ export async function POST(req:NextRequest, res:NextResponse){
         post_code: cart.buyer.post_code
     }
 
-    //if(session && session.user)
-    //    buyer.user_id = session.user.id
+    if(session && session.user && session.user.id)
+        buyer.user_id = session.user.id
 
     const itemsFormatted = items.map(({stockQty, ...keepAttrs}) => keepAttrs)
+
+    if(itemsFormatted.length === 0)
+        return
 
     const payment = {
         amount: totalPrice,

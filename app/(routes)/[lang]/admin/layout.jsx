@@ -1,10 +1,10 @@
-
 import Sidebar from '@/components/sidebar/Sidebar'
 import Transition from '@/components/layout/Transition';
 
 
 export const metadata = {
-    title: "LitStore - admin panel"
+    title: "LitStore — admin panel",
+    description: "Panel for managing products, settings and orders for shop owners"
 }
 export default function AdminLayout({children}) {
     return (

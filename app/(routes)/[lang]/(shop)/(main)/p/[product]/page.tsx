@@ -15,6 +15,7 @@ import {useRouter} from "next/navigation"
 import Spinner from "@/components/Spinner"
 
 import OptionSelect from "@/components/OptionSelect"
+import ComponentAccordion from "@/components/ComponentAccordion";
 
 interface Option {
     variant_id?: string,
@@ -233,15 +234,21 @@ const ProductPage = ({params}:{params: {product: string}}) => {
                                 </button> : ""
                         }
                     </div>
-                    <div className={"flex flex-col gap-2 my-8"}>
-                        <Accordion
-                            title="Description"
-                            description={product ? product?.description : ""}
-                        />
-                        <Accordion
-                            title="Delivery"
-                            description={"Free ship worldwide from $100"}
-                        />
+                    <div className={"flex flex-col gap-4 my-8"}>
+                        <ComponentAccordion
+                            header={"Description"}
+                        >
+                            <div className={"text-xs my-4"} dangerouslySetInnerHTML={{ __html: product ? product?.description : ""}}>
+
+                            </div>
+                        </ComponentAccordion>
+                        <ComponentAccordion
+                            header={"Delivery"}
+                        >
+                            <div className={"text-xs my-4"}>
+                                Free ship worldwide from $100
+                            </div>
+                        </ComponentAccordion>
                     </div>
                 </div>
                 <div></div>

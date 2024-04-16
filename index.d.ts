@@ -32,6 +32,10 @@ interface SubcategoryInterface extends CategoryInterface {
     category_id: string
 }
 
+interface SubcategoryPopulatedInterface extends SubcategoryInterface {
+    category_id: CategoryInterface
+}
+
 interface DeliveryInterface {
     readonly _id: string,
     name: string,
@@ -77,34 +81,40 @@ interface PromoCodeInterface {
 interface OrderInterface {
     readonly _id: string,
     buyer: BuyerInterface,
-    delivery: {
-        type: Delivery,
-        price: number,
-        email: string,
-        name: string,
-        surname: string,
-        street: string,
-        house: string,
-        flat?: String,
-        city: string,
-        post_code: string
-    },
-    items: [{
-        item: ItemInterface,
-        product: ProductInterface,
-        qty: number,
-        price: number
-    }],
+    delivery: OrderDeliveryInterface,
+    items: OrderItemsInterface[],
     promo_code?: PromoCodeInterface,
     payment: {
         amount: number,
         currency: string,
         method: string,
-        hash: string,
-        url: string,
+        hash?: string,
+        url?: string,
         status: string,
     },
     status: string,
+    readonly createdAt: string,
+    readonly updatedAt: string
+}
+
+interface OrderDeliveryInterface {
+    id: string,
+    price: number,
+    email: string,
+    name: string,
+    surname: string,
+    street: string,
+    house: string,
+    flat?: string,
+    city: string,
+    post_code: string
+}
+
+interface OrderItemsInterface {
+    item_id: string,
+    product_id: string,
+    qty: number,
+    price: number
 }
 
 interface VariantOptionInterface {
@@ -122,6 +132,10 @@ interface ProductInterface {
     variant: [VariantInterface],
     main_photo: string,
     photos: [string],
+    price: {
+        min: number,
+        max: number
+    },
     new_badge: boolean,
     active: boolean,
     readonly slug: string
@@ -133,6 +147,18 @@ interface ItemInterface {
     options: [{
         variant_id: string,
         option_id: string
+    }],
+    stock: number,
+    unit: string,
+    price: number
+}
+
+interface ItemPopulatedInterface {
+    _id: string,
+    product_id: string,
+    options: [{
+        variant_id: VariantInterface,
+        option_id: VariantOptionInterface
     }],
     stock: number,
     unit: string,
@@ -170,4 +196,24 @@ interface ShoppingCartContextType {
     increaseQty: (id: string) => void,
     decreaseQty: (id: string) => void,
     removeFromCart: (id: string) => void
+}
+
+declare module "@auth/core" {
+    interface Session {
+        user: User
+    }
+
+    interface User {
+        id: string,
+        role: string
+    }
+}
+
+declare module "@auth/core/jwt" {
+    /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
+    interface JWT {
+        /** OpenID ID Token */
+        id: string,
+        role: string
+    }
 }

@@ -1,6 +1,8 @@
-import createMiddleware from 'next-intl/middleware';
+import createMiddleware from 'next-intl/middleware'
+import { auth } from "./auth"
+import {NextRequest, NextResponse} from "next/server";
 
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
     // A list of all locales that are supported
     locales: ['en', 'de', 'fr'],
 
@@ -8,13 +10,44 @@ export default createMiddleware({
     defaultLocale: 'en'
 });
 
+export async function middleware(request: NextRequest) {
+    if (request.nextUrl.pathname.includes('/admin')) {
+        const session = await auth()
+
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+
+        if(!session)
+            return NextResponse.redirect(url)
+
+        if(!session.user){
+            return NextResponse.redirect(url)
+        }
+
+        // @ts-ignore
+        if(session.user.role !== "admin")
+            return NextResponse.redirect(url)
+    }
+
+    if (request.nextUrl.pathname.includes('/user')) {
+        const session = await auth()
+
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+
+        if(!session)
+            return NextResponse.redirect(url)
+
+        if(!session.user){
+            return NextResponse.redirect(url)
+        }
+    }
+
+    return intlMiddleware(request)
+}
+
 export const config = {
-    // Matcher entries are linked with a logical "or", therefore
-    // if one of them matches, the middleware will be invoked.
     matcher: [
-        // Match all pathnames except for
-        // - … if they start with `/api`, `/_next` or `/_vercel`
-        // - … the ones containing a dot (e.g. `favicon.ico`)
         '/((?!api|_next|_vercel|.*\\..*).*)',
     ]
 };

@@ -9,14 +9,14 @@ interface SelectInterface {
 export default function Select({id, title, autoComplete, value, options}:SelectInterface){
     return(
         <div className="col-span-12">
-            <label htmlFor={id} className="block text-xs font-medium text-gray-700">
+            <label htmlFor={id} className="block text-xs text-gray-700 px-1">
                 {title}
             </label>
             <select
                 id={id}
                 name={id}
                 autoComplete={autoComplete}
-                className="text-sm bg-gray-50 my-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-gray-500"
+                className="text-gray-900 text-sm my-1 block w-full rounded-lg border border-gray-300 p-2 px-3 shadow-sm focus:border-gray-500 focus:outline-none ring-0 focus:ring-0"
                 defaultValue={value}
             >
                 <option hidden className={"text-gray-500"}>{title}</option>

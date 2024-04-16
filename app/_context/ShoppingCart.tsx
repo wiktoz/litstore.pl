@@ -77,13 +77,20 @@ const ShoppingCartProvider = ({children}:Props) => {
     }
 
     function increaseQty(id: string){
+        console.log("here")
         if(!cartItems)
             return
 
+        console.log("not here")
         const item = cartItems.find((item: CartItemInterface) => item.item_id === id)
 
-        if(!item)
-            return setCartItems([...cartItems, { item_id: id, qty: 1}])
+        if(!item){
+            const newItem = [...cartItems, { item_id: id, qty: 1}]
+
+            setCartItems(newItem)
+            Cookies.set("cartItems", JSON.stringify(newItem))
+            return
+        }
 
         const newItems = cartItems.map((item: CartItemInterface) => {
             if(item.item_id === id)

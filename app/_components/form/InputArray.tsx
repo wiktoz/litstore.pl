@@ -51,8 +51,8 @@ const InputArray = ({title, description, options, setOptions}:InputArrayProps) =
 
     return(
         <div className="col-span-12 sm:col-span-12">
-            <div className={"mb-4"}>
-                <legend className="font-semibold text-gray-900 text-sm">{title}</legend>
+            <div className={"m-1"}>
+                <legend className="block text-sm text-gray-700 font-semibold">{title}</legend>
                 {
                     description &&
                         <p className="text-xs text-gray-500">{description}</p>

@@ -11,6 +11,7 @@ import {fetcher} from "@/utils/helpers"
 import {useForm} from "react-hook-form";
 import {resolver} from "@/validation/schema/frontend/product"
 import {useEffect, useState} from "react"
+import Header from "@/components/admin/Header";
 
 interface Photo {
     blob: string,
@@ -53,16 +54,11 @@ export default function EditProduct({params}:{params: {slug: string}}){
         <div className="py-2">
             <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-3">
-                    <div className="px-4 sm:px-0">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">Edit product</h3>
-                    <p className="mt-1 text-sm text-gray-600">
-                        Here you can edit products
-                    </p>
-                    </div>
+                    <Header title={"Edit"} desc={"Start editing your product"} />
                 </div>
                 <div className="mt-5 md:col-span-3 md:mt-0">
                     <form>
-                    <div className="shadow overflow-hidden rounded-md">
+                    <div className="shadow overflow-hidden rounded-xl">
                         <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                         <div className="grid grid-cols-12 gap-6">
                             <div className="col-span-12">

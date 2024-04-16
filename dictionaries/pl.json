@@ -1,7 +1,8 @@
 {
   "navbar": {
     "sign_in": "Sign In",
-    "create_account": "Create account"
+    "create_account": "Create account",
+    "logout": "Wyloguj"
   },
 
   "footer": {

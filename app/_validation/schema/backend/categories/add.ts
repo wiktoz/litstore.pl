@@ -1,4 +1,4 @@
-import {boolean, mixed, object, string} from "yup";
+import {boolean, mixed, object, string} from "yup"
 
 const schema = object().shape({
     name: string().required("Name is required")

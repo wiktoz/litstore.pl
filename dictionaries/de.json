@@ -1,7 +1,8 @@
 {
   "navbar": {
     "sign_in": "Eintragen",
-    "create_account": "Konto erstellen"
+    "create_account": "Konto erstellen",
+    "logout": "Abmelden"
   },
 
   "footer": {
@@ -16,5 +17,11 @@
 
     "helpful_links": "Hilfreiche Links",
     "faq": "FAQs"
+  },
+
+  "order_completed": {
+    "order_completed": "Auftrag abgeschlossen",
+    "order_completed_description": "Ihre Bestellung wurde abgeschlossen",
+    "payment_processing": "Warten auf die Bearbeitung der Zahlung"
   }
 }

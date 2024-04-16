@@ -1,7 +1,8 @@
 {
   "navbar": {
     "sign_in": "Sign In",
-    "create_account": "Create account"
+    "create_account": "Create account",
+    "logout": "Logout"
   },
 
   "footer": {
@@ -16,5 +17,11 @@
 
     "helpful_links": "Helpful Links",
     "faq": "FAQs"
+  },
+
+  "order_completed": {
+    "order_completed": "Order completed",
+    "order_completed_description": "Your order has been completed",
+    "payment_processing": "Waiting for payment to be processed"
   }
 }

@@ -3,6 +3,8 @@
 import { useState } from "react"
 import SearchBar from "@/components/form/SearchBar"
 import AdminProducts from "@/components/admin/Products"
+import Header from "@/components/admin/Header";
+import {BuildingStorefrontIcon} from "@heroicons/react/24/outline";
 
 export default function ShowProduct(){
     const [searchVal, setSearchVal] = useState('')
@@ -12,20 +14,23 @@ export default function ShowProduct(){
     }
 
     return (
-        <div className="w-full">
-            <div className={"my-4"}>
-                <p className="text-lg font-bold">Products</p>
-                <p className={"text-xs text-gray-500"}>
-                    Preview, edit and search for available products in your shop
-                </p>
+        <div className="flex flex-col gap-6">
+            <div>
+                <Header
+                    icon={<BuildingStorefrontIcon width={20} height={20}/>}
+                    title={"Products"}
+                    desc={"Manage your store products"}
+                />
             </div>
             <div>
                 <SearchBar 
                     handleSearch={handleSearch}
                     searchBtn={false}
                 />
+                <AdminProducts
+                    searchVal={searchVal}
+                />
             </div>
-            <AdminProducts searchVal={searchVal}/>
         </div>
     )
 }

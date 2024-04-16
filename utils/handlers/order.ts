@@ -1,10 +1,13 @@
 import Order from "@/models/order"
 import connect from "@/utils/db/connect"
 
-const get = async () => {
+const get = async (page:number, limit:number) => {
     await connect()
+
+    if(page < 0)
+        page = 0
     
-    return Order.find({}).sort({"date": -1})
+    return Order.find({}).sort({"createdAt": -1}).limit(limit).skip(page*limit).exec()
     .then(order => { 
         return order
     })

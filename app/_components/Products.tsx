@@ -10,7 +10,7 @@ interface Props {
 
 const Products = ({products, error, isLoading, size}:Props) => {
     return(
-        <div className={"grid grid-cols-2 gap-4 " + (size === "small" ? "md:grid-cols-6" : "md:grid-cols-4")}>
+        <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 " + (size === "small" ? "md:grid-cols-6" : "md:grid-cols-4")}>
             {
                 isLoading ?
                     <Loader/> :
@@ -20,7 +20,7 @@ const Products = ({products, error, isLoading, size}:Props) => {
                 products.map((product)=>{
                     return(
                         <Link href={"/p/" + product.slug} key={product.slug}>
-                            <div className="rounded-md border hover:cursor-pointer relative h-full overflow-hidden">
+                            <div className="rounded-md shadow hover:cursor-pointer relative h-full overflow-hidden">
                                 {
                                     product.new_badge ? 
                                     <div className="bg-gray-900 absolute top-0 right-0 rounded-tr-md rounded-bl-md">

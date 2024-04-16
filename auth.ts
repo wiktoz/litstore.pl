@@ -1,9 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import connect from "@/utils/db/connect";
-import User from "@/models/user";
-import bcrypt from "bcryptjs"
 import {JWT} from "@auth/core/jwt";
+import {Session, User} from "@auth/core"
 
 export const {
     handlers: { GET, POST },
@@ -17,26 +15,23 @@ export const {
         async authorize(credentials) {
             if (!credentials) throw new Error("No credentials to log in")
 
-            const { email, password } = credentials
-            await connect()
+            const {email, password} = credentials
 
-            const user = await User.findOne({email: email})
+            const url = "http://localhost:3000/api/auth/login"
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({email: email, password: password})
+            })
 
-            if (!user) {
-                throw new Error('No user found with this email')
-            }
+            const result = await response.json()
 
-            if(!credentials.password) {
-                throw new Error('No password provided')
-            }
+            if(!result.success)
+                throw new Error(result.error)
 
-            // @ts-ignore
-            const checkPassword = bcrypt.compare(password, user.password)
-            if (!checkPassword) {
-                throw new Error('Incorrect password')
-            }
-
-            return { id: user._id, role: user.role || "user" }
+            return { id: result.user._id, role: result.user.role || "user" }
         },
     }),
     ],
@@ -45,15 +40,17 @@ export const {
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
-        async session({session}:{session:any}){
-            return session
-        },
-        async jwt({ token, user, session }:{token:JWT, user:any, session?:any}){
-            if (session && session.user?.role) {
-                token.role = session.user.role
-                token.id = session.user.id
+        async jwt({ token, user }:{token: JWT, user: User}) {
+            if (user) { // User is available during sign-in
+                token.id = user.id
+                token.role = user.role
             }
             return token
+        },
+        async session({ session, token }:{session: Session, token: JWT}) {
+            session.user.id = token.id
+            session.user.role = token.role
+            return session
         },
         async authorized({auth}:{auth:any}){
             return auth?.user !== null

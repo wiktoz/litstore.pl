@@ -12,7 +12,7 @@ const Search = () => {
     }
 
     return(
-        <div className='my-8'>
+        <div className='my-8 mx-4'>
             <SearchBar 
                 handleSearch={handleSearch}
                 searchBtn={false}

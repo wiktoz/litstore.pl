@@ -1,103 +1,86 @@
 'use client'
 
-import useSWR from 'swr'
 import Loader from '@/components/Loader'
 import SearchBar from '@/components/form/SearchBar'
 import {fetcher} from "@/utils/helpers"
+import Order from "@/components/admin/Order"
+import Header from "@/components/admin/Header"
+import useSWRInfinite from "swr/infinite"
+import {ArrowPathIcon, ShoppingCartIcon} from "@heroicons/react/24/outline";
 
-const formatDate = (date:string) => {
-    return new Date(date).toLocaleString("pl-PL", {dateStyle: 'medium', timeStyle: 'short'});
+
+const getKey = (pageIndex:number, previousPageData:OrderInterface[]) => {
+    if (previousPageData && !previousPageData.length) return null
+    return `/api/orders?page=${pageIndex}&limit=10`
 }
 
 const ShowOrders = () => {
-    const { data: orders, error: error, isLoading: isLoading } = useSWR("/api/orders", fetcher)
+    const { data: orders, error: error, isLoading: isLoading, size, setSize }
+        = useSWRInfinite<OrderInterface[]>(getKey, fetcher, { initialSize: 1 })
+
+    const isLoadingMore =
+        (size > 0 && orders && typeof orders[size - 1] === "undefined")
+
+    const isEmpty = orders?.[0]?.length === 0;
+
+    const isReachingEnd =
+        isEmpty || (orders && orders[orders.length - 1]?.length < 10)
+
+    const issues = orders ? orders.flat() : []
+
 
     return(
-        <div className="py-2">
+        <div className="flex flex-col gap-6">
+            <div>
+                <Header
+                    icon={<ShoppingCartIcon width={20} height={20} />}
+                    title={"Orders"}
+                    desc={"Every order your customer made"}
+                />
+            </div>
+            <div className="w-full">
+                <div className="flex flex-col gap-4">
+                    {
+                        isLoading ?
+                            <Loader/> :
+                            error ?
+                                <div>Error occurred.</div> :
+                                orders && orders.length > 0 && orders.map((order: OrderInterface[]) => {
+                                    return order.map((o: OrderInterface) => {
+                                        return (
+                                            <div key={o._id}>
+                                                <Order order={o}/>
+                                            </div>
+                                        )
+                                    })
+                                })
+                    }
+                </div>
+                <div>
+                    {
+                        !isLoading && isLoadingMore && <Loader/>
+                    }
+                </div>
+                <div>
+                    {
+                        isReachingEnd ?
+                            <div>You are all caught up</div> :
 
-        <div className="bg-white rounded-md w-full flex items-center justify-between">
-			<div className="w-full">
-				<div className="inline-block min-w-full rounded-lg overflow-hidden">
-					<table className="min-w-full leading-normal">
-						<thead>
-							<tr>
-								<th
-									className="px-5 py-3 border-b-2 border-gray-300 bg-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-									Order ID
-								</th>
-								<th
-									className="px-5 py-3 border-b-2 border-gray-300 bg-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-									Products
-								</th>
-								<th
-									className="px-5 py-3 border-b-2 border-gray-300 bg-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-									Ordered at
-								</th>
-								<th
-									className="px-5 py-3 border-b-2 border-gray-300 bg-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-									Amount
-								</th>
-								<th
-									className="px-5 py-3 border-b-2 border-gray-300 bg-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-									Status
-								</th>
-							</tr>
-						</thead>
-                        <tbody>
-                        {
-							isLoading ?
-								<Loader/> :
-							error ?
-								<div>Error occurred.</div> :
-                            orders && orders.length > 0 && orders.map((order:any) => {
-                                return(
-							    <tr key={order._id}>
-								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
-									<div className="flex items-center">
-											<div>
-												<p className="text-gray-900 whitespace-no-wrap">
-													{order._id}
-												</p>
-											</div>
-										</div>
-								</td>
-								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
-									<p className="text-gray-900 whitespace-no-wrap">
-                                        {
-                                            order.items.map((item:any) => {
-                                                return (
-                                                    <p key={item.id}>{item.id}</p>
-                                                )
-                                            })
-                                        }
-                                    </p>
-								</td>
-								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
-									<p className="text-gray-900 whitespace-no-wrap">
-										{formatDate(order.date)}
-									</p>
-								</td>
-								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
-									<p className="text-gray-900 whitespace-no-wrap">
-										{Intl.NumberFormat('pl', {style:'currency', currency:'PLN'}).format(order.payment.amount)}
-									</p>
-								</td>
-								<td className="px-5 py-5 border-b border-gray-300 bg-white text-sm">
-									<span
-                                        className="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
-                                        <span aria-hidden
-                                            className="absolute inset-0 bg-orange-200 opacity-50 rounded-full"></span>
-									    <span className="relative">{order.payment.status}</span>
-									</span>
-								</td>
-							</tr>
-                                
-                                )
-                            })
-                        }
-                        </tbody>
-                        </table>
-                    </div>
+                            !isLoading && !isLoadingMore &&
+                            <div
+                                onClick={() => setSize(size + 1)}
+                                className={"bg-gray-900 rounded-lg text-xs w-fit font-semibold text-gray-300 py-1 px-2 flex items-center justify-center hover:cursor-pointer my-4"}
+                            >
+                                <p className={"mx-1"}>Load More</p>
+                                <ArrowPathIcon width={13} height={13}/>
+                            </div>
+                    }
+                </div>
+                <div>
+                    <p className={"text-xs text-gray-700 my-2 mx-1"}>
+                        showing {size} page(s) of {isLoadingMore ? "..." : issues.length}{" "}
+                        orders{" "}
+                    </p>
                 </div>
             </div>
         </div>

@@ -42,6 +42,7 @@ const Geowidget = ({submitData}: Props) => {
     })
 
     // @ts-ignore
+    // @ts-ignore
     return (
         <div>
             {
@@ -73,7 +74,7 @@ const Geowidget = ({submitData}: Props) => {
                             <link rel="stylesheet"
                                   href="https://sandbox-easy-geowidget-sdk.easypack24.net/inpost-geowidget.css"/>
                         </Head>
-
+                        <inpost-geowidget onpoint="afterPointSelected" token={inpostToken} language='pl' config='parcelCollect'></inpost-geowidget>
                         <Script src='https://sandbox-easy-geowidget-sdk.easypack24.net/inpost-geowidget.js'
                                 strategy="lazyOnload"/>
 
@@ -82,6 +83,6 @@ const Geowidget = ({submitData}: Props) => {
         </div>
     )
 }
-//<inpost-geowidget onpoint="afterPointSelected" token={inpostToken} language='pl'  config='parcelCollect'></inpost-geowidget>
+//
 
 export default Geowidget

@@ -20,7 +20,7 @@ const ShoppingCart = () => {
                 cartItems.length > 0 ?
                     <>
                         <div className={"flex flex-row px-1 py-2 items-center gap-1 w-full text-gray-700"}>
-                            <div>
+                            <div className={"text-xl font-semibold text-gray-700"}>
                                 Bag
                             </div>
                         </div>
@@ -41,13 +41,13 @@ const ShoppingCart = () => {
                         exit={{opacity: 0, y: 200}}
                         initial={{opacity: 0, y: 200}}
                         animate={{opacity: 1, y: 0}}
-                        className="flex flex-col justify-center items-center h-full my-20">
+                        className="flex flex-col justify-center items-center h-96">
                         <ShoppingBagIcon
                             className="h-24 w-24 text-gray-400"
                             aria-hidden="true"
                         />
                         <p className="my-4 text-gray-700 font-semibold">Your bag is empty</p>
-                        <Link href={"/products"}>
+                        <Link href={"/"}>
                             <p className="text-gray-700 text-xs py-1 my-2 hover:cursor-pointer">
                                 Explore products
                             </p>

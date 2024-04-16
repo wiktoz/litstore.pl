@@ -12,6 +12,7 @@ import MobileNavbar from '@/components/MobileNavbar'
 import SignOutButton from "@/components/SignOutButton"
 import Spinner from "@/components/Spinner"
 import { fetcher } from "@/utils/helpers"
+import ErrorBox from "@/components/admin/ErrorBox";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -23,6 +24,7 @@ export default function Navbar() {
   const { data: session, status } = useSession()
 
   const { data: categories, error: error, isLoading: isCategoryLoading } = useSWR<CategoryInterface[]>('/api/categories', fetcher)
+  const { data: subcategories, error: subcategoriesError, isLoading: isSubcategoryLoading } = useSWR<SubcategoryPopulatedInterface[]>('/api/subcategories', fetcher)
 
   return (
     <div className={"bg-black text-gray-200 " + (open ? "bg-opacity-60" : "bg-opacity-30")}>
@@ -99,10 +101,31 @@ export default function Navbar() {
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
                                     <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
-                                    <Popover.Button>
-                                      <Link href={"/" + category.slug} onClick={() => close()}>
+                                      {
+                                        isSubcategoryLoading ?
+                                            <Spinner/> :
+                                        subcategoriesError ?
+                                            <ErrorBox/> :
+                                            <>
+                                            {
+                                              subcategories && subcategories.length > 0 && subcategories.map(subcategory => {
+                                                return(
+                                                    subcategory.category_id._id === category._id &&
+                                                    <Popover.Button key={subcategory._id}>
+                                                      <Link href={"/" + category.slug + "/" + subcategory.slug} onClick={() => close()}>
+                                                        {subcategory.name}
+                                                      </Link>
+                                                    </Popover.Button>
+                                                )
+                                              })
+                                            }
+
+                                        </>
+                                      }
+                                      <Popover.Button>
+                                        <Link href={"/" + category.slug} onClick={() => close()}>
                                           Show Everything
-                                      </Link>
+                                        </Link>
                                       </Popover.Button>
                                     </div>
                                   </div>

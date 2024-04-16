@@ -2,10 +2,10 @@ import useSWR from "swr"
 import Loader from '../Loader'
 import Product from '@/components/admin/Product'
 import {fetcher} from "@/utils/helpers"
+import ErrorBox from "@/components/admin/ErrorBox";
 
 export default function AdminProducts({searchVal}:{searchVal: string}){
     const { data, error, isLoading } = useSWR(searchVal ? `/api/products/search/${searchVal}` : '/api/products', fetcher)
-    if (error) return "An error has occurred."
 
     return(
         <>
@@ -13,7 +13,7 @@ export default function AdminProducts({searchVal}:{searchVal: string}){
             isLoading ?
                 <Loader/> :
             error ?
-                <div>Error occurred. Try again later.</div> :
+                <ErrorBox/> :
             !data ?
                 <div>No products</div> :
 
