@@ -11,11 +11,11 @@ export async function GET(req: NextRequest, context: { params: {id: string} }){
     await connect()
 
     return await Item.findOne({_id: id}).populate({
-        path: "options.option_id",
-        model: VariantOption
-    }).populate({
-        path: "options.variant_id",
-        model: Variant
+        path: 'options',
+        populate: [
+            { path: 'option_id' },
+            { path: 'variant_id' }
+        ]
     }).then((product)=>{
         return NextResponse.json(product, {status: 200})
     }).catch((err)=>{

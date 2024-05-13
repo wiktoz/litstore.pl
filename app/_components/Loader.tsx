@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Loader() {
   return (
-      <div className={"flex items-center align-middle w-full"}>
+      <div className={"flex items-center align-middle w-full m-2"}>
     <AnimatePresence>
     <div className="w-full m-2">
       <motion.span

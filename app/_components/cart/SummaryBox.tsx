@@ -46,7 +46,7 @@ const SummaryBox = ({previousStep, nextStep, nextStepTitle, nextStepActive = tru
 
     return(
         <div className="my-4 md:mx-4 md:my-0 md:mb-4 rounded h-full relative">
-            <div className="flex flex-col justify-between sticky top-5 bg-gray-50 px-8 py-6 rounded-lg">
+            <div className="flex flex-col justify-between sticky top-20 bg-gray-50 px-8 py-6 rounded-lg">
                 <div className={"flex flex-row py-2 items-center gap-1"}>
                     <div className={"font-bold text-gray-700"}>
                         Summary

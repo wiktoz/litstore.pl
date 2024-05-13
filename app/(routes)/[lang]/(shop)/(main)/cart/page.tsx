@@ -4,7 +4,7 @@ import Cart from "@/components/cart/Cart"
 import SummaryBox from "@/components/cart/SummaryBox"
 import {useShoppingCart} from "@/context/ShoppingCart";
 import {useRouter} from "next/navigation";
-import {AnimatePresence, motion} from "framer-motion";
+import {motion} from "framer-motion"
 import CartItem from "@/components/cart/CartItem";
 import {ShoppingBagIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -14,13 +14,12 @@ const ShoppingCart = () => {
     const {cartItems} = useShoppingCart() as ShoppingCartContextType
 
     return(
-        <div className={"my-8"}>
-        <AnimatePresence>
+        <div className={"w-full"}>
             {
                 cartItems.length > 0 ?
                     <>
                         <div className={"flex flex-row px-1 py-2 items-center gap-1 w-full text-gray-700"}>
-                            <div className={"text-xl font-semibold text-gray-700"}>
+                            <div className={"font-bold text-gray-700 mb-2 "}>
                                 Bag
                             </div>
                         </div>
@@ -54,7 +53,6 @@ const ShoppingCart = () => {
                         </Link>
                     </motion.div>
             }
-        </AnimatePresence>
         </div>
     )
 }

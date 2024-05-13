@@ -3,43 +3,47 @@
 import Input from "./Input"
 import { resolver } from "@/validation/schema/frontend/address"
 import { useForm } from "react-hook-form"
+import {useState} from "react";
+import Button from "@/components/admin/Button";
+import {PencilSquareIcon} from "@heroicons/react/24/outline";
 
 interface Props extends AddressInterface {
     title?: string,
     description?: string,
-    submitData: (data: AddressInterface) => void
-    disabled?: boolean
+    submitData: (data: AddressInterface) => void,
+    disableOnSave?: boolean,
+    dataLocked?: boolean
 }
 
-const AddressForm = ({title, description, name, surname, email, street, post_code, city, submitData, disabled}:Props) => {
-
+const AddressForm = ({title, description, name, surname, email, street, post_code, city, submitData, disableOnSave, dataLocked}:Props) => {
+    const [locked, setLocked] = useState<boolean>(dataLocked ? dataLocked : false)
     const { register, handleSubmit, formState: {errors} }
         = useForm<AddressInterface>({resolver})
 
     const onSubmit = (data: AddressInterface) => {
+        if(disableOnSave)
+            setLocked(true)
         if(data)
             submitData(data)
     }
 
     return(
-        <div>
+            <div>
                 <div className="rounded-lg py-2">
-                    <div>
-                        <h3 className="text-md font-semibold text-gray-900">
+                    <div className={title ? "mb-6" : ""}>
+                        <h3 className={"font-bold text-gray-700"}>
                             {
-                                typeof title !== undefined ?
-                                title : "Personal Information"
+                                title && title
                             }
                         </h3>
-                        <p className="mt-1 text-xs text-gray-600">
+                        <div className={"text-xs text-gray-500"}>
                             {
-                                typeof description !== undefined ?
-                                description : "Enter your details. The invoice will be issued for the following data"
+                                description && description
                             }
-                        </p>
+                        </div>
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)} >
-                        <fieldset disabled={disabled ? disabled : false}>
+                    <form onSubmit={handleSubmit(onSubmit)} className={locked ? "opacity-50" : ""}>
+                    <fieldset disabled={locked}>
                     <div className="overflow-hidden">
                         <div className="py-2">
                         <div className="grid grid-cols-12 gap-5">
@@ -117,6 +121,14 @@ const AddressForm = ({title, description, name, surname, email, street, post_cod
                     </div>
                     </fieldset>
                     </form>
+                    {
+                        locked &&
+                        <Button
+                            icon={<PencilSquareIcon width={16} height={16}/>}
+                            title={"Edit"}
+                            onClick={() => setLocked(false)}
+                        />
+                    }
                 </div>
             </div>
     )

@@ -28,12 +28,12 @@ const Order = ({order}:{order:OrderInterface}) => {
             </div>
             <div className={"h-px bg-gray-100 rounded my-2"}></div>
             <ComponentAccordion header={"Products"}>
-                <div className={"flex flex-col gap-2"}>
+                <div className={"flex flex-col gap-2 my-6 mx-2"}>
                 {
                     order.items.map((item, index) => {
                         return(
                             <div key={item.item_id + index}>
-                                <Item item={item}/>
+                                <Item itemData={item}/>
                             </div>
                         )
                     })
@@ -41,10 +41,14 @@ const Order = ({order}:{order:OrderInterface}) => {
                 </div>
             </ComponentAccordion>
             <ComponentAccordion header={"Delivery"}>
-                <Delivery d={order.delivery} />
+                <div className={"my-6 mx-2"}>
+                    <Delivery
+                        d={order.delivery}
+                    />
+                </div>
             </ComponentAccordion>
             <ComponentAccordion header={"Payment"}>
-                <div className={"flex flex-col gap-2 shadow rounded-lg p-4 px-6"}>
+                <div className={"flex flex-col gap-2 shadow rounded-xl p-4 px-6 my-6 mx-2"}>
                     <div className={"flex gap-2 items-center"}>
                         <div className={"text-sm font-medium"}>
                             {order.payment.method}

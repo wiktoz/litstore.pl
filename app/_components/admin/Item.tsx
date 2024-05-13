@@ -1,20 +1,23 @@
 import useSWR from "swr";
 import {fetcher, formatPrice} from "@/utils/helpers";
-import Loader from "@/components/Loader";
 import ErrorBox from "@/components/admin/ErrorBox";
 import Image from "next/image";
+import Spinner from "@/components/Spinner";
 
 interface Props {
-    item: OrderItemsInterface
+    itemData: OrderItemsInterface
 }
 
-const Item = ({item}:Props) => {
+const Item = ({itemData}:Props) => {
     const { data: product, error: productError, isLoading: productLoading }
-        = useSWR(item.product_id ? "/api/products/" + item.product_id : null, fetcher)
+        = useSWR<ProductInterface>(itemData.product_id ? "/api/products/" + itemData.product_id : null, fetcher)
+
+    const { data: item, error: itemError, isLoading: itemLoading }
+        = useSWR<ItemPopulatedInterface>(itemData.item_id ? "/api/items/" + itemData.item_id : null, fetcher)
 
 
     return(
-        <div className={"m-2 rounded-xl"}>
+        <div className={"rounded-xl shadow overflow-hidden"}>
             {
                 productLoading ?
                     <div className={"flex flex-row gap-6 items-center"}>
@@ -48,10 +51,9 @@ const Item = ({item}:Props) => {
                             alt={product.name}
                             width={70}
                             height={200}
-                            className={"rounded"}
                         />
                     </div>
-                    <div className={"flex flex-col gap-2 self-center"}>
+                    <div className={"flex flex-col gap-2 self-center justify-between grow"}>
                         <div>
                             <div className={"text-xs text-gray-500 flex gap-1"}>
                                 <div>
@@ -62,9 +64,37 @@ const Item = ({item}:Props) => {
                                 {product.name}
                             </div>
                         </div>
-                        <div className={"text-xs font-semibold"}>
-                            {item.qty} x {formatPrice(item.price)}
+                        <div className={"text-xs"}>
+                            {
+                                itemLoading ?
+                                    <Spinner/> :
+                                itemError ?
+                                    <ErrorBox/> :
+                                !item ?
+                                    <div className={"text-xs"}>
+                                        No item found
+                                    </div>  :
+                                <div className={"flex gap-2"}>
+                                    {
+                                        item.options.map(option => {
+                                            return(
+                                                <div key={item._id + option.option_id._id} className={"flex gap-1"}>
+                                                    <div>
+                                                        {option.variant_id.display_name}
+                                                    </div>
+                                                    <div className={"font-semibold"}>
+                                                        {option.option_id.name}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            }
                         </div>
+                    </div>
+                    <div className={"text-sm flex mx-4"}>
+                        {itemData.qty} {item?.unit}
                     </div>
                 </div>
             }

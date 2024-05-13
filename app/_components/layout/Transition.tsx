@@ -23,7 +23,7 @@ const Transition = ({ children }: {children:ReactNode}) => {
     const pathname = usePathname()
 
     return (
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 <motion.div
                 key={pathname}
                 variants={variants}

@@ -25,9 +25,9 @@ const CartDelivery = () => {
     }
 
     return(
-        <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-8 px-4 flex flex-col gap-4">
-                <section className='flex flex-row justify-between gap-4 p-4'>
+        <div className="flex gap-4 w-full">
+            <div className="w-2/3 flex flex-col gap-4 grow">
+                <section className='flex flex-row justify-between gap-4 p-4 pb-0'>
                     <div className="w-1/3">
                         <p className="font-bold mb-4 text-gray-700 ">1. Delivery</p>
                         <div className='w-full h-1 rounded bg-gray-700'></div>
@@ -41,7 +41,7 @@ const CartDelivery = () => {
                         <div className='w-full h-1 rounded bg-gray-300'></div>
                     </div>
                 </section>
-                <section className={"p-4 relative " + (isBuyer ? "opacity-50" : "")}>
+                <section className={"p-4 relative"}>
                     <div className={"flex flex-col py-4 gap-1"}>
                         <div className={"font-bold text-gray-700"}>
                             Invoice
@@ -61,19 +61,12 @@ const CartDelivery = () => {
                             post_code={cartBuyer.post_code ? cartBuyer.post_code : ""}
                             city={cartBuyer.city ? cartBuyer.city : ""}
                             submitData={handleAddressData}
-                            disabled={isBuyer}
+                            disableOnSave={true}
+                            dataLocked={isBuyer}
                         />
                     </div>
-                    {
-                        isBuyer &&
-                        <div onClick={() => setIsBuyer(false)}
-                             className={"z-50 absolute top-0 right-0 text-white text-sm bg-gray-700 font-semibold rounded-lg"}
-                        >
-                            Edit
-                        </div>
-                    }
                 </section>
-                <section className={"rounded p-4 "}>
+                <section className={"rounded px-4"}>
                     <div className={"flex flex-col py-4 gap-1"}>
                         <div className={"font-bold text-gray-700"}>
                             Delivery
@@ -87,7 +80,7 @@ const CartDelivery = () => {
                     />
                 </section>
             </div>
-            <div className="col-span-12 md:col-span-4">
+            <div className="w-1/3">
                 <SummaryBox
                     previousStep={() => router.push('/cart')}
                     nextStep={() => router.push('/cart/summary')}

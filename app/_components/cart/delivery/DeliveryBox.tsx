@@ -5,6 +5,7 @@ import Loader from "@/components/Loader"
 import AddressForm from "@/components/form/AddressForm"
 import {fetcher} from "@/utils/helpers"
 import Geowidget from "@/components/Geowidget";
+import {id} from "postcss-selector-parser";
 
 interface Props {
     submitData: (data: CartDeliveryInterface) => void
@@ -13,14 +14,20 @@ interface Props {
 const DeliveryBox = ({submitData}:Props) => {
     const { data: deliveries, error} = useSWR('/api/deliveries', fetcher)
     const { cartDelivery, setDelivery } = useShoppingCart() as ShoppingCartContextType
-    
+
     if(error) return "An error has occurred"
     if(!deliveries) return <Loader />
 
     const pickDelivery = (id:string) => {
         setDelivery({
-            ...cartDelivery,
-            delivery_id: id
+            delivery_id: id,
+            email: "",
+            name: "",
+            surname: "",
+            city: "",
+            house: "",
+            post_code: "",
+            street: ""
         })
     }
 
@@ -60,15 +67,15 @@ const DeliveryBox = ({submitData}:Props) => {
                 })
             }
         </div>
-        <div className="w-full my-4">
+        <div className="w-full mt-4">
             {
                 deliveries && deliveries.length > 0 &&
                 deliveries.map((item: DeliveryInterface) => {
                     return (
-                        <>
+                        <div key={"addressForm" + item._id}>
                         {
                             cartDelivery && cartDelivery.delivery_id === item._id &&
-                            <div key={"addressForm" + item._id} className="rounded-lg">
+                            <div className="rounded-lg">
                                 {
                                     item.name === "InPost" ?
                                         <Geowidget
@@ -86,12 +93,14 @@ const DeliveryBox = ({submitData}:Props) => {
                                             post_code={cartDelivery.post_code}
                                             street={cartDelivery.street}
                                             surname={cartDelivery.surname}
+                                            disableOnSave={true}
+                                            dataLocked={cartDelivery.name != ""}
                                         />
                                         </div>
                                 }
                             </div>
                         }
-                        </>
+                        </div>
                     )
                 })
             }

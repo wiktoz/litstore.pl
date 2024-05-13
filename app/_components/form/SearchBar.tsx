@@ -5,7 +5,7 @@ interface Props {
 
 export default function SearchBar({handleSearch, searchBtn}:Props){
     return(
-        <div className="flex items-center">   
+        <div className="flex items-center w-full">
             <label htmlFor="simple-search" className="sr-only">Search</label>
             <div className="relative w-full">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
